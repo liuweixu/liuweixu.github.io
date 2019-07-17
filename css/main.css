@@ -598,7 +598,11 @@ pre .addition {
   background: #dfd;
 }
 pre .meta {
-  color: #8959a8;
+  color: #eab700;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 pre .comment {
   color: #8e908c;
@@ -1701,7 +1705,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #0dfff5;
+  background: #6cf45d;
 }
 .feed-link,
 .chat {

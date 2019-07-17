@@ -93,18 +93,18 @@
   };
 </script>
 
-  <meta name="description" content="pytorch的size()的总结：输入的代码的例子1：12345678910111213141516import torchimport numpy as npa = np.array([[1,2,3],              [4,5,6]])x = torch.tensor(a)print(&quot;numpy:&quot;)print(&quot;Shape of a:&quot;,a.shape)print(&quot;Type">
+  <meta name="description" content="如题">
 <meta name="keywords" content="pytorch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pytorch的size()的总结">
 <meta property="og:url" content="http://yoursite.com/2019/07/17/pytorch的size-的总结/index.html">
 <meta property="og:site_name" content="PJCK(Weixu Liu)">
-<meta property="og:description" content="pytorch的size()的总结：输入的代码的例子1：12345678910111213141516import torchimport numpy as npa = np.array([[1,2,3],              [4,5,6]])x = torch.tensor(a)print(&quot;numpy:&quot;)print(&quot;Shape of a:&quot;,a.shape)print(&quot;Type">
+<meta property="og:description" content="如题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-17T08:54:04.429Z">
+<meta property="og:updated_time" content="2019-07-17T10:37:00.034Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pytorch的size()的总结">
-<meta name="twitter:description" content="pytorch的size()的总结：输入的代码的例子1：12345678910111213141516import torchimport numpy as npa = np.array([[1,2,3],              [4,5,6]])x = torch.tensor(a)print(&quot;numpy:&quot;)print(&quot;Shape of a:&quot;,a.shape)print(&quot;Type">
+<meta name="twitter:description" content="如题">
 
 
 
@@ -443,7 +443,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 08:54:04" itemprop="dateModified" datetime="2019-07-17T08:54:04Z">2019-07-17</time>
+                <time title="修改时间：2019-07-17 10:37:00" itemprop="dateModified" datetime="2019-07-17T10:37:00Z">2019-07-17</time>
               </span>
             
           
@@ -504,7 +504,9 @@
       
 
       
-        <h3 id="pytorch的size-的总结："><a href="#pytorch的size-的总结：" class="headerlink" title="pytorch的size()的总结："></a>pytorch的size()的总结：</h3><h6 id="输入的代码的例子1："><a href="#输入的代码的例子1：" class="headerlink" title="输入的代码的例子1："></a>输入的代码的例子1：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">              [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line">x = torch.tensor(a)</span><br><span class="line">print(<span class="string">"numpy:"</span>)</span><br><span class="line">print(<span class="string">"Shape of a:"</span>,a.shape)</span><br><span class="line">print(<span class="string">"Type of a.shape:"</span>, type(a.shape))</span><br><span class="line">print(<span class="string">"Size of a:"</span>, a.size)</span><br><span class="line">print(<span class="string">"-------------"</span>)</span><br><span class="line">print(<span class="string">"pytorch:"</span>)</span><br><span class="line">print(<span class="string">"Shape of x:"</span>,x.shape)</span><br><span class="line">print(<span class="string">"Size of x:"</span>,x.size())</span><br><span class="line">print(<span class="string">"Type of x.size():"</span>,type(x.size()))</span><br></pre></td></tr></table></figure>
+        <h3 id="如题"><a href="#如题" class="headerlink" title="如题"></a>如题</h3><a id="more"></a>
+
+<h3 id="pytorch的size-的总结："><a href="#pytorch的size-的总结：" class="headerlink" title="pytorch的size()的总结："></a>pytorch的size()的总结：</h3><h6 id="输入的代码的例子1："><a href="#输入的代码的例子1：" class="headerlink" title="输入的代码的例子1："></a>输入的代码的例子1：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">              [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line">x = torch.tensor(a)</span><br><span class="line">print(<span class="string">"numpy:"</span>)</span><br><span class="line">print(<span class="string">"Shape of a:"</span>,a.shape)</span><br><span class="line">print(<span class="string">"Type of a.shape:"</span>, type(a.shape))</span><br><span class="line">print(<span class="string">"Size of a:"</span>, a.size)</span><br><span class="line">print(<span class="string">"-------------"</span>)</span><br><span class="line">print(<span class="string">"pytorch:"</span>)</span><br><span class="line">print(<span class="string">"Shape of x:"</span>,x.shape)</span><br><span class="line">print(<span class="string">"Size of x:"</span>,x.size())</span><br><span class="line">print(<span class="string">"Type of x.size():"</span>,type(x.size()))</span><br></pre></td></tr></table></figure>
 
 <h6 id="输出结果"><a href="#输出结果" class="headerlink" title="输出结果:"></a>输出结果:</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">numpy:</span><br><span class="line">Shape of a: (2, 3)</span><br><span class="line">Type of a.shape: &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">Size of a: 6</span><br><span class="line">-------------</span><br><span class="line">pytorch:</span><br><span class="line">Shape of x: torch.Size([2, 3])</span><br><span class="line">Size of x: torch.Size([2, 3])</span><br><span class="line">Type of x.size(): &lt;class &apos;torch.Size&apos;&gt;</span><br></pre></td></tr></table></figure>
 
@@ -726,7 +728,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#pytorch的size-的总结："><span class="nav-number">1.</span> <span class="nav-text">pytorch的size()的总结：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#输入的代码的例子1："><span class="nav-number">1.0.0.1.</span> <span class="nav-text">输入的代码的例子1：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#输出结果"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">输出结果:</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#输出："><span class="nav-number">1.0.0.3.</span> <span class="nav-text">输出：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如题"><span class="nav-number">1.</span> <span class="nav-text">如题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pytorch的size-的总结："><span class="nav-number">2.</span> <span class="nav-text">pytorch的size()的总结：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#输入的代码的例子1："><span class="nav-number">2.0.0.1.</span> <span class="nav-text">输入的代码的例子1：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#输出结果"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">输出结果:</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#输出："><span class="nav-number">2.0.0.3.</span> <span class="nav-text">输出：</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -771,6 +773,11 @@
 
 
 
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count"> |  博客全站共 234 字</span>
+</div>
 
         
 

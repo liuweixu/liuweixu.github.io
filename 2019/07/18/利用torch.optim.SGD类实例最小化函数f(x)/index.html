@@ -94,16 +94,16 @@
 </script>
 
   <meta name="description" content="如题">
-<meta name="keywords" content="Deeping Learning,Python,NumPy,pytorch">
+<meta name="keywords" content="Deeping Learning,PyTorch,Python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pytorch的size()的总结">
-<meta property="og:url" content="http://yoursite.com/2019/07/17/pytorch的size-的总结/index.html">
+<meta property="og:title" content="利用torch.optim.SGD类实例最小化函数f(x)">
+<meta property="og:url" content="http://yoursite.com/2019/07/18/利用torch.optim.SGD类实例最小化函数f(x)/index.html">
 <meta property="og:site_name" content="PJCK">
 <meta property="og:description" content="如题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-17T21:39:02.588Z">
+<meta property="og:updated_time" content="2019-07-17T21:47:02.682Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pytorch的size()的总结">
+<meta name="twitter:title" content="利用torch.optim.SGD类实例最小化函数f(x)">
 <meta name="twitter:description" content="如题">
 
 
@@ -114,7 +114,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/2019/07/17/pytorch的size-的总结/">
+  <link rel="canonical" href="http://yoursite.com/2019/07/18/利用torch.optim.SGD类实例最小化函数f(x)/">
 
 
 
@@ -125,7 +125,7 @@
 </script>
 
   
-  <title>pytorch的size()的总结 | PJCK</title>
+  <title>利用torch.optim.SGD类实例最小化函数f(x) | PJCK</title>
   
 
 
@@ -337,7 +337,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/17/pytorch的size-的总结/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/18/利用torch.optim.SGD类实例最小化函数f(x)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content>
@@ -354,7 +354,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pytorch的size()的总结
+          <h1 class="post-title" itemprop="name headline">利用torch.optim.SGD类实例最小化函数f(x)
 
               
             
@@ -382,7 +382,7 @@
                 
               
 
-              <time title="创建时间：2019-07-16 21:58:39" itemprop="dateCreated datePublished" datetime="2019-07-16T21:58:39Z">2019-07-16</time>
+              <time title="创建时间：2019-07-18 05:40:55" itemprop="dateCreated datePublished" datetime="2019-07-18T05:40:55Z">2019-07-18</time>
             </span>
           
 
@@ -397,7 +397,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-17 21:39:02" itemprop="dateModified" datetime="2019-07-17T21:39:02Z">2019-07-17</time>
+                <time title="修改时间：2019-07-17 21:47:02" itemprop="dateModified" datetime="2019-07-17T21:47:02Z">2019-07-17</time>
               </span>
             
           
@@ -454,7 +454,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">930</span>
+              <span title="本文字数">1.4k</span>
             </span>
           
 
@@ -487,15 +487,9 @@
       
         <h3 id="如题"><a href="#如题" class="headerlink" title="如题"></a>如题</h3><a id="more"></a>
 
-<h3 id="pytorch的size-的总结："><a href="#pytorch的size-的总结：" class="headerlink" title="pytorch的size()的总结："></a>pytorch的size()的总结：</h3><h6 id="输入的代码的例子1："><a href="#输入的代码的例子1：" class="headerlink" title="输入的代码的例子1："></a>输入的代码的例子1：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">              [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line">x = torch.tensor(a)</span><br><span class="line">print(<span class="string">"numpy:"</span>)</span><br><span class="line">print(<span class="string">"Shape of a:"</span>,a.shape)</span><br><span class="line">print(<span class="string">"Type of a.shape:"</span>, type(a.shape))</span><br><span class="line">print(<span class="string">"Size of a:"</span>, a.size)</span><br><span class="line">print(<span class="string">"-------------"</span>)</span><br><span class="line">print(<span class="string">"pytorch:"</span>)</span><br><span class="line">print(<span class="string">"Shape of x:"</span>,x.shape)</span><br><span class="line">print(<span class="string">"Size of x:"</span>,x.size())</span><br><span class="line">print(<span class="string">"Type of x.size():"</span>,type(x.size()))</span><br></pre></td></tr></table></figure>
+<h5 id="–来自于肖志清的《神经网络与pytorch实战》"><a href="#–来自于肖志清的《神经网络与pytorch实战》" class="headerlink" title="–来自于肖志清的《神经网络与pytorch实战》"></a>–来自于肖志清的《神经网络与pytorch实战》</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> pi</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">x = torch.tensor([pi/<span class="number">3</span>, pi/<span class="number">6</span>], requires_grad=<span class="literal">True</span>) <span class="comment"># 输入的数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line">optimzer = optim.SGD([x,], lr=<span class="number">0.1</span>, momentum=<span class="number">0</span>)<span class="comment"># 第一个参数是需要更新的列表。</span></span><br><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">11</span>):</span><br><span class="line">    <span class="comment"># step为0时，没有优化，从1开始优化。</span></span><br><span class="line">    <span class="keyword">if</span> step:</span><br><span class="line">        optimzer.zero_grad() <span class="comment"># 需要清空优化器在上次迭代中存储的数据。避免积累。</span></span><br><span class="line">        f.backward()	<span class="comment"># 调用这个方法，说明进行求导。</span></span><br><span class="line">        optimzer.step()	<span class="comment"># 用这个方法更新自变量的值</span></span><br><span class="line">    f = -((x.cos() ** <span class="number">2</span>).sum()) ** <span class="number">2</span></span><br><span class="line">    print(<span class="string">'step &#123;&#125; : x = &#123;&#125;, f(x) = &#123;&#125;'</span>.format(step, x.tolist(), f))</span><br></pre></td></tr></table></figure>
 
-<h6 id="输出结果"><a href="#输出结果" class="headerlink" title="输出结果:"></a>输出结果:</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">numpy:</span><br><span class="line">Shape of a: (2, 3)</span><br><span class="line">Type of a.shape: &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">Size of a: 6</span><br><span class="line">-------------</span><br><span class="line">pytorch:</span><br><span class="line">Shape of x: torch.Size([2, 3])</span><br><span class="line">Size of x: torch.Size([2, 3])</span><br><span class="line">Type of x.size(): &lt;class &apos;torch.Size&apos;&gt;</span><br></pre></td></tr></table></figure>
-
-<p>​        在关于pytorch的size()中，我们通过和numpy类比，可以发现，pytorch的size()的功能和numpy的<strong>shape</strong>属性类似，而和numpy的size属性是不一样的，另外，pytorch的size()功能和属性shape一样。</p>
-<p>​        还有，pytorch的torch.size()是一个<strong>元组</strong>，可以实现python中的元组的一系列操作。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">              [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line">x = torch.tensor(a)</span><br><span class="line"></span><br><span class="line">print(x.size()[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
-
-<h6 id="输出："><a href="#输出：" class="headerlink" title="输出："></a>输出：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.Size([<span class="number">3</span>]) <span class="comment"># 切片</span></span><br></pre></td></tr></table></figure>
+<h6 id="输出："><a href="#输出：" class="headerlink" title="输出："></a>输出：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">step <span class="number">0</span> : x = [<span class="number">1.0471975803375244</span>, <span class="number">0.5235987901687622</span>], f(x) = <span class="number">-1.0</span></span><br><span class="line">step <span class="number">1</span> : x = [<span class="number">0.8739925026893616</span>, <span class="number">0.35039371252059937</span>], f(x) = <span class="number">-1.674528956413269</span></span><br><span class="line">step <span class="number">2</span> : x = [<span class="number">0.6192374229431152</span>, <span class="number">0.1835097223520279</span>], f(x) = <span class="number">-2.6563119888305664</span></span><br><span class="line">step <span class="number">3</span> : x = [<span class="number">0.3111077845096588</span>, <span class="number">0.06654246151447296</span>], f(x) = <span class="number">-3.617122173309326</span></span><br><span class="line">step <span class="number">4</span> : x = [<span class="number">0.08941137790679932</span>, <span class="number">0.016069628298282623</span>], f(x) = <span class="number">-3.9671425819396973</span></span><br><span class="line">step <span class="number">5</span> : x = [<span class="number">0.01855570822954178</span>, <span class="number">0.0032690390944480896</span>], f(x) = <span class="number">-3.99858021736145</span></span><br><span class="line">step <span class="number">6</span> : x = [<span class="number">0.0037171822041273117</span>, <span class="number">0.0006542906630784273</span>], f(x) = <span class="number">-3.999943256378174</span></span><br><span class="line">step <span class="number">7</span> : x = [<span class="number">0.0007434850558638573</span>, <span class="number">0.00013086199760437012</span>], f(x) = <span class="number">-3.999997615814209</span></span><br><span class="line">step <span class="number">8</span> : x = [<span class="number">0.00014869740698486567</span>, <span class="number">2.617243444547057e-05</span>], f(x) = <span class="number">-4.0</span></span><br><span class="line">step <span class="number">9</span> : x = [<span class="number">2.973947994178161e-05</span>, <span class="number">5.234485797700472e-06</span>], f(x) = <span class="number">-4.0</span></span><br><span class="line">step <span class="number">10</span> : x = [<span class="number">5.947895260760561e-06</span>, <span class="number">1.0468970685906243e-06</span>], f(x) = <span class="number">-4.0</span></span><br></pre></td></tr></table></figure>
 
 
       
@@ -537,11 +531,9 @@
           
             <a href="/tags/Deeping-Learning/" rel="tag"><i class="fa fa-tag "></i> Deeping Learning</a>
           
+            <a href="/tags/PyTorch/" rel="tag"><i class="fa fa-tag "></i> PyTorch</a>
+          
             <a href="/tags/Python/" rel="tag"><i class="fa fa-tag "></i> Python</a>
-          
-            <a href="/tags/NumPy/" rel="tag"><i class="fa fa-tag "></i> NumPy</a>
-          
-            <a href="/tags/pytorch/" rel="tag"><i class="fa fa-tag "></i> pytorch</a>
           
         </div>
       
@@ -554,15 +546,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/07/18/pytorch的view()的用法的总结/" rel="next" title="pytorch的view()的用法的总结">
+                <i class="fa fa-chevron-left"></i> pytorch的view()的用法的总结
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/18/BrokenPipeError [Errno 32] Broken pipe 的解决办法/" rel="prev" title="BrokenPipeError [Errno 32] Broken pipe 的解决办法">
-                BrokenPipeError [Errno 32] Broken pipe 的解决办法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -762,7 +754,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如题"><span class="nav-number">1.</span> <span class="nav-text">如题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pytorch的size-的总结："><span class="nav-number">2.</span> <span class="nav-text">pytorch的size()的总结：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#输入的代码的例子1："><span class="nav-number">2.0.0.1.</span> <span class="nav-text">输入的代码的例子1：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#输出结果"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">输出结果:</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#输出："><span class="nav-number">2.0.0.3.</span> <span class="nav-text">输出：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如题"><span class="nav-number">1.</span> <span class="nav-text">如题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#–来自于肖志清的《神经网络与pytorch实战》"><span class="nav-number">1.0.1.</span> <span class="nav-text">–来自于肖志清的《神经网络与pytorch实战》</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#输出："><span class="nav-number">1.0.1.1.</span> <span class="nav-text">输出：</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

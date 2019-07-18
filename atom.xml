@@ -35,9 +35,9 @@
     
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
-      <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
-    
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
     
   </entry>
   
@@ -65,11 +65,11 @@
     
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
-      <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
-    
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
+    
+      <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
     
   </entry>
   
@@ -97,11 +97,11 @@
     
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
-      <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
-    
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
+    
+      <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
     
   </entry>
   
@@ -157,11 +157,11 @@
     
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
-      <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
-    
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
+    
+      <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
     
   </entry>
   

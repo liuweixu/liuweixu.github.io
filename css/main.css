@@ -1672,8 +1672,8 @@ pre .javascript .function {
   display: block;
   margin: 0 auto;
   padding: 2px;
-  max-width: 160px;
-  height: 160px;
+  max-width: 120px;
+  height: auto;
   border: 1px solid #eee;
 /* 头像圆形 */
   border-radius: 100px;
@@ -1717,7 +1717,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff9c12;
+  background: #3e57cb;
 }
 .feed-link,
 .chat {

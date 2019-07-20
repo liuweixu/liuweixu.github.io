@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-20T11:44:21.959Z</updated>
+  <updated>2019-07-20T11:59:50.518Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
@@ -16,9 +16,9 @@
     <link href="http://yoursite.com/2019/07/21/(%E6%95%B0%E5%AD%A6)%20A.%20Restoring%20Three%20Numbers/"/>
     <id>http://yoursite.com/2019/07/21/(数学) A. Restoring Three Numbers/</id>
     <published>2019-07-20T19:36:30.000Z</published>
-    <updated>2019-07-20T11:44:21.959Z</updated>
+    <updated>2019-07-20T11:59:50.518Z</updated>
     
-    <content type="html"><![CDATA[<p>这个是一个数学题。不过不必是暴力的。</p><p>题目链接：<a href="http://codeforces.com/problemset/problem/1154/A" target="_blank" rel="noopener">http://codeforces.com/problemset/problem/1154/A</a></p><a id="more"></a><h4 id="A-Restoring-Three-Numbers"><a href="#A-Restoring-Three-Numbers" class="headerlink" title="A. Restoring Three Numbers"></a>A. Restoring Three Numbers</h4><p>Polycarp has guessed three positive integers aa, bb and cc. He keeps these numbers in secret, but he writes down four numbers on a board in arbitrary order — their pairwise sums (three numbers) and sum of all three numbers (one number). So, there are four numbers on a board in random order: a+ba+b, a+ca+c, b+cb+c and a+b+ca+b+c.</p><p>You have to guess three numbers aa, bb and cc using given numbers. Print three guessed integers in any order.</p><p>Pay attention that some given numbers aa, bb and cc can be equal (it is also possible that a=b=ca=b=c).</p><p>Input</p><p>The only line of the input contains four positive integers x1,x2,x3,x4x1,x2,x3,x4 (2≤xi≤1092≤xi≤109) — numbers written on a board in random order. It is guaranteed that the answer exists for the given number x1,x2,x3,x4x1,x2,x3,x4.</p><p>Output</p><p>Print such positive integers aa, bb and cc that four numbers written on a board are values a+ba+b, a+ca+c, b+cb+c and a+b+ca+b+c written in some order. Print aa, bb and cc in any order. If there are several answers, you can print any. It is guaranteed that the answer exists.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 6 5 4</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 1 3</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">40 40 40 60</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20 20 20</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">201 101 101 200</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 100 100</span><br></pre></td></tr></table></figure><p>这个是一个数学题，不必是从1开始暴力，会超时的。可以从给出的4个数中选出最大的（a+b+c当然是最大的），然后减去其他中的一个，得到a或b或c，最后把剩下的两个减去这个数，得到相应的数。</p><p>Python代码:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Q = map(int, input().split()) <span class="comment"># 最后得到的就是一个tuple类型</span></span><br><span class="line">L = list(Q) <span class="comment"># 将tuple类型转换为list类型。</span></span><br><span class="line">L.sort() <span class="comment"># 排序，为了得到a + b + c的值。</span></span><br><span class="line">m = L[<span class="number">3</span>]</span><br><span class="line">c = m - L[<span class="number">2</span>]</span><br><span class="line">a = L[<span class="number">0</span>] - c</span><br><span class="line">b = L[<span class="number">1</span>] - c</span><br><span class="line">print(a, b, c)</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<p>这个是一个数学题。不过不必是暴力的。</p><p>题目链接：<a href="http://codeforces.com/problemset/problem/1154/A" target="_blank" rel="noopener">http://codeforces.com/problemset/problem/1154/A</a></p><a id="more"></a><h4 id="A-Restoring-Three-Numbers"><a href="#A-Restoring-Three-Numbers" class="headerlink" title="A. Restoring Three Numbers"></a>A. Restoring Three Numbers</h4><p>Polycarp has guessed three positive integers aa, bb and cc. He keeps these numbers in secret, but he writes down four numbers on a board in arbitrary order — their pairwise sums (three numbers) and sum of all three numbers (one number). So, there are four numbers on a board in random order: a+ba, a+c, b+c and a+b+c.</p><p>You have to guess three numbers aa, bb and cc using given numbers. Print three guessed integers in any order.</p><p>Pay attention that some given numbers a, b and c can be equal (it is also possible that a=b=c).</p><p>Input</p><p>The only line of the input contains four positive integers x1,x2,x3,x4(2≤xi≤10^9) — numbers written on a board in random order. It is guaranteed that the answer exists for the given number x1,x2,x3,x4.</p><p>Output</p><p>Print such positive integers aa, bb and cc that four numbers written on a board are values a+b, a+c, b+c and a+b+c written in some order. Print a, b and c in any order. If there are several answers, you can print any. It is guaranteed that the answer exists.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 6 5 4</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 1 3</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">40 40 40 60</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20 20 20</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">201 101 101 200</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 100 100</span><br></pre></td></tr></table></figure><p>这个是一个数学题，不必是从1开始暴力，会超时的。可以从给出的4个数中选出最大的（a+b+c当然是最大的），然后减去其他中的一个，得到a或b或c，最后把剩下的两个减去这个数，得到相应的数。</p><p>Python代码:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Q = map(int, input().split()) <span class="comment"># 最后得到的就是一个tuple类型</span></span><br><span class="line">L = list(Q) <span class="comment"># 将tuple类型转换为list类型。</span></span><br><span class="line">L.sort() <span class="comment"># 排序，为了得到a + b + c的值。</span></span><br><span class="line">m = L[<span class="number">3</span>]</span><br><span class="line">c = m - L[<span class="number">2</span>]</span><br><span class="line">a = L[<span class="number">0</span>] - c</span><br><span class="line">b = L[<span class="number">1</span>] - c</span><br><span class="line">print(a, b, c)</span><br></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
@@ -34,11 +34,11 @@
     
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
-      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
+      <category term="数学" scheme="http://yoursite.com/tags/%E6%95%B0%E5%AD%A6/"/>
     
       <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
     
-      <category term="数学" scheme="http://yoursite.com/tags/%E6%95%B0%E5%AD%A6/"/>
+      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
     
   </entry>
   
@@ -63,15 +63,15 @@
       <category term="cf" scheme="http://yoursite.com/categories/oj/cf/"/>
     
     
-      <category term="brute force" scheme="http://yoursite.com/tags/brute-force/"/>
-    
-      <category term="模拟" scheme="http://yoursite.com/tags/%E6%A8%A1%E6%8B%9F/"/>
-    
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
     
       <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
     
-      <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
+      <category term="brute force" scheme="http://yoursite.com/tags/brute-force/"/>
+    
+      <category term="模拟" scheme="http://yoursite.com/tags/%E6%A8%A1%E6%8B%9F/"/>
     
       <category term="C++" scheme="http://yoursite.com/tags/C/"/>
     

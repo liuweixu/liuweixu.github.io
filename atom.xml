@@ -6,10 +6,45 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-18T05:59:25.743Z</updated>
+  <updated>2019-07-20T11:23:19.150Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>(brute force, implementation)A. Fafa and his Company</title>
+    <link href="http://yoursite.com/2019/07/21/(brute%20force,%20implementation)A.%20Fafa%20and%20his%20Company/"/>
+    <id>http://yoursite.com/2019/07/21/(brute force, implementation)A. Fafa and his Company/</id>
+    <published>2019-07-20T19:10:55.000Z</published>
+    <updated>2019-07-20T11:23:19.150Z</updated>
+    
+    <content type="html"><![CDATA[<p>这是一个很水的题，但是自己的英语基础很差，理解文章却花了我不少时间。。。</p><p>题目链接：<a href="http://codeforces.com/problemset/problem/935/A" target="_blank" rel="noopener">935A - Fafa and his Company</a></p><a id="more"></a><h4 id="A-Fafa-and-his-Company"><a href="#A-Fafa-and-his-Company" class="headerlink" title="A. Fafa and his Company"></a>A. Fafa and his Company</h4><p>Fafa owns a company that works on huge projects. There are <em>n</em> employees in Fafa’s company. Whenever the company has a new project to start working on, Fafa has to divide the tasks of this project among all the employees.</p><p>Fafa finds doing this every time is very tiring for him. So, he decided to choose the best <em>l</em> employees in his company as team leaders. Whenever there is a new project, Fafa will divide the tasks among only the team leaders and each team leader will be responsible of some positive number of employees to give them the tasks. To make this process fair for the team leaders, each one of them should be responsible for the same number of employees. Moreover, every employee, who is not a team leader, has to be under the responsibility of exactly one team leader, and no team leader is responsible for another team leader.</p><p>Given the number of employees <em>n</em>, <strong>find in how many ways</strong> Fafa could choose the number of team leaders <em>l</em> in such a way that it is possible to divide employees between them evenly.</p><p>Input</p><p>The input consists of a single line containing a positive integer <em>n</em> (2 ≤ <em>n</em> ≤ 105) — the number of employees in Fafa’s company.</p><p>Output</p><p>Print a single integer representing the answer to the problem.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure><p>Note</p><p>In the second sample Fafa has 3 ways:</p><ul><li>choose only 1 employee as a team leader with 9 employees under his responsibility.</li><li>choose 2 employees as team leaders with 4 employees under the responsibility of each of them.</li><li>choose 5 employees as team leaders with 1 employee under the responsibility of each of them.</li></ul><p>这个是一个基础的题，注意题目中的<strong>“find in how many ways”</strong>，可以看出，这个是求分配的方案的总数，这个分配必须保证每个领导带领的人是一样的。因此可以采取模拟。</p><p>Python代码：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">sum = <span class="number">0</span></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt;= n // <span class="number">2</span>:</span><br><span class="line">    <span class="keyword">if</span> (n - i) % i == <span class="number">0</span>:</span><br><span class="line">        sum += <span class="number">1</span></span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">print(sum)</span><br></pre></td></tr></table></figure><p>C++代码：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt;= n / <span class="number">2</span>) &#123;</span><br><span class="line"><span class="keyword">if</span> ((n - i) % i == <span class="number">0</span>) &#123;</span><br><span class="line">sum++;</span><br><span class="line">&#125;</span><br><span class="line">i++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; sum &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="PS"><a href="#PS" class="headerlink" title="PS:"></a>PS:</h3><p>英语很重要，很重要的</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这是一个很水的题，但是自己的英语基础很差，理解文章却花了我不少时间。。。&lt;/p&gt;
+&lt;p&gt;题目链接：&lt;a href=&quot;http://codeforces.com/problemset/problem/935/A&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;935A - Fafa and his Company&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="oj" scheme="http://yoursite.com/categories/oj/"/>
+    
+      <category term="cf" scheme="http://yoursite.com/categories/oj/cf/"/>
+    
+    
+      <category term="brute force" scheme="http://yoursite.com/tags/brute-force/"/>
+    
+      <category term="implementation" scheme="http://yoursite.com/tags/implementation/"/>
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
+    
+      <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
+    
+      <category term="C++" scheme="http://yoursite.com/tags/C/"/>
+    
+  </entry>
   
   <entry>
     <title>利用torch.optim.SGD类实例最小化函数f(x)</title>
@@ -33,11 +68,11 @@
       <category term="PyTorch" scheme="http://yoursite.com/categories/Deep-Learning/%E6%A1%86%E6%9E%B6/PyTorch/"/>
     
     
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
   </entry>
   
@@ -63,11 +98,11 @@
       <category term="PyTorch" scheme="http://yoursite.com/categories/Deep-Learning/%E6%A1%86%E6%9E%B6/PyTorch/"/>
     
     
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     
@@ -95,11 +130,11 @@
       <category term="PyTorch" scheme="http://yoursite.com/categories/Deep-Learning/%E6%A1%86%E6%9E%B6/PyTorch/"/>
     
     
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     
@@ -155,11 +190,11 @@
       <category term="PyTorch" scheme="http://yoursite.com/categories/Deep-Learning/%E6%A1%86%E6%9E%B6/PyTorch/"/>
     
     
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     

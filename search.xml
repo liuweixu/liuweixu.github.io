@@ -10,9 +10,9 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>数学</tag>
-        <tag>oj</tag>
         <tag>cf</tag>
+        <tag>oj</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -24,11 +24,11 @@
         <category>cf</category>
       </categories>
       <tags>
-        <tag>Python</tag>
-        <tag>oj</tag>
-        <tag>cf</tag>
         <tag>brute force</tag>
         <tag>模拟</tag>
+        <tag>Python</tag>
+        <tag>cf</tag>
+        <tag>oj</tag>
         <tag>C++</tag>
       </tags>
   </entry>

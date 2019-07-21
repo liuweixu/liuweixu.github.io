@@ -34,11 +34,11 @@
     
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
-      <category term="数学" scheme="http://yoursite.com/tags/%E6%95%B0%E5%AD%A6/"/>
+      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
     
       <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
     
-      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
+      <category term="数学" scheme="http://yoursite.com/tags/%E6%95%B0%E5%AD%A6/"/>
     
   </entry>
   
@@ -63,15 +63,15 @@
       <category term="cf" scheme="http://yoursite.com/categories/oj/cf/"/>
     
     
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
-    
-      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
-    
       <category term="brute force" scheme="http://yoursite.com/tags/brute-force/"/>
     
       <category term="模拟" scheme="http://yoursite.com/tags/%E6%A8%A1%E6%8B%9F/"/>
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
+    
+      <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
     
       <category term="C++" scheme="http://yoursite.com/tags/C/"/>
     
@@ -133,9 +133,9 @@
     
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
-      <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
-    
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
+    
+      <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     
   </entry>
   
@@ -165,9 +165,9 @@
     
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
-      <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
-    
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
+    
+      <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     
   </entry>
   
@@ -225,9 +225,9 @@
     
       <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
-      <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
-    
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
+    
+      <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     
   </entry>
   

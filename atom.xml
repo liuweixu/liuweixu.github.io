@@ -6,10 +6,71 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-20T11:59:50.518Z</updated>
+  <updated>2019-07-21T11:24:13.600Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>(图论, dfs) B.Badge</title>
+    <link href="http://yoursite.com/2019/07/22/(%E5%9B%BE%E8%AE%BA,%20dfs)%20B.Badge/"/>
+    <id>http://yoursite.com/2019/07/22/(图论, dfs) B.Badge/</id>
+    <published>2019-07-21T19:19:21.000Z</published>
+    <updated>2019-07-21T11:24:13.600Z</updated>
+    
+    <content type="html"><![CDATA[<p>题目链接：<a href="http://codeforces.com/contest/1020/problem/B" target="_blank" rel="noopener">http://codeforces.com/contest/1020/problem/B</a></p><a id="more"></a><h4 id="B-Badge"><a href="#B-Badge" class="headerlink" title="B. Badge"></a>B. Badge</h4><p>In Summer Informatics School, if a student doesn’t behave well, teachers make a hole in his badge. And today one of the teachers caught a group of n students doing yet another trick.</p><p>Let’s assume that all these students are numbered from 11 to n. The teacher came to student a and put a hole in his badge. The student, however, claimed that the main culprit is some other student papa.</p><p>After that, the teacher came to student papa and made a hole in his badge as well. The student in reply said that the main culprit was student Ppa.</p><p>This process went on for a while, but, since the number of students was finite, eventually the teacher came to the student, who already had a hole in his badge.</p><p>After that, the teacher put a second hole in the student’s badge and decided that he is done with this process, and went to the sauna.</p><p>You don’t know the first student who was caught by the teacher. However, you know all the numbers pi. Your task is to find out for every student a, who would be the student with two holes in the badge if the first caught student was a.</p><p>Input</p><p>The first line of the input contains the only integer n (1≤n≤10001≤n≤1000) — the number of the naughty students.</p><p>The second line contains n integers p1, …, p (1≤pi≤n), where pi indicates the student who was reported to the teacher by student ii.</p><p>Output</p><p>For every student a from 11 to n print which student would receive two holes in the badge, if a was the first student caught by the teacher.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">2 3 2</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 2 3</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">1 2 3</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 2 3</span><br></pre></td></tr></table></figure><p>Note</p><p>The picture corresponds to the first example test case.</p><p><img src="http://codeforces.com/predownloaded/e6/2f/e62f6279b291a91d10dcf8b13b483a9dc5659758.png" alt="img"></p><p>When a=1, the teacher comes to students 1, 2, 3, 2, in this order, and the student 2 is the one who receives a second hole in his badge.</p><p>When a=2,the teacher comes to students 2, 3, 2, and the student 2 gets a second hole in his badge. When a=3, the teacher will visit students 3, 2, 3 with student 3 getting a second hole in his badge.</p><p>For the second example test case it’s clear that no matter with whom the teacher starts, that student would be the one who gets the second hole in his badge.</p><p>上面的一些特殊的符号需要看看codeforces就行。</p><p>这个是一个图论题，就是在不断根据指控把一个人的标记打上扣，一直继续下去，直到找出已打出两个扣的人。</p><p>Python代码:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> n = int(input())</span><br><span class="line">L = list(map(int, input().split()))</span><br><span class="line">L.insert(<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line">Q = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(n)]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">    vis = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">    cur = i</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">if</span> vis[cur] != <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        vis[cur] = <span class="number">1</span></span><br><span class="line">        cur = L[cur]</span><br><span class="line">    print(cur, end=<span class="string">" "</span>)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;题目链接：&lt;a href=&quot;http://codeforces.com/contest/1020/problem/B&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://codeforces.com/contest/1020/problem/B&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="oj" scheme="http://yoursite.com/categories/oj/"/>
+    
+      <category term="cf" scheme="http://yoursite.com/categories/oj/cf/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
+    
+      <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
+    
+      <category term="图论" scheme="http://yoursite.com/tags/%E5%9B%BE%E8%AE%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>(图论) A. Love Triangle</title>
+    <link href="http://yoursite.com/2019/07/22/(%E5%9B%BE%E8%AE%BA)%20A.%20Love%20Triangle/"/>
+    <id>http://yoursite.com/2019/07/22/(图论) A. Love Triangle/</id>
+    <published>2019-07-21T19:12:05.000Z</published>
+    <updated>2019-07-21T11:24:00.858Z</updated>
+    
+    <content type="html"><![CDATA[<p>这个其实是一个很基础的图论题。</p><p>题目链接：<a href="http://codeforces.com/problemset/problem/939/A" target="_blank" rel="noopener">http://codeforces.com/problemset/problem/939/A</a></p><a id="more"></a><h4 id="A-Love-Triangle"><a href="#A-Love-Triangle" class="headerlink" title="A. Love Triangle"></a>A. Love Triangle</h4><p>As you could know there are no male planes nor female planes. However, each plane on Earth likes some other plane. There are <em>n</em> planes on Earth, numbered from 1 to <em>n</em>, and the plane with number <em>i</em> likes the plane with number <em>f**i</em>, where 1 ≤ <em>f**i</em> ≤ <em>n</em> and <em>f**i</em> ≠ <em>i</em>.</p><p>We call a love triangle a situation in which plane <em>A</em> likes plane <em>B</em>, plane <em>B</em> likes plane <em>C</em> and plane <em>C</em> likes plane <em>A</em>. Find out if there is any love triangle on Earth.</p><p>Input</p><p>The first line contains a single integer <em>n</em> (2 ≤ <em>n</em> ≤ 5000) — the number of planes.</p><p>The second line contains <em>n</em> integers <em>f</em>1, <em>f</em>2, …, <em>f**n</em> (1 ≤ <em>f**i</em> ≤ <em>n</em>, <em>f**i</em> ≠ <em>i</em>), meaning that the <em>i</em>-th plane likes the <em>f**i</em>-th.</p><p>Output</p><p>Output «YES» if there is a love triangle consisting of planes on Earth. Otherwise, output «NO».</p><p>You can output any letter in lower case or in upper case.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">2 4 5 1 3</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">YES</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">5 5 5 5 1</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NO</span><br></pre></td></tr></table></figure><p>Note</p><p>In first example plane 2 likes plane 4, plane 4 likes plane 1, plane 1 likes plane 2 and that is a love triangle.</p><p>In second example there are no love triangles.</p><p>这个是一个很基础的图论题，只要有f[f[f[i]]] == i的话，就说明肯定存在三角关系。</p><p>Python代码:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">f = list(map(int, input().split()))</span><br><span class="line">f.insert(<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">flag = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">    <span class="keyword">if</span> f[f[f[i]]] == i:</span><br><span class="line">        flag = <span class="number">1</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"><span class="keyword">if</span> flag:</span><br><span class="line">    print(<span class="string">"YES"</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">"NO"</span>)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这个其实是一个很基础的图论题。&lt;/p&gt;
+&lt;p&gt;题目链接：&lt;a href=&quot;http://codeforces.com/problemset/problem/939/A&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://codeforces.com/problemset/problem/939/A&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="oj" scheme="http://yoursite.com/categories/oj/"/>
+    
+      <category term="cf" scheme="http://yoursite.com/categories/oj/cf/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="cf" scheme="http://yoursite.com/tags/cf/"/>
+    
+      <category term="oj" scheme="http://yoursite.com/tags/oj/"/>
+    
+      <category term="图论" scheme="http://yoursite.com/tags/%E5%9B%BE%E8%AE%BA/"/>
+    
+  </entry>
   
   <entry>
     <title>(数学)A. Restoring Three Numbers</title>

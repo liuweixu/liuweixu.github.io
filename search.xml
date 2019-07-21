@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[(图论, dfs) B.Badge]]></title>
+    <url>%2F2019%2F07%2F22%2F(%E5%9B%BE%E8%AE%BA%2C%20dfs)%20B.Badge%2F</url>
+    <content type="text"><![CDATA[题目链接：http://codeforces.com/contest/1020/problem/B B. BadgeIn Summer Informatics School, if a student doesn’t behave well, teachers make a hole in his badge. And today one of the teachers caught a group of n students doing yet another trick. Let’s assume that all these students are numbered from 11 to n. The teacher came to student a and put a hole in his badge. The student, however, claimed that the main culprit is some other student papa. After that, the teacher came to student papa and made a hole in his badge as well. The student in reply said that the main culprit was student Ppa. This process went on for a while, but, since the number of students was finite, eventually the teacher came to the student, who already had a hole in his badge. After that, the teacher put a second hole in the student’s badge and decided that he is done with this process, and went to the sauna. You don’t know the first student who was caught by the teacher. However, you know all the numbers pi. Your task is to find out for every student a, who would be the student with two holes in the badge if the first caught student was a. Input The first line of the input contains the only integer n (1≤n≤10001≤n≤1000) — the number of the naughty students. The second line contains n integers p1, …, p (1≤pi≤n), where pi indicates the student who was reported to the teacher by student ii. Output For every student a from 11 to n print which student would receive two holes in the badge, if a was the first student caught by the teacher. Examples input Copy 1232 3 2 output Copy 12 2 3 input Copy 1231 2 3 output Copy 11 2 3 Note The picture corresponds to the first example test case. When a=1, the teacher comes to students 1, 2, 3, 2, in this order, and the student 2 is the one who receives a second hole in his badge. When a=2,the teacher comes to students 2, 3, 2, and the student 2 gets a second hole in his badge. When a=3, the teacher will visit students 3, 2, 3 with student 3 getting a second hole in his badge. For the second example test case it’s clear that no matter with whom the teacher starts, that student would be the one who gets the second hole in his badge. 上面的一些特殊的符号需要看看codeforces就行。 这个是一个图论题，就是在不断根据指控把一个人的标记打上扣，一直继续下去，直到找出已打出两个扣的人。 Python代码: 12345678910111213 n = int(input())L = list(map(int, input().split()))L.insert(0,0)Q = [i for i in range(n)]for i in range(1, n + 1): vis = [0 for i in range(n + 1)] cur = i while True: if vis[cur] != 0: break vis[cur] = 1 cur = L[cur] print(cur, end=" ")]]></content>
+      <categories>
+        <category>oj</category>
+        <category>cf</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>cf</tag>
+        <tag>oj</tag>
+        <tag>图论</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[(图论) A. Love Triangle]]></title>
+    <url>%2F2019%2F07%2F22%2F(%E5%9B%BE%E8%AE%BA)%20A.%20Love%20Triangle%2F</url>
+    <content type="text"><![CDATA[这个其实是一个很基础的图论题。 题目链接：http://codeforces.com/problemset/problem/939/A A. Love TriangleAs you could know there are no male planes nor female planes. However, each plane on Earth likes some other plane. There are n planes on Earth, numbered from 1 to n, and the plane with number i likes the plane with number f**i, where 1 ≤ f**i ≤ n and f**i ≠ i. We call a love triangle a situation in which plane A likes plane B, plane B likes plane C and plane C likes plane A. Find out if there is any love triangle on Earth. Input The first line contains a single integer n (2 ≤ n ≤ 5000) — the number of planes. The second line contains n integers f1, f2, …, f**n (1 ≤ f**i ≤ n, f**i ≠ i), meaning that the i-th plane likes the f**i-th. Output Output «YES» if there is a love triangle consisting of planes on Earth. Otherwise, output «NO». You can output any letter in lower case or in upper case. Examples input Copy 1252 4 5 1 3 output Copy 1YES input Copy 1255 5 5 5 1 output Copy 1NO Note In first example plane 2 likes plane 4, plane 4 likes plane 1, plane 1 likes plane 2 and that is a love triangle. In second example there are no love triangles. 这个是一个很基础的图论题，只要有f[f[f[i]]] == i的话，就说明肯定存在三角关系。 Python代码: 123456789101112n = int(input())f = list(map(int, input().split()))f.insert(0, 0)flag = 0for i in range(1, n + 1): if f[f[f[i]]] == i: flag = 1 breakif flag: print("YES")else: print("NO")]]></content>
+      <categories>
+        <category>oj</category>
+        <category>cf</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>cf</tag>
+        <tag>oj</tag>
+        <tag>图论</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[(数学)A. Restoring Three Numbers]]></title>
     <url>%2F2019%2F07%2F21%2F(%E6%95%B0%E5%AD%A6)%20A.%20Restoring%20Three%20Numbers%2F</url>
     <content type="text"><![CDATA[这个是一个数学题。不过不必是暴力的。 题目链接：http://codeforces.com/problemset/problem/1154/A A. Restoring Three NumbersPolycarp has guessed three positive integers aa, bb and cc. He keeps these numbers in secret, but he writes down four numbers on a board in arbitrary order — their pairwise sums (three numbers) and sum of all three numbers (one number). So, there are four numbers on a board in random order: a+ba, a+c, b+c and a+b+c. You have to guess three numbers aa, bb and cc using given numbers. Print three guessed integers in any order. Pay attention that some given numbers a, b and c can be equal (it is also possible that a=b=c). Input The only line of the input contains four positive integers x1,x2,x3,x4(2≤xi≤10^9) — numbers written on a board in random order. It is guaranteed that the answer exists for the given number x1,x2,x3,x4. Output Print such positive integers aa, bb and cc that four numbers written on a board are values a+b, a+c, b+c and a+b+c written in some order. Print a, b and c in any order. If there are several answers, you can print any. It is guaranteed that the answer exists. Examples input Copy 13 6 5 4 output Copy 12 1 3 input Copy 140 40 40 60 output Copy 120 20 20 input Copy 1201 101 101 200 output Copy 11 100 100 这个是一个数学题，不必是从1开始暴力，会超时的。可以从给出的4个数中选出最大的（a+b+c当然是最大的），然后减去其他中的一个，得到a或b或c，最后把剩下的两个减去这个数，得到相应的数。 Python代码: 12345678Q = map(int, input().split()) # 最后得到的就是一个tuple类型L = list(Q) # 将tuple类型转换为list类型。L.sort() # 排序，为了得到a + b + c的值。m = L[3]c = m - L[2]a = L[0] - cb = L[1] - cprint(a, b, c)]]></content>

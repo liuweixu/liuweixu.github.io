@@ -6,10 +6,36 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-21T11:24:13.600Z</updated>
+  <updated>2019-08-21T06:30:41.154Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用VMware虚拟机安装Ubuntu18.04.md</title>
+    <link href="http://yoursite.com/2019/08/21/%E4%BD%BF%E7%94%A8VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Ubuntu18-04-md/"/>
+    <id>http://yoursite.com/2019/08/21/使用VMware虚拟机安装Ubuntu18-04-md/</id>
+    <published>2019-08-21T14:29:04.000Z</published>
+    <updated>2019-08-21T06:30:41.154Z</updated>
+    
+    <content type="html"><![CDATA[<p>这个是利用VMware虚拟机安装Ubuntu的。由于我的笔记本电脑的硬盘有点问题，所以利用USB安装Ubuntu时，却经常扫描不到硬盘，所以最后放弃安装双系统。改为利用虚拟机了。</p><a id="more"></a><p>*<em>VMware 的百度云链接：<a href="https://pan.baidu.com/s/1QV60f1wv6OVOm9wJ1a0dKw" target="_blank" rel="noopener">https://pan.baidu.com/s/1QV60f1wv6OVOm9wJ1a0dKw</a> *</em><br>*<em>提取码：sr62 *</em></p><p>*<em>Ubuntu 的百度云链接：<a href="https://pan.baidu.com/s/1L3NWXms7TSXGV2X_mORMKg" target="_blank" rel="noopener">https://pan.baidu.com/s/1L3NWXms7TSXGV2X_mORMKg</a> *</em><br>*<em>提取码：hbz4 *</em></p><h3 id="一、VMware-的安装"><a href="#一、VMware-的安装" class="headerlink" title="一、VMware  的安装"></a>一、VMware  的安装</h3><p>我们可以在上面给出的链接进行下载。这个链接长期有效。然后根据提示一步一步安装，最后根据给出的密钥进行注册。</p><h3 id="二、-Ubuntu18-04下载"><a href="#二、-Ubuntu18-04下载" class="headerlink" title="二、 Ubuntu18.04下载"></a>二、 Ubuntu18.04下载</h3><p>这个要注意！！！，必须从官网进行下载，这个必须的，因为如果不是从官网下载的话，安装过程可能会出错的。推荐下载Ubuntu Desktop 18.04 LTS。当然，如果嫌慢的话，也可以从我给的链接下载（如果你有超级会员或其他破解工具的话），这个是从官网亲自下载的，保证正确。</p><h3 id="三、-虚拟机的配置"><a href="#三、-虚拟机的配置" class="headerlink" title="三、 虚拟机的配置"></a>三、 虚拟机的配置</h3><ol><li><p>打开虚拟机，点击创建虚拟机，然后得到如下图：</p><p><img src="http://wx3.sinaimg.cn/mw690/006QU0Psly1g6796kt60yj30u00ltjrt.jpg" alt="1"></p><p>可以直接点下一步。</p></li><li><p>然后得到下面的图，像这样。再点下一步。</p><p><img src="http://wx1.sinaimg.cn/mw690/006QU0Psly1g6793xwt25j30s70k80t0.jpg" alt="2"></p></li><li><p>既然是要安装Ubuntu，用Ubuntu64就行。</p><p><img src="http://wx1.sinaimg.cn/mw690/006QU0Psly1g6793z8z6pj30tl0kz3yn.jpg" alt="3"></p></li><li><p>下面自己设置就行</p><p><img src="http://wx4.sinaimg.cn/mw690/006QU0Psly1g679409995j30ud0k4glo.jpg" alt="4"></p></li><li><p><img src="http://wx2.sinaimg.cn/mw690/006QU0Psly1g67941hlupj30wq0l6gm1.jpg" alt="5"></p><p>​    这个步骤，磁盘大小最好至少20GB，当然，设置更大就更好了，对了，起初是占用不多，才几GB，然后往里面添加一些文件才会变大。</p></li><li><p>接下来就是继续点下一步，直至完成。然后还要点击编辑虚拟机设置。</p><p><img src="http://wx2.sinaimg.cn/mw690/006QU0Psly1g67942pz33j30ns0j174f.jpg" alt="6"></p><p>​    最后在下面的图中：</p><p><img src="http://wx3.sinaimg.cn/mw690/006QU0Psly1g67943raecj30yk0j674o.jpg" alt="7"></p></li></ol><p> 用这个，浏览Ubuntu镜像保存的位置。最后点击确定。</p><h3 id="四、Ubuntu安装"><a href="#四、Ubuntu安装" class="headerlink" title="四、Ubuntu安装"></a>四、Ubuntu安装</h3><p>最后，VMware虚拟机配置好了，接下来就是点击开启此虚拟机，开始安装。安装步骤不难（和那个让我头大的生双系统安装相比太简单了，几乎是傻瓜式的）：（先不放图了）</p><ol><li>点击“Install Ubuntu”（我觉得最好用English比较好，因为用中文可能会有一些bug。。。用English权当练习英语吧）</li><li>点continue,并且在‘Update and other software’ 中划上 ‘minimal installation’ （会省下一些时间）, 也划上 ‘Download updates while installation’ ,再点continue。</li><li>在Installation Type选默认就行。弹出的提示也点继续就行，（注意！！！！，在安装双系统时，这个不能点，要点最下边的那个，方便分区）</li><li>在Where Are You?点击中国，接下来就是填写个人信息，注意密码不能忘了，切记。</li><li>最后就是点击安装了，我这个渣渣的校园网安装这个花了半小时左右。</li><li>安装完毕后，点击restart now,重启虚拟机，当然，有可能会碰上重启时卡了，还一闪一闪的，可以直接打开windows进程，杀死VMware进程，然后进入VMware，点打开虚拟机，启动就行。</li></ol><h3 id="五、参考链接："><a href="#五、参考链接：" class="headerlink" title="五、参考链接："></a>五、参考链接：</h3><ol><li><strong><a href="https://zhuanlan.zhihu.com/p/41940739" target="_blank" rel="noopener">良许LInux-知乎-手把手教你安装Linux虚拟机</a></strong></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这个是利用VMware虚拟机安装Ubuntu的。由于我的笔记本电脑的硬盘有点问题，所以利用USB安装Ubuntu时，却经常扫描不到硬盘，所以最后放弃安装双系统。改为利用虚拟机了。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
+    
+      <category term="Ubuntu" scheme="http://yoursite.com/categories/Linux/Ubuntu/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="Ubuntu" scheme="http://yoursite.com/tags/Ubuntu/"/>
+    
+  </entry>
   
   <entry>
     <title>(图论, dfs) B.Badge</title>
@@ -162,9 +188,9 @@
     
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
-      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
-    
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
+    
+      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
   </entry>
   
@@ -192,9 +218,9 @@
     
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
-      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
-    
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
+    
+      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     
@@ -224,9 +250,9 @@
     
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
-      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
-    
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
+    
+      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     
@@ -254,9 +280,9 @@
       <category term="PyTorch" scheme="http://yoursite.com/categories/Deep-Learning/%E6%A1%86%E6%9E%B6/PyTorch/"/>
     
     
-      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
-    
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
+    
+      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
   </entry>
   
@@ -284,9 +310,9 @@
     
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
-      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
-    
       <category term="pytorch" scheme="http://yoursite.com/tags/pytorch/"/>
+    
+      <category term="Deep Learning" scheme="http://yoursite.com/tags/Deep-Learning/"/>
     
       <category term="NumPy" scheme="http://yoursite.com/tags/NumPy/"/>
     

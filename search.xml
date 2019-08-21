@@ -1,142 +1,341 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title><![CDATA[(图论, dfs) B.Badge]]></title>
-    <url>%2F2019%2F07%2F22%2F(%E5%9B%BE%E8%AE%BA%2C%20dfs)%20B.Badge%2F</url>
-    <content type="text"><![CDATA[题目链接：http://codeforces.com/contest/1020/problem/B B. BadgeIn Summer Informatics School, if a student doesn’t behave well, teachers make a hole in his badge. And today one of the teachers caught a group of n students doing yet another trick. Let’s assume that all these students are numbered from 11 to n. The teacher came to student a and put a hole in his badge. The student, however, claimed that the main culprit is some other student papa. After that, the teacher came to student papa and made a hole in his badge as well. The student in reply said that the main culprit was student Ppa. This process went on for a while, but, since the number of students was finite, eventually the teacher came to the student, who already had a hole in his badge. After that, the teacher put a second hole in the student’s badge and decided that he is done with this process, and went to the sauna. You don’t know the first student who was caught by the teacher. However, you know all the numbers pi. Your task is to find out for every student a, who would be the student with two holes in the badge if the first caught student was a. Input The first line of the input contains the only integer n (1≤n≤10001≤n≤1000) — the number of the naughty students. The second line contains n integers p1, …, p (1≤pi≤n), where pi indicates the student who was reported to the teacher by student ii. Output For every student a from 11 to n print which student would receive two holes in the badge, if a was the first student caught by the teacher. Examples input Copy 1232 3 2 output Copy 12 2 3 input Copy 1231 2 3 output Copy 11 2 3 Note The picture corresponds to the first example test case. When a=1, the teacher comes to students 1, 2, 3, 2, in this order, and the student 2 is the one who receives a second hole in his badge. When a=2,the teacher comes to students 2, 3, 2, and the student 2 gets a second hole in his badge. When a=3, the teacher will visit students 3, 2, 3 with student 3 getting a second hole in his badge. For the second example test case it’s clear that no matter with whom the teacher starts, that student would be the one who gets the second hole in his badge. 上面的一些特殊的符号需要看看codeforces就行。 这个是一个图论题，就是在不断根据指控把一个人的标记打上扣，一直继续下去，直到找出已打出两个扣的人。 Python代码: 12345678910111213 n = int(input())L = list(map(int, input().split()))L.insert(0,0)Q = [i for i in range(n)]for i in range(1, n + 1): vis = [0 for i in range(n + 1)] cur = i while True: if vis[cur] != 0: break vis[cur] = 1 cur = L[cur] print(cur, end=" ")]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>使用VMware虚拟机安装Ubuntu18.04.md</title>
+      <link href="/2019/08/21/%E4%BD%BF%E7%94%A8VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Ubuntu18-04-md/"/>
+      <url>/2019/08/21/%E4%BD%BF%E7%94%A8VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Ubuntu18-04-md/</url>
+      
+        <content type="html"><![CDATA[<p>这个是利用VMware虚拟机安装Ubuntu的。由于我的笔记本电脑的硬盘有点问题，所以利用USB安装Ubuntu时，却经常扫描不到硬盘，所以最后放弃安装双系统。改为利用虚拟机了。</p><a id="more"></a><p>*<em>VMware 的百度云链接：<a href="https://pan.baidu.com/s/1QV60f1wv6OVOm9wJ1a0dKw" target="_blank" rel="noopener">https://pan.baidu.com/s/1QV60f1wv6OVOm9wJ1a0dKw</a> *</em><br>*<em>提取码：sr62 *</em></p><p>*<em>Ubuntu 的百度云链接：<a href="https://pan.baidu.com/s/1L3NWXms7TSXGV2X_mORMKg" target="_blank" rel="noopener">https://pan.baidu.com/s/1L3NWXms7TSXGV2X_mORMKg</a> *</em><br>*<em>提取码：hbz4 *</em></p><h3 id="一、VMware-的安装"><a href="#一、VMware-的安装" class="headerlink" title="一、VMware  的安装"></a>一、VMware  的安装</h3><p>我们可以在上面给出的链接进行下载。这个链接长期有效。然后根据提示一步一步安装，最后根据给出的密钥进行注册。</p><h3 id="二、-Ubuntu18-04下载"><a href="#二、-Ubuntu18-04下载" class="headerlink" title="二、 Ubuntu18.04下载"></a>二、 Ubuntu18.04下载</h3><p>这个要注意！！！，必须从官网进行下载，这个必须的，因为如果不是从官网下载的话，安装过程可能会出错的。推荐下载Ubuntu Desktop 18.04 LTS。当然，如果嫌慢的话，也可以从我给的链接下载（如果你有超级会员或其他破解工具的话），这个是从官网亲自下载的，保证正确。</p><h3 id="三、-虚拟机的配置"><a href="#三、-虚拟机的配置" class="headerlink" title="三、 虚拟机的配置"></a>三、 虚拟机的配置</h3><ol><li><p>打开虚拟机，点击创建虚拟机，然后得到如下图：</p><p><img src="http://wx3.sinaimg.cn/mw690/006QU0Psly1g6796kt60yj30u00ltjrt.jpg" alt="1"></p><p>可以直接点下一步。</p></li><li><p>然后得到下面的图，像这样。再点下一步。</p><p><img src="http://wx1.sinaimg.cn/mw690/006QU0Psly1g6793xwt25j30s70k80t0.jpg" alt="2"></p></li><li><p>既然是要安装Ubuntu，用Ubuntu64就行。</p><p><img src="http://wx1.sinaimg.cn/mw690/006QU0Psly1g6793z8z6pj30tl0kz3yn.jpg" alt="3"></p></li><li><p>下面自己设置就行</p><p><img src="http://wx4.sinaimg.cn/mw690/006QU0Psly1g679409995j30ud0k4glo.jpg" alt="4"></p></li><li><p><img src="http://wx2.sinaimg.cn/mw690/006QU0Psly1g67941hlupj30wq0l6gm1.jpg" alt="5"></p><p>​    这个步骤，磁盘大小最好至少20GB，当然，设置更大就更好了，对了，起初是占用不多，才几GB，然后往里面添加一些文件才会变大。</p></li><li><p>接下来就是继续点下一步，直至完成。然后还要点击编辑虚拟机设置。</p><p><img src="http://wx2.sinaimg.cn/mw690/006QU0Psly1g67942pz33j30ns0j174f.jpg" alt="6"></p><p>​    最后在下面的图中：</p><p><img src="http://wx3.sinaimg.cn/mw690/006QU0Psly1g67943raecj30yk0j674o.jpg" alt="7"></p></li></ol><p> 用这个，浏览Ubuntu镜像保存的位置。最后点击确定。</p><h3 id="四、Ubuntu安装"><a href="#四、Ubuntu安装" class="headerlink" title="四、Ubuntu安装"></a>四、Ubuntu安装</h3><p>最后，VMware虚拟机配置好了，接下来就是点击开启此虚拟机，开始安装。安装步骤不难（和那个让我头大的生双系统安装相比太简单了，几乎是傻瓜式的）：（先不放图了）</p><ol><li>点击“Install Ubuntu”（我觉得最好用English比较好，因为用中文可能会有一些bug。。。用English权当练习英语吧）</li><li>点continue,并且在‘Update and other software’ 中划上 ‘minimal installation’ （会省下一些时间）, 也划上 ‘Download updates while installation’ ,再点continue。</li><li>在Installation Type选默认就行。弹出的提示也点继续就行，（注意！！！！，在安装双系统时，这个不能点，要点最下边的那个，方便分区）</li><li>在Where Are You?点击中国，接下来就是填写个人信息，注意密码不能忘了，切记。</li><li>最后就是点击安装了，我这个渣渣的校园网安装这个花了半小时左右。</li><li>安装完毕后，点击restart now,重启虚拟机，当然，有可能会碰上重启时卡了，还一闪一闪的，可以直接打开windows进程，杀死VMware进程，然后进入VMware，点打开虚拟机，启动就行。</li></ol><h3 id="五、参考链接："><a href="#五、参考链接：" class="headerlink" title="五、参考链接："></a>五、参考链接：</h3><ol><li><strong><a href="https://zhuanlan.zhihu.com/p/41940739" target="_blank" rel="noopener">良许LInux-知乎-手把手教你安装Linux虚拟机</a></strong></li></ol>]]></content>
+      
+      
       <categories>
-        <category>oj</category>
-        <category>cf</category>
+          
+          <category> Linux </category>
+          
+          <category> Ubuntu </category>
+          
       </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>cf</tag>
-        <tag>oj</tag>
-        <tag>图论</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[(图论) A. Love Triangle]]></title>
-    <url>%2F2019%2F07%2F22%2F(%E5%9B%BE%E8%AE%BA)%20A.%20Love%20Triangle%2F</url>
-    <content type="text"><![CDATA[这个其实是一个很基础的图论题。 题目链接：http://codeforces.com/problemset/problem/939/A A. Love TriangleAs you could know there are no male planes nor female planes. However, each plane on Earth likes some other plane. There are n planes on Earth, numbered from 1 to n, and the plane with number i likes the plane with number f**i, where 1 ≤ f**i ≤ n and f**i ≠ i. We call a love triangle a situation in which plane A likes plane B, plane B likes plane C and plane C likes plane A. Find out if there is any love triangle on Earth. Input The first line contains a single integer n (2 ≤ n ≤ 5000) — the number of planes. The second line contains n integers f1, f2, …, f**n (1 ≤ f**i ≤ n, f**i ≠ i), meaning that the i-th plane likes the f**i-th. Output Output «YES» if there is a love triangle consisting of planes on Earth. Otherwise, output «NO». You can output any letter in lower case or in upper case. Examples input Copy 1252 4 5 1 3 output Copy 1YES input Copy 1255 5 5 5 1 output Copy 1NO Note In first example plane 2 likes plane 4, plane 4 likes plane 1, plane 1 likes plane 2 and that is a love triangle. In second example there are no love triangles. 这个是一个很基础的图论题，只要有f[f[f[i]]] == i的话，就说明肯定存在三角关系。 Python代码: 123456789101112n = int(input())f = list(map(int, input().split()))f.insert(0, 0)flag = 0for i in range(1, n + 1): if f[f[f[i]]] == i: flag = 1 breakif flag: print("YES")else: print("NO")]]></content>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> Ubuntu </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>(图论, dfs) B.Badge</title>
+      <link href="/2019/07/22/(%E5%9B%BE%E8%AE%BA,%20dfs)%20B.Badge/"/>
+      <url>/2019/07/22/(%E5%9B%BE%E8%AE%BA,%20dfs)%20B.Badge/</url>
+      
+        <content type="html"><![CDATA[<p>题目链接：<a href="http://codeforces.com/contest/1020/problem/B" target="_blank" rel="noopener">http://codeforces.com/contest/1020/problem/B</a></p><a id="more"></a><h4 id="B-Badge"><a href="#B-Badge" class="headerlink" title="B. Badge"></a>B. Badge</h4><p>In Summer Informatics School, if a student doesn’t behave well, teachers make a hole in his badge. And today one of the teachers caught a group of n students doing yet another trick.</p><p>Let’s assume that all these students are numbered from 11 to n. The teacher came to student a and put a hole in his badge. The student, however, claimed that the main culprit is some other student papa.</p><p>After that, the teacher came to student papa and made a hole in his badge as well. The student in reply said that the main culprit was student Ppa.</p><p>This process went on for a while, but, since the number of students was finite, eventually the teacher came to the student, who already had a hole in his badge.</p><p>After that, the teacher put a second hole in the student’s badge and decided that he is done with this process, and went to the sauna.</p><p>You don’t know the first student who was caught by the teacher. However, you know all the numbers pi. Your task is to find out for every student a, who would be the student with two holes in the badge if the first caught student was a.</p><p>Input</p><p>The first line of the input contains the only integer n (1≤n≤10001≤n≤1000) — the number of the naughty students.</p><p>The second line contains n integers p1, …, p (1≤pi≤n), where pi indicates the student who was reported to the teacher by student ii.</p><p>Output</p><p>For every student a from 11 to n print which student would receive two holes in the badge, if a was the first student caught by the teacher.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">2 3 2</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 2 3</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">1 2 3</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 2 3</span><br></pre></td></tr></table></figure><p>Note</p><p>The picture corresponds to the first example test case.</p><p><img src="http://codeforces.com/predownloaded/e6/2f/e62f6279b291a91d10dcf8b13b483a9dc5659758.png" alt="img"></p><p>When a=1, the teacher comes to students 1, 2, 3, 2, in this order, and the student 2 is the one who receives a second hole in his badge.</p><p>When a=2,the teacher comes to students 2, 3, 2, and the student 2 gets a second hole in his badge. When a=3, the teacher will visit students 3, 2, 3 with student 3 getting a second hole in his badge.</p><p>For the second example test case it’s clear that no matter with whom the teacher starts, that student would be the one who gets the second hole in his badge.</p><p>上面的一些特殊的符号需要看看codeforces就行。</p><p>这个是一个图论题，就是在不断根据指控把一个人的标记打上扣，一直继续下去，直到找出已打出两个扣的人。</p><p>Python代码:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> n = int(input())</span><br><span class="line">L = list(map(int, input().split()))</span><br><span class="line">L.insert(<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line">Q = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(n)]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">    vis = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line">    cur = i</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">if</span> vis[cur] != <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        vis[cur] = <span class="number">1</span></span><br><span class="line">        cur = L[cur]</span><br><span class="line">    print(cur, end=<span class="string">" "</span>)</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>oj</category>
-        <category>cf</category>
+          
+          <category> oj </category>
+          
+          <category> cf </category>
+          
       </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>cf</tag>
-        <tag>oj</tag>
-        <tag>图论</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[(数学)A. Restoring Three Numbers]]></title>
-    <url>%2F2019%2F07%2F21%2F(%E6%95%B0%E5%AD%A6)%20A.%20Restoring%20Three%20Numbers%2F</url>
-    <content type="text"><![CDATA[这个是一个数学题。不过不必是暴力的。 题目链接：http://codeforces.com/problemset/problem/1154/A A. Restoring Three NumbersPolycarp has guessed three positive integers aa, bb and cc. He keeps these numbers in secret, but he writes down four numbers on a board in arbitrary order — their pairwise sums (three numbers) and sum of all three numbers (one number). So, there are four numbers on a board in random order: a+ba, a+c, b+c and a+b+c. You have to guess three numbers aa, bb and cc using given numbers. Print three guessed integers in any order. Pay attention that some given numbers a, b and c can be equal (it is also possible that a=b=c). Input The only line of the input contains four positive integers x1,x2,x3,x4(2≤xi≤10^9) — numbers written on a board in random order. It is guaranteed that the answer exists for the given number x1,x2,x3,x4. Output Print such positive integers aa, bb and cc that four numbers written on a board are values a+b, a+c, b+c and a+b+c written in some order. Print a, b and c in any order. If there are several answers, you can print any. It is guaranteed that the answer exists. Examples input Copy 13 6 5 4 output Copy 12 1 3 input Copy 140 40 40 60 output Copy 120 20 20 input Copy 1201 101 101 200 output Copy 11 100 100 这个是一个数学题，不必是从1开始暴力，会超时的。可以从给出的4个数中选出最大的（a+b+c当然是最大的），然后减去其他中的一个，得到a或b或c，最后把剩下的两个减去这个数，得到相应的数。 Python代码: 12345678Q = map(int, input().split()) # 最后得到的就是一个tuple类型L = list(Q) # 将tuple类型转换为list类型。L.sort() # 排序，为了得到a + b + c的值。m = L[3]c = m - L[2]a = L[0] - cb = L[1] - cprint(a, b, c)]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> cf </tag>
+            
+            <tag> oj </tag>
+            
+            <tag> 图论 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>(图论) A. Love Triangle</title>
+      <link href="/2019/07/22/(%E5%9B%BE%E8%AE%BA)%20A.%20Love%20Triangle/"/>
+      <url>/2019/07/22/(%E5%9B%BE%E8%AE%BA)%20A.%20Love%20Triangle/</url>
+      
+        <content type="html"><![CDATA[<p>这个其实是一个很基础的图论题。</p><p>题目链接：<a href="http://codeforces.com/problemset/problem/939/A" target="_blank" rel="noopener">http://codeforces.com/problemset/problem/939/A</a></p><a id="more"></a><h4 id="A-Love-Triangle"><a href="#A-Love-Triangle" class="headerlink" title="A. Love Triangle"></a>A. Love Triangle</h4><p>As you could know there are no male planes nor female planes. However, each plane on Earth likes some other plane. There are <em>n</em> planes on Earth, numbered from 1 to <em>n</em>, and the plane with number <em>i</em> likes the plane with number <em>f**i</em>, where 1 ≤ <em>f**i</em> ≤ <em>n</em> and <em>f**i</em> ≠ <em>i</em>.</p><p>We call a love triangle a situation in which plane <em>A</em> likes plane <em>B</em>, plane <em>B</em> likes plane <em>C</em> and plane <em>C</em> likes plane <em>A</em>. Find out if there is any love triangle on Earth.</p><p>Input</p><p>The first line contains a single integer <em>n</em> (2 ≤ <em>n</em> ≤ 5000) — the number of planes.</p><p>The second line contains <em>n</em> integers <em>f</em>1, <em>f</em>2, …, <em>f**n</em> (1 ≤ <em>f**i</em> ≤ <em>n</em>, <em>f**i</em> ≠ <em>i</em>), meaning that the <em>i</em>-th plane likes the <em>f**i</em>-th.</p><p>Output</p><p>Output «YES» if there is a love triangle consisting of planes on Earth. Otherwise, output «NO».</p><p>You can output any letter in lower case or in upper case.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">2 4 5 1 3</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">YES</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">5 5 5 5 1</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NO</span><br></pre></td></tr></table></figure><p>Note</p><p>In first example plane 2 likes plane 4, plane 4 likes plane 1, plane 1 likes plane 2 and that is a love triangle.</p><p>In second example there are no love triangles.</p><p>这个是一个很基础的图论题，只要有f[f[f[i]]] == i的话，就说明肯定存在三角关系。</p><p>Python代码:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">f = list(map(int, input().split()))</span><br><span class="line">f.insert(<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">flag = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">    <span class="keyword">if</span> f[f[f[i]]] == i:</span><br><span class="line">        flag = <span class="number">1</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"><span class="keyword">if</span> flag:</span><br><span class="line">    print(<span class="string">"YES"</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">"NO"</span>)</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>oj</category>
-        <category>cf</category>
+          
+          <category> oj </category>
+          
+          <category> cf </category>
+          
       </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>cf</tag>
-        <tag>oj</tag>
-        <tag>数学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[(brute force, implementation)A. Fafa and his Company]]></title>
-    <url>%2F2019%2F07%2F21%2F(brute%20force%2C%20%E6%A8%A1%E6%8B%9F)A.%20Fafa%20and%20his%20Company%2F</url>
-    <content type="text"><![CDATA[这是一个很水的题，但是自己的英语基础很差，理解文章却花了我不少时间。。。 题目链接：935A - Fafa and his Company A. Fafa and his CompanyFafa owns a company that works on huge projects. There are n employees in Fafa’s company. Whenever the company has a new project to start working on, Fafa has to divide the tasks of this project among all the employees. Fafa finds doing this every time is very tiring for him. So, he decided to choose the best l employees in his company as team leaders. Whenever there is a new project, Fafa will divide the tasks among only the team leaders and each team leader will be responsible of some positive number of employees to give them the tasks. To make this process fair for the team leaders, each one of them should be responsible for the same number of employees. Moreover, every employee, who is not a team leader, has to be under the responsibility of exactly one team leader, and no team leader is responsible for another team leader. Given the number of employees n, find in how many ways Fafa could choose the number of team leaders l in such a way that it is possible to divide employees between them evenly. Input The input consists of a single line containing a positive integer n (2 ≤ n ≤ 105) — the number of employees in Fafa’s company. Output Print a single integer representing the answer to the problem. Examples input Copy 12 output Copy 11 input Copy 110 output Copy 13 Note In the second sample Fafa has 3 ways: choose only 1 employee as a team leader with 9 employees under his responsibility. choose 2 employees as team leaders with 4 employees under the responsibility of each of them. choose 5 employees as team leaders with 1 employee under the responsibility of each of them. 这个是一个基础的题，注意题目中的“find in how many ways”，可以看出，这个是求分配的方案的总数，这个分配必须保证每个领导带领的人是一样的。因此可以采取模拟。 Python代码： 12345678n = int(input())sum = 0i = 1while i &lt;= n // 2: if (n - i) % i == 0: sum += 1 i += 1print(sum) C++代码： 12345678910111213141516#include&lt;iostream&gt;using namespace std;int main() &#123; int n; cin &gt;&gt; n; int sum = 0; int i = 1; while (i &lt;= n / 2) &#123; if ((n - i) % i == 0) &#123; sum++; &#125; i++; &#125; cout &lt;&lt; sum &lt;&lt; endl; return 0;&#125; PS:英语很重要，很重要的]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> cf </tag>
+            
+            <tag> oj </tag>
+            
+            <tag> 图论 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>(数学)A. Restoring Three Numbers</title>
+      <link href="/2019/07/21/(%E6%95%B0%E5%AD%A6)%20A.%20Restoring%20Three%20Numbers/"/>
+      <url>/2019/07/21/(%E6%95%B0%E5%AD%A6)%20A.%20Restoring%20Three%20Numbers/</url>
+      
+        <content type="html"><![CDATA[<p>这个是一个数学题。不过不必是暴力的。</p><p>题目链接：<a href="http://codeforces.com/problemset/problem/1154/A" target="_blank" rel="noopener">http://codeforces.com/problemset/problem/1154/A</a></p><a id="more"></a><h4 id="A-Restoring-Three-Numbers"><a href="#A-Restoring-Three-Numbers" class="headerlink" title="A. Restoring Three Numbers"></a>A. Restoring Three Numbers</h4><p>Polycarp has guessed three positive integers aa, bb and cc. He keeps these numbers in secret, but he writes down four numbers on a board in arbitrary order — their pairwise sums (three numbers) and sum of all three numbers (one number). So, there are four numbers on a board in random order: a+ba, a+c, b+c and a+b+c.</p><p>You have to guess three numbers aa, bb and cc using given numbers. Print three guessed integers in any order.</p><p>Pay attention that some given numbers a, b and c can be equal (it is also possible that a=b=c).</p><p>Input</p><p>The only line of the input contains four positive integers x1,x2,x3,x4(2≤xi≤10^9) — numbers written on a board in random order. It is guaranteed that the answer exists for the given number x1,x2,x3,x4.</p><p>Output</p><p>Print such positive integers aa, bb and cc that four numbers written on a board are values a+b, a+c, b+c and a+b+c written in some order. Print a, b and c in any order. If there are several answers, you can print any. It is guaranteed that the answer exists.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 6 5 4</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 1 3</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">40 40 40 60</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20 20 20</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">201 101 101 200</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 100 100</span><br></pre></td></tr></table></figure><p>这个是一个数学题，不必是从1开始暴力，会超时的。可以从给出的4个数中选出最大的（a+b+c当然是最大的），然后减去其他中的一个，得到a或b或c，最后把剩下的两个减去这个数，得到相应的数。</p><p>Python代码:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Q = map(int, input().split()) <span class="comment"># 最后得到的就是一个tuple类型</span></span><br><span class="line">L = list(Q) <span class="comment"># 将tuple类型转换为list类型。</span></span><br><span class="line">L.sort() <span class="comment"># 排序，为了得到a + b + c的值。</span></span><br><span class="line">m = L[<span class="number">3</span>]</span><br><span class="line">c = m - L[<span class="number">2</span>]</span><br><span class="line">a = L[<span class="number">0</span>] - c</span><br><span class="line">b = L[<span class="number">1</span>] - c</span><br><span class="line">print(a, b, c)</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>oj</category>
-        <category>cf</category>
+          
+          <category> oj </category>
+          
+          <category> cf </category>
+          
       </categories>
-      <tags>
-        <tag>brute force</tag>
-        <tag>模拟</tag>
-        <tag>Python</tag>
-        <tag>cf</tag>
-        <tag>oj</tag>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[利用torch.optim.SGD类实例最小化函数f(x)]]></title>
-    <url>%2F2019%2F07%2F18%2F%E5%88%A9%E7%94%A8torch.optim.SGD%E7%B1%BB%E5%AE%9E%E4%BE%8B%E6%9C%80%E5%B0%8F%E5%8C%96%E5%87%BD%E6%95%B0f(x)%2F</url>
-    <content type="text"><![CDATA[如题 –来自于肖志清的《神经网络与pytorch实战》123456789101112131415from math import piimport torchx = torch.tensor([pi/3, pi/6], requires_grad=True) # 输入的数import torch.optim as optimoptimzer = optim.SGD([x,], lr=0.1, momentum=0)# 第一个参数是需要更新的列表。for step in range(11): # step为0时，没有优化，从1开始优化。 if step: optimzer.zero_grad() # 需要清空优化器在上次迭代中存储的数据。避免积累。 f.backward() # 调用这个方法，说明进行求导。 optimzer.step() # 用这个方法更新自变量的值 f = -((x.cos() ** 2).sum()) ** 2 print('step &#123;&#125; : x = &#123;&#125;, f(x) = &#123;&#125;'.format(step, x.tolist(), f)) 输出：1234567891011step 0 : x = [1.0471975803375244, 0.5235987901687622], f(x) = -1.0step 1 : x = [0.8739925026893616, 0.35039371252059937], f(x) = -1.674528956413269step 2 : x = [0.6192374229431152, 0.1835097223520279], f(x) = -2.6563119888305664step 3 : x = [0.3111077845096588, 0.06654246151447296], f(x) = -3.617122173309326step 4 : x = [0.08941137790679932, 0.016069628298282623], f(x) = -3.9671425819396973step 5 : x = [0.01855570822954178, 0.0032690390944480896], f(x) = -3.99858021736145step 6 : x = [0.0037171822041273117, 0.0006542906630784273], f(x) = -3.999943256378174step 7 : x = [0.0007434850558638573, 0.00013086199760437012], f(x) = -3.999997615814209step 8 : x = [0.00014869740698486567, 2.617243444547057e-05], f(x) = -4.0step 9 : x = [2.973947994178161e-05, 5.234485797700472e-06], f(x) = -4.0step 10 : x = [5.947895260760561e-06, 1.0468970685906243e-06], f(x) = -4.0]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> cf </tag>
+            
+            <tag> oj </tag>
+            
+            <tag> 数学 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>(brute force, implementation)A. Fafa and his Company</title>
+      <link href="/2019/07/21/(brute%20force,%20%E6%A8%A1%E6%8B%9F)A.%20Fafa%20and%20his%20Company/"/>
+      <url>/2019/07/21/(brute%20force,%20%E6%A8%A1%E6%8B%9F)A.%20Fafa%20and%20his%20Company/</url>
+      
+        <content type="html"><![CDATA[<p>这是一个很水的题，但是自己的英语基础很差，理解文章却花了我不少时间。。。</p><p>题目链接：<a href="http://codeforces.com/problemset/problem/935/A" target="_blank" rel="noopener">935A - Fafa and his Company</a></p><a id="more"></a><h4 id="A-Fafa-and-his-Company"><a href="#A-Fafa-and-his-Company" class="headerlink" title="A. Fafa and his Company"></a>A. Fafa and his Company</h4><p>Fafa owns a company that works on huge projects. There are <em>n</em> employees in Fafa’s company. Whenever the company has a new project to start working on, Fafa has to divide the tasks of this project among all the employees.</p><p>Fafa finds doing this every time is very tiring for him. So, he decided to choose the best <em>l</em> employees in his company as team leaders. Whenever there is a new project, Fafa will divide the tasks among only the team leaders and each team leader will be responsible of some positive number of employees to give them the tasks. To make this process fair for the team leaders, each one of them should be responsible for the same number of employees. Moreover, every employee, who is not a team leader, has to be under the responsibility of exactly one team leader, and no team leader is responsible for another team leader.</p><p>Given the number of employees <em>n</em>, <strong>find in how many ways</strong> Fafa could choose the number of team leaders <em>l</em> in such a way that it is possible to divide employees between them evenly.</p><p>Input</p><p>The input consists of a single line containing a positive integer <em>n</em> (2 ≤ <em>n</em> ≤ 105) — the number of employees in Fafa’s company.</p><p>Output</p><p>Print a single integer representing the answer to the problem.</p><p>Examples</p><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure><p>input</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure><p>output</p><p>Copy</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure><p>Note</p><p>In the second sample Fafa has 3 ways:</p><ul><li>choose only 1 employee as a team leader with 9 employees under his responsibility.</li><li>choose 2 employees as team leaders with 4 employees under the responsibility of each of them.</li><li>choose 5 employees as team leaders with 1 employee under the responsibility of each of them.</li></ul><p>这个是一个基础的题，注意题目中的<strong>“find in how many ways”</strong>，可以看出，这个是求分配的方案的总数，这个分配必须保证每个领导带领的人是一样的。因此可以采取模拟。</p><p>Python代码：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">sum = <span class="number">0</span></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt;= n // <span class="number">2</span>:</span><br><span class="line">    <span class="keyword">if</span> (n - i) % i == <span class="number">0</span>:</span><br><span class="line">        sum += <span class="number">1</span></span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">print(sum)</span><br></pre></td></tr></table></figure><p>C++代码：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line"><span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt;= n / <span class="number">2</span>) &#123;</span><br><span class="line"><span class="keyword">if</span> ((n - i) % i == <span class="number">0</span>) &#123;</span><br><span class="line">sum++;</span><br><span class="line">&#125;</span><br><span class="line">i++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; sum &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="PS"><a href="#PS" class="headerlink" title="PS:"></a>PS:</h3><p>英语很重要，很重要的</p>]]></content>
+      
+      
       <categories>
-        <category>Deep Learning</category>
-        <category>框架</category>
-        <category>PyTorch</category>
+          
+          <category> oj </category>
+          
+          <category> cf </category>
+          
       </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>Deep Learning</tag>
-        <tag>pytorch</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[pytorch的view()的用法的总结]]></title>
-    <url>%2F2019%2F07%2F18%2Fpytorch%E7%9A%84view()%E7%9A%84%E7%94%A8%E6%B3%95%E7%9A%84%E6%80%BB%E7%BB%93%2F</url>
-    <content type="text"><![CDATA[如题 下面看代码（解释见注释）1234567891011121314151617181920212223import torchimport numpy as npa = np.array([[[1,2,3], [4,5,6]]])print("numpy 的 reshape")print(a.reshape(-1,6))print("=============")print("pytorch")x = torch.tensor(a)print(x.size())print(x)x = x.view(-1,6)print(x.size())print(x)print("-------------")b = np.array([1,2,3])y = torch.tensor(b)print(y.size())print(y)y = y.view(-1,3)print(y.size())print(y) 输出：1234567891011121314numpy 的 reshape[[1 2 3 4 5 6]]=============pytorchtorch.Size([1, 2, 3])tensor([[[1, 2, 3], [4, 5, 6]]], dtype=torch.int32)torch.Size([1, 6])tensor([[1, 2, 3, 4, 5, 6]], dtype=torch.int32)-------------torch.Size([3])tensor([1, 2, 3], dtype=torch.int32)torch.Size([1, 3])tensor([[1, 2, 3]], dtype=torch.int32) 从上面可以看出，此处的view()的作用和numpy的reshape的作用类似，就是转换维度，最后得到自己需要的维度的张量，其中-1则是具有推导合适的值得作用，和numpy里面一样。]]></content>
+      
+      
+        <tags>
+            
+            <tag> brute force </tag>
+            
+            <tag> 模拟 </tag>
+            
+            <tag> Python </tag>
+            
+            <tag> cf </tag>
+            
+            <tag> oj </tag>
+            
+            <tag> C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>利用torch.optim.SGD类实例最小化函数f(x)</title>
+      <link href="/2019/07/18/%E5%88%A9%E7%94%A8torch.optim.SGD%E7%B1%BB%E5%AE%9E%E4%BE%8B%E6%9C%80%E5%B0%8F%E5%8C%96%E5%87%BD%E6%95%B0f(x)/"/>
+      <url>/2019/07/18/%E5%88%A9%E7%94%A8torch.optim.SGD%E7%B1%BB%E5%AE%9E%E4%BE%8B%E6%9C%80%E5%B0%8F%E5%8C%96%E5%87%BD%E6%95%B0f(x)/</url>
+      
+        <content type="html"><![CDATA[<h3 id="如题"><a href="#如题" class="headerlink" title="如题"></a>如题</h3><a id="more"></a><h5 id="–来自于肖志清的《神经网络与pytorch实战》"><a href="#–来自于肖志清的《神经网络与pytorch实战》" class="headerlink" title="–来自于肖志清的《神经网络与pytorch实战》"></a>–来自于肖志清的《神经网络与pytorch实战》</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> pi</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">x = torch.tensor([pi/<span class="number">3</span>, pi/<span class="number">6</span>], requires_grad=<span class="literal">True</span>) <span class="comment"># 输入的数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line">optimzer = optim.SGD([x,], lr=<span class="number">0.1</span>, momentum=<span class="number">0</span>)<span class="comment"># 第一个参数是需要更新的列表。</span></span><br><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">11</span>):</span><br><span class="line">    <span class="comment"># step为0时，没有优化，从1开始优化。</span></span><br><span class="line">    <span class="keyword">if</span> step:</span><br><span class="line">        optimzer.zero_grad() <span class="comment"># 需要清空优化器在上次迭代中存储的数据。避免积累。</span></span><br><span class="line">        f.backward()<span class="comment"># 调用这个方法，说明进行求导。</span></span><br><span class="line">        optimzer.step()<span class="comment"># 用这个方法更新自变量的值</span></span><br><span class="line">    f = -((x.cos() ** <span class="number">2</span>).sum()) ** <span class="number">2</span></span><br><span class="line">    print(<span class="string">'step &#123;&#125; : x = &#123;&#125;, f(x) = &#123;&#125;'</span>.format(step, x.tolist(), f))</span><br></pre></td></tr></table></figure><h6 id="输出："><a href="#输出：" class="headerlink" title="输出："></a>输出：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">step <span class="number">0</span> : x = [<span class="number">1.0471975803375244</span>, <span class="number">0.5235987901687622</span>], f(x) = <span class="number">-1.0</span></span><br><span class="line">step <span class="number">1</span> : x = [<span class="number">0.8739925026893616</span>, <span class="number">0.35039371252059937</span>], f(x) = <span class="number">-1.674528956413269</span></span><br><span class="line">step <span class="number">2</span> : x = [<span class="number">0.6192374229431152</span>, <span class="number">0.1835097223520279</span>], f(x) = <span class="number">-2.6563119888305664</span></span><br><span class="line">step <span class="number">3</span> : x = [<span class="number">0.3111077845096588</span>, <span class="number">0.06654246151447296</span>], f(x) = <span class="number">-3.617122173309326</span></span><br><span class="line">step <span class="number">4</span> : x = [<span class="number">0.08941137790679932</span>, <span class="number">0.016069628298282623</span>], f(x) = <span class="number">-3.9671425819396973</span></span><br><span class="line">step <span class="number">5</span> : x = [<span class="number">0.01855570822954178</span>, <span class="number">0.0032690390944480896</span>], f(x) = <span class="number">-3.99858021736145</span></span><br><span class="line">step <span class="number">6</span> : x = [<span class="number">0.0037171822041273117</span>, <span class="number">0.0006542906630784273</span>], f(x) = <span class="number">-3.999943256378174</span></span><br><span class="line">step <span class="number">7</span> : x = [<span class="number">0.0007434850558638573</span>, <span class="number">0.00013086199760437012</span>], f(x) = <span class="number">-3.999997615814209</span></span><br><span class="line">step <span class="number">8</span> : x = [<span class="number">0.00014869740698486567</span>, <span class="number">2.617243444547057e-05</span>], f(x) = <span class="number">-4.0</span></span><br><span class="line">step <span class="number">9</span> : x = [<span class="number">2.973947994178161e-05</span>, <span class="number">5.234485797700472e-06</span>], f(x) = <span class="number">-4.0</span></span><br><span class="line">step <span class="number">10</span> : x = [<span class="number">5.947895260760561e-06</span>, <span class="number">1.0468970685906243e-06</span>], f(x) = <span class="number">-4.0</span></span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>Deep Learning</category>
-        <category>框架</category>
-        <category>PyTorch</category>
+          
+          <category> Deep Learning </category>
+          
+          <category> 框架 </category>
+          
+          <category> PyTorch </category>
+          
       </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>Deep Learning</tag>
-        <tag>pytorch</tag>
-        <tag>NumPy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[pytorch、numpy和list的求平方]]></title>
-    <url>%2F2019%2F07%2F18%2Fpytorch%E3%80%81numpy%E5%92%8Clist%E7%9A%84%E6%B1%82%E5%B9%B3%E6%96%B9%2F</url>
-    <content type="text"><![CDATA[如题 输入例子：1234567891011import numpy as npimport torcha = [1/2, 1/4] # 一个listb = np.array(a)# 转换成数组print(np.power(a, 2)) # 求平方。print(b ** 2) # 数组可以用 ** ,但是列表是不能用的。print(a + a) # 等同于 print(a * 2)# 利用pytorch求平方。x = torch.tensor(a)print((x ** 2).numpy()) 输出结果：1234[0.25 0.0625][0.25 0.0625][0.5, 0.25, 0.5, 0.25][0.25 0.0625]]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> pytorch </tag>
+            
+            <tag> Deep Learning </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pytorch的view()的用法的总结</title>
+      <link href="/2019/07/18/pytorch%E7%9A%84view()%E7%9A%84%E7%94%A8%E6%B3%95%E7%9A%84%E6%80%BB%E7%BB%93/"/>
+      <url>/2019/07/18/pytorch%E7%9A%84view()%E7%9A%84%E7%94%A8%E6%B3%95%E7%9A%84%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<h3 id="如题"><a href="#如题" class="headerlink" title="如题"></a>如题</h3><a id="more"></a><h4 id="下面看代码（解释见注释）"><a href="#下面看代码（解释见注释）" class="headerlink" title="下面看代码（解释见注释）"></a>下面看代码（解释见注释）</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([[[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">               [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]]])</span><br><span class="line">print(<span class="string">"numpy 的 reshape"</span>)</span><br><span class="line">print(a.reshape(<span class="number">-1</span>,<span class="number">6</span>))</span><br><span class="line">print(<span class="string">"============="</span>)</span><br><span class="line">print(<span class="string">"pytorch"</span>)</span><br><span class="line">x = torch.tensor(a)</span><br><span class="line">print(x.size())</span><br><span class="line">print(x)</span><br><span class="line">x = x.view(<span class="number">-1</span>,<span class="number">6</span>)</span><br><span class="line">print(x.size())</span><br><span class="line">print(x)</span><br><span class="line">print(<span class="string">"-------------"</span>)</span><br><span class="line">b = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">y = torch.tensor(b)</span><br><span class="line">print(y.size())</span><br><span class="line">print(y)</span><br><span class="line">y = y.view(<span class="number">-1</span>,<span class="number">3</span>)</span><br><span class="line">print(y.size())</span><br><span class="line">print(y)</span><br></pre></td></tr></table></figure><h6 id="输出："><a href="#输出：" class="headerlink" title="输出："></a>输出：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">numpy 的 reshape</span><br><span class="line">[[1 2 3 4 5 6]]</span><br><span class="line">=============</span><br><span class="line">pytorch</span><br><span class="line">torch.Size([1, 2, 3])</span><br><span class="line">tensor([[[1, 2, 3],</span><br><span class="line">         [4, 5, 6]]], dtype=torch.int32)</span><br><span class="line">torch.Size([1, 6])</span><br><span class="line">tensor([[1, 2, 3, 4, 5, 6]], dtype=torch.int32)</span><br><span class="line">-------------</span><br><span class="line">torch.Size([3])</span><br><span class="line">tensor([1, 2, 3], dtype=torch.int32)</span><br><span class="line">torch.Size([1, 3])</span><br><span class="line">tensor([[1, 2, 3]], dtype=torch.int32)</span><br></pre></td></tr></table></figure><p>从上面可以看出，此处的view()的作用和numpy的reshape的作用类似，就是转换维度，最后得到自己需要的维度的张量，其中<strong>-1</strong>则是具有推导合适的值得作用，和numpy里面一样。</p>]]></content>
+      
+      
       <categories>
-        <category>Deep Learning</category>
-        <category>框架</category>
-        <category>PyTorch</category>
+          
+          <category> Deep Learning </category>
+          
+          <category> 框架 </category>
+          
+          <category> PyTorch </category>
+          
       </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>Deep Learning</tag>
-        <tag>pytorch</tag>
-        <tag>NumPy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[BrokenPipeError [Errno 32] Broken pipe 的解决办法]]></title>
-    <url>%2F2019%2F07%2F18%2FBrokenPipeError%20%5BErrno%2032%5D%20Broken%20pipe%20%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[PyTorch : Training A Classifier 中的BrokenPipeError: [Errno 32] Broken pipe问题的解决办法 1234567891011121314151617181920212223242526272829303132333435363738import torchimport torchvisionimport torchvision.transforms as transformsimport matplotlib.pyplot as pltimport numpy as npdef imshow(img): img = img / 2 + 0.5 # unnormalize npimg = img.numpy() plt.imshow(np.transpose(npimg, (1, 2, 0))) plt.show()transform = transforms.Compose( [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers=2)testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)testloader = torch.utils.data.DataLoader(testset, batch_size=4, shuffle=False, num_workers=2)classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')# get some random training imagesdataiter = iter(trainloader)images, labels = dataiter.next()# show imagesimshow(torchvision.utils.make_grid(images))# print labelsprint(' '.join('%5s' % classes[labels[j]] for j in range(4))) 但是出了问题： 1BrokenPipeError: [Errno 32] Broken pipe 这个问题与windows下多线程的问题有关， 与torch.utils.data.DataLoader()的num_workers参数有关，目前，到版本1.1.0为止，PyTorch的官方教程仍未改变或提出关于这个的解法。 我们只需要把这个num_workers把2改为0，只启用一个主进程加载数据集。]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> pytorch </tag>
+            
+            <tag> Deep Learning </tag>
+            
+            <tag> NumPy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pytorch、numpy和list的求平方</title>
+      <link href="/2019/07/18/pytorch%E3%80%81numpy%E5%92%8Clist%E7%9A%84%E6%B1%82%E5%B9%B3%E6%96%B9/"/>
+      <url>/2019/07/18/pytorch%E3%80%81numpy%E5%92%8Clist%E7%9A%84%E6%B1%82%E5%B9%B3%E6%96%B9/</url>
+      
+        <content type="html"><![CDATA[<h3 id="如题"><a href="#如题" class="headerlink" title="如题"></a>如题</h3><a id="more"></a><h5 id="输入例子："><a href="#输入例子：" class="headerlink" title="输入例子："></a>输入例子：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">a = [<span class="number">1</span>/<span class="number">2</span>, <span class="number">1</span>/<span class="number">4</span>] <span class="comment"># 一个list</span></span><br><span class="line">b = np.array(a)<span class="comment"># 转换成数组</span></span><br><span class="line">print(np.power(a, <span class="number">2</span>)) <span class="comment"># 求平方。</span></span><br><span class="line">print(b ** <span class="number">2</span>) <span class="comment"># 数组可以用 ** ,但是列表是不能用的。</span></span><br><span class="line">print(a + a) <span class="comment"># 等同于 print(a * 2)</span></span><br><span class="line"><span class="comment"># 利用pytorch求平方。</span></span><br><span class="line">x = torch.tensor(a)</span><br><span class="line">print((x ** <span class="number">2</span>).numpy())</span><br></pre></td></tr></table></figure><h5 id="输出结果："><a href="#输出结果：" class="headerlink" title="输出结果："></a>输出结果：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">0.25</span>   <span class="number">0.0625</span>]</span><br><span class="line">[<span class="number">0.25</span>   <span class="number">0.0625</span>]</span><br><span class="line">[<span class="number">0.5</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.25</span>]</span><br><span class="line">[<span class="number">0.25</span>   <span class="number">0.0625</span>]</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>Deep Learning</category>
-        <category>框架</category>
-        <category>PyTorch</category>
+          
+          <category> Deep Learning </category>
+          
+          <category> 框架 </category>
+          
+          <category> PyTorch </category>
+          
       </categories>
-      <tags>
-        <tag>Deep Learning</tag>
-        <tag>pytorch</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[pytorch的size()的总结]]></title>
-    <url>%2F2019%2F07%2F17%2Fpytorch%E7%9A%84size-%E7%9A%84%E6%80%BB%E7%BB%93%2F</url>
-    <content type="text"><![CDATA[如题 pytorch的size()的总结：输入的代码的例子1：12345678910111213141516import torchimport numpy as npa = np.array([[1,2,3], [4,5,6]])x = torch.tensor(a)print("numpy:")print("Shape of a:",a.shape)print("Type of a.shape:", type(a.shape))print("Size of a:", a.size)print("-------------")print("pytorch:")print("Shape of x:",x.shape)print("Size of x:",x.size())print("Type of x.size():",type(x.size())) 输出结果:123456789numpy:Shape of a: (2, 3)Type of a.shape: &lt;class &apos;tuple&apos;&gt;Size of a: 6-------------pytorch:Shape of x: torch.Size([2, 3])Size of x: torch.Size([2, 3])Type of x.size(): &lt;class &apos;torch.Size&apos;&gt; ​ 在关于pytorch的size()中，我们通过和numpy类比，可以发现，pytorch的size()的功能和numpy的shape属性类似，而和numpy的size属性是不一样的，另外，pytorch的size()功能和属性shape一样。 ​ 还有，pytorch的torch.size()是一个元组，可以实现python中的元组的一系列操作。 123456789import torchimport numpy as npa = np.array([[1,2,3], [4,5,6]])x = torch.tensor(a)print(x.size()[1:]) 输出：1torch.Size([3]) # 切片]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> pytorch </tag>
+            
+            <tag> Deep Learning </tag>
+            
+            <tag> NumPy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>BrokenPipeError [Errno 32] Broken pipe 的解决办法</title>
+      <link href="/2019/07/18/BrokenPipeError%20%5BErrno%2032%5D%20Broken%20pipe%20%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
+      <url>/2019/07/18/BrokenPipeError%20%5BErrno%2032%5D%20Broken%20pipe%20%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<h3 id="PyTorch-Training-A-Classifier-中的BrokenPipeError-Errno-32-Broken-pipe问题的解决办法"><a href="#PyTorch-Training-A-Classifier-中的BrokenPipeError-Errno-32-Broken-pipe问题的解决办法" class="headerlink" title="PyTorch : Training A Classifier  中的BrokenPipeError: [Errno 32] Broken pipe问题的解决办法"></a>PyTorch : Training A Classifier  中的BrokenPipeError: [Errno 32] Broken pipe问题的解决办法</h3><a id="more"></a><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torchvision</span><br><span class="line"><span class="keyword">import</span> torchvision.transforms <span class="keyword">as</span> transforms</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">imshow</span><span class="params">(img)</span>:</span></span><br><span class="line">    img = img / <span class="number">2</span> + <span class="number">0.5</span>     <span class="comment"># unnormalize</span></span><br><span class="line">    npimg = img.numpy()</span><br><span class="line">    plt.imshow(np.transpose(npimg, (<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>)))</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">transform = transforms.Compose(</span><br><span class="line">    [transforms.ToTensor(),</span><br><span class="line">     transforms.Normalize((<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>), (<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>))])</span><br><span class="line"></span><br><span class="line">trainset = torchvision.datasets.CIFAR10(root=<span class="string">'./data'</span>, train=<span class="literal">True</span>,</span><br><span class="line">                                        download=<span class="literal">True</span>, transform=transform)</span><br><span class="line">trainloader = torch.utils.data.DataLoader(trainset, batch_size=<span class="number">4</span>,</span><br><span class="line">                                          shuffle=<span class="literal">True</span>, num_workers=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">testset = torchvision.datasets.CIFAR10(root=<span class="string">'./data'</span>, train=<span class="literal">False</span>,</span><br><span class="line">                                       download=<span class="literal">True</span>, transform=transform)</span><br><span class="line">testloader = torch.utils.data.DataLoader(testset, batch_size=<span class="number">4</span>,</span><br><span class="line">                                         shuffle=<span class="literal">False</span>, num_workers=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">classes = (<span class="string">'plane'</span>, <span class="string">'car'</span>, <span class="string">'bird'</span>, <span class="string">'cat'</span>,</span><br><span class="line">           <span class="string">'deer'</span>, <span class="string">'dog'</span>, <span class="string">'frog'</span>, <span class="string">'horse'</span>, <span class="string">'ship'</span>, <span class="string">'truck'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># get some random training images</span></span><br><span class="line">dataiter = iter(trainloader)</span><br><span class="line">images, labels = dataiter.next()</span><br><span class="line"></span><br><span class="line"><span class="comment"># show images</span></span><br><span class="line">imshow(torchvision.utils.make_grid(images))</span><br><span class="line"><span class="comment"># print labels</span></span><br><span class="line">print(<span class="string">' '</span>.join(<span class="string">'%5s'</span> % classes[labels[j]] <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">4</span>)))</span><br></pre></td></tr></table></figure><p>但是出了问题：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BrokenPipeError: [Errno <span class="number">32</span>] Broken pipe</span><br></pre></td></tr></table></figure><p>这个问题与windows下多线程的问题有关， 与torch.utils.data.DataLoader()的num_workers参数有关，目前，到版本1.1.0为止，PyTorch的官方教程仍未改变或提出关于这个的解法。</p><p>我们只需要把这个num_workers把2改为0，只启用一个主进程加载数据集。</p>]]></content>
+      
+      
       <categories>
-        <category>Deep Learning</category>
-        <category>框架</category>
-        <category>PyTorch</category>
+          
+          <category> Deep Learning </category>
+          
+          <category> 框架 </category>
+          
+          <category> PyTorch </category>
+          
       </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>Deep Learning</tag>
-        <tag>pytorch</tag>
-        <tag>NumPy</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> pytorch </tag>
+            
+            <tag> Deep Learning </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pytorch的size()的总结</title>
+      <link href="/2019/07/17/pytorch%E7%9A%84size-%E7%9A%84%E6%80%BB%E7%BB%93/"/>
+      <url>/2019/07/17/pytorch%E7%9A%84size-%E7%9A%84%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<h3 id="如题"><a href="#如题" class="headerlink" title="如题"></a>如题</h3><a id="more"></a><h3 id="pytorch的size-的总结："><a href="#pytorch的size-的总结：" class="headerlink" title="pytorch的size()的总结："></a>pytorch的size()的总结：</h3><h6 id="输入的代码的例子1："><a href="#输入的代码的例子1：" class="headerlink" title="输入的代码的例子1："></a>输入的代码的例子1：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">              [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line">x = torch.tensor(a)</span><br><span class="line">print(<span class="string">"numpy:"</span>)</span><br><span class="line">print(<span class="string">"Shape of a:"</span>,a.shape)</span><br><span class="line">print(<span class="string">"Type of a.shape:"</span>, type(a.shape))</span><br><span class="line">print(<span class="string">"Size of a:"</span>, a.size)</span><br><span class="line">print(<span class="string">"-------------"</span>)</span><br><span class="line">print(<span class="string">"pytorch:"</span>)</span><br><span class="line">print(<span class="string">"Shape of x:"</span>,x.shape)</span><br><span class="line">print(<span class="string">"Size of x:"</span>,x.size())</span><br><span class="line">print(<span class="string">"Type of x.size():"</span>,type(x.size()))</span><br></pre></td></tr></table></figure><h6 id="输出结果"><a href="#输出结果" class="headerlink" title="输出结果:"></a>输出结果:</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">numpy:</span><br><span class="line">Shape of a: (2, 3)</span><br><span class="line">Type of a.shape: &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">Size of a: 6</span><br><span class="line">-------------</span><br><span class="line">pytorch:</span><br><span class="line">Shape of x: torch.Size([2, 3])</span><br><span class="line">Size of x: torch.Size([2, 3])</span><br><span class="line">Type of x.size(): &lt;class &apos;torch.Size&apos;&gt;</span><br></pre></td></tr></table></figure><p>​        在关于pytorch的size()中，我们通过和numpy类比，可以发现，pytorch的size()的功能和numpy的<strong>shape</strong>属性类似，而和numpy的size属性是不一样的，另外，pytorch的size()功能和属性shape一样。</p><p>​        还有，pytorch的torch.size()是一个<strong>元组</strong>，可以实现python中的元组的一系列操作。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">              [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line">x = torch.tensor(a)</span><br><span class="line"></span><br><span class="line">print(x.size()[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure><h6 id="输出："><a href="#输出：" class="headerlink" title="输出："></a>输出：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.Size([<span class="number">3</span>]) <span class="comment"># 切片</span></span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Deep Learning </category>
+          
+          <category> 框架 </category>
+          
+          <category> PyTorch </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> pytorch </tag>
+            
+            <tag> Deep Learning </tag>
+            
+            <tag> NumPy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>

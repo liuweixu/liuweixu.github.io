@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Ubuntu18.04 主题美化（MaxOS主题）]]></title>
+    <url>%2F2019%2F08%2F22%2FUbuntu18-04-%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%EF%BC%88MaxOS%E4%B8%BB%E9%A2%98%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[Ubuntu时可以进行主题的美化，可以改为MacOS主题，可以享受Mac 安装工具要安装主题，首先要安装三个包 1sudo apt update 1sudo apt install gnome-tweak-tool 1sudo apt install gnome-shell-extensions 1sudo apt install gnome-shell-extension-dashtodock Tweak修改（注意，下面这些已经经过主题美化了） 经过安装三个包后，我们可以打开Tweaks 像上面修改，我们可以发现本来在右上角的按钮放到了左上角了。 修改鼠标的指针的样式 如图，我们可以通过修改cursor ,修改鼠标的箭头的样式。 去掉Shell的无法修改的感叹号 Extensions -&gt; User themes 打开它 重启，然后可以发现那个感叹号不见了。 将侧边栏放到底部。 Extensions -&gt; Dash to dock 点击settings图标，像下面的图，然后进一步修改。 安装主题安装GTK主题McHigh Sierra https://www.pling.com/s/Gnome/p/1013714/ McSierra Compact https://www.pling.com/s/Gnome/p/1013741/ 在第一个链接中。 下载这个，到桌面或其他比较便于管理的位置。 然后再这个位置打开terminal 1tar xvf Sierra-light.tar.xz 得到解压后的文件。 1sudo mv Sierra-light /usr/share/themes 最后在Tweaks中 在applications中修改为Sierra-light，我们可以发现GTK主题改变了。 安装shell主题其实，shell主题和GTK主题一样，也可以在shell中修改为Sierra-light 也可以。 也可以安装其他主题，比如Sierra-compact-light主题等等。可以在https://www.pling.com/s/Gnome/ 中寻找。 安装icons主题我选的是MacOS11主题，不过由于这个主题比较大，下载费时，所以下面给出了百度云链接： 链接：https://pan.baidu.com/s/1tVP9dghyHvNwq4kMNtyu5g ****提取码：f34j 然后放到某一位置，解压，并把解压后得到的文件夹移动到/usr/share/icons 最后打开Tweaks，在Appearance 中打开icon，选MacOS11就行。 安装GDM主题（登陆界面主题）百度云链接：*https://pan.baidu.com/s/1f-PPWVILeovdIWmvQjXkVw **提取码：yetv * 来源：https://www.pling.com/s/Gnome/p/1207015/ 把下载得到的文件解压，得到文件夹，文件夹的内容： 备份/usr/share/gnome-shell/theme/ubuntu.css 1sudo cp /usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css.backup 用上图中的ubuntu.css替换掉系统自带的/usr/share/gnome-shell/theme/ubuntu.css 1sudo cp -i ~/Desktop/liu/setaswallpaper/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css （上面的注意位置别写错） 把SetAsWallpaper脚本文件复制到~/.local/share/nautilus/scripts/目录下，然后修改下权限（如果需要） 1sudo cp ~/Desktop/liu/setaswallpaper/SetAsWallpaper ~/.local/share/nautilus/scripts/ 1sudo chmod +x SetAsWallpaper 然后重启nautilus（下面的命令是关闭） 1nautilus -q 执行如下命令，修改下 /usr/share/backgrounds 的权限. 1sudo chmod 777 /usr/share/backgrounds/ 去~/.local/share/nautilus/scripts/ 目录下执行下SetAsWallpaper脚本。 1sudo ./SetAsWallpape 重启系统（这个必须的） 不过此时壁纸应该会没了，可以重新设置，另外，最好先设置自己喜欢的壁纸，这样的话得到的登陆界面的模糊界面可以是基于自己选的壁纸了。 效果图 其他主题的一些修改桌面壁纸和锁屏界面壁纸修改在桌面右键点击，点Change background。可以修改壁纸，当然，我们也可以从网上下载自己喜欢的壁纸，存到~/Pictures就行。 头像的修改在Settings中，Details -&gt; Users 点击头像，可以选择自己喜欢的图作为自己的头像。 最终成色 参考链接： 给Ubuntu18.04(18.10)安装mac os主题 [https://www.pling.com/s/Gnome/]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Ubuntu</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[配置VMware的Ubuntu]]></title>
     <url>%2F2019%2F08%2F22%2F%E9%85%8D%E7%BD%AEVMware%E7%9A%84Ubuntu%2F</url>
     <content type="text"><![CDATA[在上一篇中，我们已经在VMware虚拟机中安装了Ubuntu。接下来还需要对于这个Ubuntu进行配置，使其能够进行一定程度的开发（VMware的Ubuntu的配置和装到硬盘的Ubuntu的配置几乎一样，已经装好了双系统的人，也可以看看这个博文，希望能够给大家带来一些帮助） 配置内容前言当我们安装好了Ubuntu后，还需要进行一些配置，比如安装vim，切换软件源为清华源，安装搜狗拼音输入法等等。 安装VMware tools​ 这个VMware tools十分有用，当安装好了后， 界面的大小可以自动适应屏幕，还可以打开共享文件夹。 ​ 首先，点击界面的左上方的“虚拟机”，然后点击“安装VMware tools”，等待一些时间，我们可以在桌面中看见： （忽略背景和主题，这些是我已经进行美化了，具体的美化方法可以见我的下一篇博文） 步骤： 然后在这个VMware tools界面中， ctrl + alt + t， 打开terminal，输入 1sudo mv VMwareTools-10.2.5-8068393.tar.gz ~/Desktop 移动压缩文件到桌面，方便管理。 解压安装包 12cd ~/Desktoptar xvf VMwareTools-10.2.5-8068393.tar.gz 进到vmware-tools-distrib, 用sudo 运行 vmware-install.pl, 安装VMware tools。安装过程第一次询问的时候，输入 yes, 之后一路回车即可。 12cd vmware-tools-distribsudo ./vmware-install.pl 当我们再点击界面左上方的虚拟机时，如果出现“重新安装VMware Tools”时，安装VMware就算是完成了。 关于自动调整大小，需要在虚拟机界面中 查看-&gt;自动调整大小 勾选自动适应客户机就可以了。 切换软件源为国内源，比如清华源。​ 这个是有必要做的，因为这个会大大加快apt upgrade 和 apt install 的速度，可以在较短的时间内安装和升级包，节省不少时间。 清华源的网址：https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/ 我们选择与自己的版本相对应的。目前没有19.04版本(2019年8月21日)，不过有18.04已经够了。 步骤： 切换源之前把相应的配置文件备份一份，保险。 1sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak 打开清华源官网，如图： 1sudo gedit /etc/apt/sources.list 用gedit 打开这个配置文件，把上面几行网址（去掉注释）替代配置文件上的内容，然后保存。也可以用vi，不过对于linux新手来说可能是比较麻烦的。 更新软件包缓存 12sudo apt updatesudo apt upgrade 到此，我们算是正式完成切换到国内源，当然，也可以换成其他的国内源，比如阿里源等等。 打开共享文件夹当我们安装好了VMware Tools后，就可以打开共享文件夹了。 步骤： 在虚拟机界面左上角点击虚拟机。如图 点击共享文件夹，点击启用 然后点击下面的添加，如果没有，就建立一个，继续点下一个，勾选“启用其共享” 这个已建立的文件夹中，如果我们放入一些文件其中，我们便可以在虚拟机中的ubuntu里的 /mnt/hgfs/share 中找到一样的东西，因此，我们可以先在windows中下载一些东西，然后放到这个已建立的文件夹中，我们可以在ubuntu中用这些东西，很方便。 安装VIMLinux虽然有vi，不过Ubuntu自带的vi非常难用，比如在插入模式下方向键不能用，而是会输出ABCD的文字。所以我们得更新vi到vim。 1sudo apt install vim (我们可能会见到要输入[Y/n], 我们只需要输入Y就行)。 ps: VIM的主题如何修改： 只需要在VIM界面中用右键点击，点preferences，然后再color中修改就行。 安装git1sudo apt install git 安装gcc/g++12sudo apt install g++sudo apt install gcc 安装搜狗拼音输入法​ 不过Ubuntu18.04已经有了中文输入法，我们可以在相应的设置中进行修改就可以得到。但是，我个人觉得这个输入法不如搜狗拼音输入法好用，所以我就安装搜狗拼音输入法了。 步骤： 卸载ibus。 我们安装搜狗输入法前，必须卸载ibus才能行，否则一安装后，就不得不面对用搜狗输入法打字时却同时出现Ubuntu自带的中文输入法候选框和搜狗拼音输入法的候选框的bug ，所以还不如先卸载ibus，而且卸载ibus不会给Ubuntu带来一些问题。 1sudo apt remove ibus 清除ibus配置。 1sudo apt purge ibus 卸载顶部面板任务栏上的键盘指示。 1sudo apt-get remove indicator-keyboard 安装fcitx输入法框架 1sudo apt install fcitx-table-wbpy fcitx-config-gtk 切换为 Fcitx输入法 1im-config -n fcitx im-config 配置需要重启系统才能生效（下面的命令就是重启） 1sudo shutdown -r now 下载和安装搜狗输入法 *搜狗输入法linux版本的百度云链接：链接：https://pan.baidu.com/s/1P5oM5vzbaNaWzASOyUHIyA **提取码：lxe6 * 我们可以从这个链接下载deb文件，然后放到相应的位置上，在这个位置打开terminal 1sudo dpkg -i sogoupinyin_2.2.0.0108_amd64.deb ​ 这个deb文件用dpkg命令实现安装。 修复损坏缺少的包和打开fcitx输入法配置。 修复： 1sudo apt-get install -f 然后重启（这个再次重启比较好） 然后打开Fcitx 输入法配置： 1fcitx-config-gtk3 如图： 如果有Sogou Pinyin，就OK了。 最后： 我们还需要打开setting中的region and language的设置，在Input source 中添加Chinese。 然后输入一些字时，打开搜狗拼音输入法的设置，然后关闭（这样的话能够可以实现shift切换中英文，如果不这样做的话，shift 键的功能就失效了，emmmmm）。 注意事项 换国内源，移动文件，打开文件等等操作时，最好用sudo，因为如果不用sudo ，这些操作未必都能实现。 如果出现了搜狗输入法的候选框的乱码时： 用下面就行 1sudo killall fcitx 12cd ~/.configsudo rm -rf SogouPY* sogou* 可以用ctrl+shift+f 实现简体和繁体的转换。 参考链接 良许Linux-手把手教你配置虚拟机 清华源 ubuntu 18.04 LTS 安装搜狗输入法 [VMware下共享文件夹的实现]]></content>
@@ -35,10 +48,10 @@
         <category>cf</category>
       </categories>
       <tags>
-        <tag>Python</tag>
+        <tag>图论</tag>
         <tag>oj</tag>
         <tag>cf</tag>
-        <tag>图论</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -50,10 +63,10 @@
         <category>cf</category>
       </categories>
       <tags>
-        <tag>Python</tag>
+        <tag>图论</tag>
         <tag>oj</tag>
         <tag>cf</tag>
-        <tag>图论</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -65,10 +78,10 @@
         <category>cf</category>
       </categories>
       <tags>
-        <tag>Python</tag>
-        <tag>数学</tag>
         <tag>oj</tag>
         <tag>cf</tag>
+        <tag>Python</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -80,9 +93,9 @@
         <category>cf</category>
       </categories>
       <tags>
-        <tag>Python</tag>
         <tag>oj</tag>
         <tag>cf</tag>
+        <tag>Python</tag>
         <tag>brute force</tag>
         <tag>模拟</tag>
         <tag>C++</tag>
@@ -99,8 +112,8 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>pytorch</tag>
         <tag>Deep Learning</tag>
+        <tag>pytorch</tag>
       </tags>
   </entry>
   <entry>
@@ -114,8 +127,8 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>pytorch</tag>
         <tag>Deep Learning</tag>
+        <tag>pytorch</tag>
         <tag>NumPy</tag>
       </tags>
   </entry>
@@ -130,8 +143,8 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>pytorch</tag>
         <tag>Deep Learning</tag>
+        <tag>pytorch</tag>
         <tag>NumPy</tag>
       </tags>
   </entry>
@@ -145,8 +158,8 @@
         <category>PyTorch</category>
       </categories>
       <tags>
-        <tag>pytorch</tag>
         <tag>Deep Learning</tag>
+        <tag>pytorch</tag>
       </tags>
   </entry>
   <entry>
@@ -160,8 +173,8 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>pytorch</tag>
         <tag>Deep Learning</tag>
+        <tag>pytorch</tag>
         <tag>NumPy</tag>
       </tags>
   </entry>

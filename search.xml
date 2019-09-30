@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Beautifulsoup]]></title>
+    <url>%2F2019%2F10%2F01%2FBeautifulsoup%2F</url>
+    <content type="text"><![CDATA[Beautifulsoup和requests爬取笔趣看的书的内容。关于讲解这个代码之前，我觉得需要注意的一些必要的内容： 这个爬虫实质上就是利用某种工具帮助我们从网上爬取相应的HTML或其他结构，而一般来说，这个HTML或其他结构里面会有我们需要的内容，并且这些一般是字符串类型，也有可能是json类型。 爬取到这些字符串后，我们接下来用Xpath、Beautifulsoup或PyQuery等等工具解析，因为这样会让我们更高效的找到自己所需要的内容。当然，我们可以不用这些，直接利用字符串的操作函数来找，比如python的split()等等，不过我觉得会比较费事和费力的，我个人不太推荐这个方式的。如果没有特殊的情况的话，还是先用这些解析工具比较好。 最后利用这些解析工具或用自己的方式找到这些需要的数据以某种形式保存下去，保存的方式有：保存到csv文件，json文件，txt文件，以及保存到MySQL、MongoDB、Redis等等，选自己喜欢的就好。 这个爬虫，我们需要面对静态页面和有js加载的动态页面，而前者会更简单，可以“可见即可爬”，后者比较困难，不能做到“可见即可爬”，需要利用Google等浏览器的开发者工具来帮助我们查找，就算如此，也有可能碰壁，这时我们可以利用Selenium等工具来帮助我们查找，做到“可见即可爬”，所以，我们有必要区分这两个页面类型，从而选取合适的爬虫方式。 当我们学爬虫到一定的程度时，我们最好先学习框架，比如Python的Scrapy或Java的WebMagic等等，因为这些优秀的框架可以帮助我们省下不少的爬虫功夫，直接用好的轮子总会比自己闷头造轮子更好的吧。 最后爬虫的流程一般是： 接下来讲解代码： 首先我们可以打开Google，进入笔趣看的极品家丁的目录页，然后打开开发者工具（用Ctrl+Shift+I），确定需要爬取的各个标题的位置。 然后用requests.get(url) 这个url是目录页的链接，这个功能是爬取网页的源代码（在静态网页上是通用的，而动态网页也许是失效的），其中，为了反爬，特意添加headers，构建一个请求头，具体过程如下： 最后注意编码格式的问题，因为一般来说，中文网的编码格式是gbk的，而我们如果不注意这个情况，爬下来的源代码中涉及到的中文可能出现乱码，因此我们需要进行处理：text.encoding = text.apparent_encoding, 也可以用text.encoding = “utf-8”。 然后就是利用Beautifulsoup解析了，关于Beautifulsoup的推荐链接是：崔庆才的博客， 最后并把爬下来的各个标题的链接进行整理，用于接下来的爬虫。 用requests遍历，爬取每个链接里面的内容，其中注意“&amp;nbsp”，这个是\xa0，最好替换掉，否则会爬不出内容，这个也是反爬的一个比较简单的措施。最后把爬取的内容一个一个的保存到txt文件就行。 代码见下面。 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465import requestsfrom bs4 import BeautifulSoupheaders = &#123; "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)\ Chrome/77.0.3865.90 Safari/537.36"&#125;list_url = []list_title = []target = "https://www.biqukan.com" # 这个是用来和在目录页爬取的链接相结合，从而得到一个可以访问的链接。# 爬取笔趣看的《极品家丁》的目录页def getHtmlList(url): text = requests.get(url, headers=headers) text.encoding = text.apparent_encoding if text.status_code == 200: text = text.text soup = BeautifulSoup(text, 'lxml') soup = soup.prettify() soup = BeautifulSoup(soup, 'lxml') div = soup.find_all("div", class_="listmain") a_soup = div[0].find_all("a") for item in a_soup: list_url.append(target + item.get("href")) list_title.append(item.string.replace("\n", "").strip()) else: return None# 爬取每个目录文章的内容，由于在笔趣看的书中，每个目录的的内容格式是几乎一样的。def getHtmlContent(url): txt = requests.get(url, headers=headers) txt.encoding = txt.apparent_encoding if txt.status_code == 200: return txt.text else: return None# 用Beautifulsoup解析爬取的内容，注意"\xa0"。def parse_content(txt): soup = BeautifulSoup(txt, 'lxml') div = soup.find_all('div', class_='showtxt') text = div[0].text.replace(" ", "\n").replace("\xa0" * 8, ' ') return text# 保存到txt文件中def save_text(text, path): with open("./极品家丁/&#123;&#125;.txt".format(path), "w", encoding="utf-8") as f: f.writelines(text)if __name__ == '__main__': url = 'https://www.biqukan.com/3_3053/' getHtmlList(url) list_url = list_url[13:] list_title = list_title[13:] for i in range(len(list_url)): text = getHtmlContent(list_url[i]) text = parse_content(text) save_text(text, list_title[i]) print("\r" + "下载进度：&#123;:.2f&#125;%".format(i / len(list_url) * 100), end="", flush=True) # 这个可以实现原地刷新，flush=True 和\r 这两个不能少。 Github的链接：Github]]></content>
+      <categories>
+        <category>爬虫</category>
+        <category>Beautifulsoup</category>
+      </categories>
+      <tags>
+        <tag>爬虫</tag>
+        <tag>Beautifulsoup</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Ubuntu18.04 主题美化（MaxOS主题）]]></title>
     <url>%2F2019%2F08%2F22%2FUbuntu18-04-%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%EF%BC%88MaxOS%E4%B8%BB%E9%A2%98%EF%BC%89%2F</url>
     <content type="text"><![CDATA[Ubuntu时可以进行主题的美化，可以改为MacOS主题，可以享受Mac的优雅的主题。 安装工具要安装主题，首先要安装三个包 1sudo apt update 1sudo apt install gnome-tweak-tool 1sudo apt install gnome-shell-extensions 1sudo apt install gnome-shell-extension-dashtodock Tweak修改（注意，下面这些已经经过主题美化了） 经过安装三个包后，我们可以打开Tweaks 像上面修改，我们可以发现本来在右上角的按钮放到了左上角了。 修改鼠标的指针的样式 如图，我们可以通过修改cursor ,修改鼠标的箭头的样式。 去掉Shell的无法修改的感叹号 Extensions -&gt; User themes 打开它 重启，然后可以发现那个感叹号不见了。 将侧边栏放到底部。 Extensions -&gt; Dash to dock 点击settings图标，像下面的图，然后进一步修改。 安装主题安装GTK主题McHigh Sierra https://www.pling.com/s/Gnome/p/1013714/ McSierra Compact https://www.pling.com/s/Gnome/p/1013741/ 在第一个链接中。 下载这个，到桌面或其他比较便于管理的位置。 然后再这个位置打开terminal 1tar xvf Sierra-light.tar.xz 得到解压后的文件。 1sudo mv Sierra-light /usr/share/themes 最后在Tweaks中 在applications中修改为Sierra-light，我们可以发现GTK主题改变了。 安装shell主题其实，shell主题和GTK主题一样，也可以在shell中修改为Sierra-light 也可以。 也可以安装其他主题，比如Sierra-compact-light主题等等。可以在https://www.pling.com/s/Gnome/ 中寻找。 安装icons主题我选的是MacOS11主题，不过由于这个主题比较大，下载费时，所以下面给出了百度云链接： 链接：https://pan.baidu.com/s/1tVP9dghyHvNwq4kMNtyu5g ****提取码：f34j 然后放到某一位置，解压，并把解压后得到的文件夹移动到/usr/share/icons 最后打开Tweaks，在Appearance 中打开icon，选MacOS11就行。 安装GDM主题（登陆界面主题）百度云链接：*https://pan.baidu.com/s/1f-PPWVILeovdIWmvQjXkVw **提取码：yetv * 来源：https://www.pling.com/s/Gnome/p/1207015/ 把下载得到的文件解压，得到文件夹，文件夹的内容： 备份/usr/share/gnome-shell/theme/ubuntu.css 1sudo cp /usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css.backup 用上图中的ubuntu.css替换掉系统自带的/usr/share/gnome-shell/theme/ubuntu.css 1sudo cp -i ~/Desktop/liu/setaswallpaper/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css （上面的注意位置别写错） 把SetAsWallpaper脚本文件复制到~/.local/share/nautilus/scripts/目录下，然后修改下权限（如果需要） 1sudo cp ~/Desktop/liu/setaswallpaper/SetAsWallpaper ~/.local/share/nautilus/scripts/ 1sudo chmod +x SetAsWallpaper 然后重启nautilus（下面的命令是关闭） 1nautilus -q 执行如下命令，修改下 /usr/share/backgrounds 的权限. 1sudo chmod 777 /usr/share/backgrounds/ 去~/.local/share/nautilus/scripts/ 目录下执行下SetAsWallpaper脚本。 1sudo ./SetAsWallpape 重启系统（这个必须的） 不过此时壁纸应该会没了，可以重新设置，另外，最好先设置自己喜欢的壁纸，这样的话得到的登陆界面的模糊界面可以是基于自己选的壁纸了。 效果图 其他主题的一些修改桌面壁纸和锁屏界面壁纸修改在桌面右键点击，点Change background。可以修改壁纸，当然，我们也可以从网上下载自己喜欢的壁纸，存到~/Pictures就行。 头像的修改在Settings中，Details -&gt; Users 点击头像，可以选择自己喜欢的图作为自己的头像。 最终成色 参考链接： 给Ubuntu18.04(18.10)安装mac os主题 [https://www.pling.com/s/Gnome/]]></content>
@@ -128,8 +141,8 @@
       <tags>
         <tag>Python</tag>
         <tag>Deep Learning</tag>
-        <tag>NumPy</tag>
         <tag>pytorch</tag>
+        <tag>NumPy</tag>
       </tags>
   </entry>
   <entry>
@@ -144,8 +157,8 @@
       <tags>
         <tag>Python</tag>
         <tag>Deep Learning</tag>
-        <tag>NumPy</tag>
         <tag>pytorch</tag>
+        <tag>NumPy</tag>
       </tags>
   </entry>
   <entry>
@@ -174,8 +187,8 @@
       <tags>
         <tag>Python</tag>
         <tag>Deep Learning</tag>
-        <tag>NumPy</tag>
         <tag>pytorch</tag>
+        <tag>NumPy</tag>
       </tags>
   </entry>
 </search>

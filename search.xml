@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>scrapy提交表单——爬取火熊网最新上传一栏并下载图片</title>
+      <link href="/2019/10/05/scrapy%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95%E2%80%94%E2%80%94%E7%88%AC%E5%8F%96%E7%81%AB%E7%86%8A%E7%BD%91%E6%9C%80%E6%96%B0%E4%B8%8A%E4%BC%A0%E4%B8%80%E6%A0%8F%E5%B9%B6%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87/"/>
+      <url>/2019/10/05/scrapy%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95%E2%80%94%E2%80%94%E7%88%AC%E5%8F%96%E7%81%AB%E7%86%8A%E7%BD%91%E6%9C%80%E6%96%B0%E4%B8%8A%E4%BC%A0%E4%B8%80%E6%A0%8F%E5%B9%B6%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87/</url>
+      
+        <content type="html"><![CDATA[<p>通过scrapy提交表单获得需要的信息（json），并通过这些信息下载图片。</p><a id="more"></a><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>我起初在爬这个<a href="http://cgartt.com/" target="_blank" rel="noopener">火熊网</a>却发现这个是JS加载，所以我就打开谷歌开发者工具，查看<strong>XHR</strong>，找到了<a href="http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList这个链接，用了Google的JSON-handleg工具查看json，却发现这个json和preview是有所不同的：" target="_blank" rel="noopener">http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList这个链接，用了Google的JSON-handleg工具查看json，却发现这个json和preview是有所不同的：</a></p><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Form_data1.png" style="zoom: 33%;"><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Form_data2.png" style="zoom: 50%;"><p>（上面两个无论是title还是id以及imageUrl均是不同的）</p><p>所以我很困惑，一度误认为这个是JS加密或JS混淆的，所以就学了如何js加密的破解，不过还是没有找到关于这个的解决办法。后来，在Header一栏中，却发现有“Form data”：</p><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Form_data3.png" style="zoom:50%;"><p>这时，我才想起，这个也许是需要通过提交表单才能获取preview上的json，所以就开始尝试提交表单了。</p><h3 id="开始爬取"><a href="#开始爬取" class="headerlink" title="开始爬取"></a>开始爬取</h3><h4 id="确定爬取的目标"><a href="#确定爬取的目标" class="headerlink" title="确定爬取的目标"></a>确定爬取的目标</h4><p>我确定在火熊网上爬取最新上传一栏的前10页，其中，对于排序并没有要求，能爬取并下载图片就行。网址：<a href="http://cgartt.com/" target="_blank" rel="noopener">http://cgartt.com/</a></p><h4 id="确定爬取时所用的语言和框架"><a href="#确定爬取时所用的语言和框架" class="headerlink" title="确定爬取时所用的语言和框架"></a>确定爬取时所用的语言和框架</h4><p>Python的<strong>scrapy</strong>，同时，用scrapy的<strong>ImagePipeline</strong>来下载图片。</p><h4 id="爬虫程序"><a href="#爬虫程序" class="headerlink" title="爬虫程序"></a>爬虫程序</h4><h5 id="Begin"><a href="#Begin" class="headerlink" title="Begin:"></a>Begin:</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject Huoxiong</span><br><span class="line">scrapy genspider huoXiongImage cgartt.com/</span><br></pre></td></tr></table></figure><p>上面建立scrapy</p><h5 id="spider-huoXiongImage-py"><a href="#spider-huoXiongImage-py" class="headerlink" title="spider/huoXiongImage.py"></a>spider/huoXiongImage.py</h5><p>这个是整个爬虫程序的重中之重，与爬虫是否成功息息相关的。</p><ul><li><p>其中，base_url_1指的是之前在开发者工具中找到的要查找的json所在的网址；而base_url_2是我在分析图片页的网址时，发现这个是共同的链接，比如：</p><ul><li><p><a href="http://cgartt.com/index_writing_detail.php?work=0&amp;id=2761" target="_blank" rel="noopener">http://cgartt.com/index_writing_detail.php?work=0&amp;id=2761</a>  </p></li><li><p><a href="http://cgartt.com/index_writing_detail.php?work=0&amp;id=27614" target="_blank" rel="noopener">http://cgartt.com/index_writing_detail.php?work=0&amp;id=27614</a> </p></li><li><p><a href="http://cgartt.com/index_writing_detail.php?work=0&amp;id=27676" target="_blank" rel="noopener">http://cgartt.com/index_writing_detail.php?work=0&amp;id=27676</a></p></li></ul><p>在上面随机选择的3个图片页的链接中，可以看出它们几乎相似，唯一不同的地方是<strong>id</strong>，所以从这个思路下手，得到图片页的链接；最后的base_url_3中，这个的查找方法和base_url_1类似，也需要提交表单才能得到需要的信息,用<strong>scrapy.Request()</strong>，method为<strong>‘POST’</strong>，指提交。</p></li><li><p>接下来我觉得需要重写start_requests()，因为如果不重写，那程序将会从start_urls中开始爬取，不符合要从<a href="http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList提交表单的目的。" target="_blank" rel="noopener">http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList提交表单的目的。</a></p></li><li><p>下面就是通过base_url_1提交表单得到json后处理，主要是得到<strong>id</strong>，便于和base_url_2组成图片页的链接。</p></li><li><p>然后就是对base_url_3进行提交表单，用<strong>scrapy.FormRequest()</strong>，不过用scrapy.Request()并不能得到需要的内容。最后就是获取图片页的各个图片的链接，图片的标题、作者名字等等。</p></li><li><p>代码如下（HuoxiongimageSpider(scrapy.Spider)类里面）：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">name = <span class="string">'huoXiongImage'</span>  <span class="comment"># 这个name必不可少。</span></span><br><span class="line">allowed_domains = [<span class="string">'cgartt.com'</span>]</span><br><span class="line">start_urls = [<span class="string">'http://cgartt.com/'</span>]</span><br><span class="line">base_url_1 = <span class="string">"http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList"</span></span><br><span class="line">base_url_2 = <span class="string">"http://cgartt.com/index_writing_detail.php?work=0&amp;id="</span></span><br><span class="line">base_url_3 = <span class="string">"http://cgartt.com/api/api.php?d=find&amp;c=FindInfo&amp;action=getWorkDetial"</span></span><br><span class="line">  </span><br><span class="line"><span class="comment"># 爬取前10页。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_requests</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">11</span>):</span><br><span class="line">        data = &#123;<span class="string">'order'</span>: <span class="number">2</span>&#125;</span><br><span class="line">        data[<span class="string">'page'</span>] = page</span><br><span class="line">        <span class="comment"># 提交表单，为了得到最新上传一栏的1到10页的json。</span></span><br><span class="line">        <span class="keyword">yield</span> Request(url=self.base_url_1, method=<span class="string">'POST'</span>, body=json.dumps(data), callback=self.parse)</span><br><span class="line">  </span><br><span class="line"><span class="comment"># 分析提交表单后得到的数据。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    text = response.text</span><br><span class="line">    text = text[<span class="number">18</span>:] <span class="comment"># 这个是为了去掉空格，从而能确保转化为json过程中没有出错。</span></span><br><span class="line">    text = json.loads(text)</span><br><span class="line">    <span class="keyword">for</span> list <span class="keyword">in</span> text[<span class="string">'list'</span>]:</span><br><span class="line">        id = list[<span class="string">'id'</span>]</span><br><span class="line">        url = self.base_url_2 + id</span><br><span class="line">        <span class="keyword">yield</span> Request(url=url, callback=self.parse_page, meta=&#123;<span class="string">'id'</span>: id&#125;)</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_page</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    id = response.meta[<span class="string">'id'</span>]  <span class="comment"># 这个不能写成response['id']</span></span><br><span class="line">    data = &#123;<span class="string">'id'</span>: id&#125;</span><br><span class="line">    <span class="comment"># 不知怎么的，用FormRequest能得到需要的数据，而Request不能，所以一个不能用时，考虑用另一个。</span></span><br><span class="line">    <span class="keyword">yield</span> FormRequest(url=self.base_url_3, formdata=data, method=<span class="string">'POST'</span>, callback=self.parse_detail)</span><br><span class="line">  </span><br><span class="line"><span class="comment"># 在图片页面获取图片的链接用于下载。另外也获取图片的id，标题和作者。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_detail</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    text = response.text</span><br><span class="line">    text = text[<span class="number">8</span>:]</span><br><span class="line">    text = json.loads(text)</span><br><span class="line">    images = text[<span class="string">'worksInfo'</span>][<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> image <span class="keyword">in</span> images[<span class="string">'imageUrl'</span>]:</span><br><span class="line">        item = HuoxiongItem()</span><br><span class="line">        item[<span class="string">'img'</span>] = image[<span class="string">'imageUrl'</span>]</span><br><span class="line">        item[<span class="string">'title'</span>] = images[<span class="string">'title'</span>]</span><br><span class="line">        item[<span class="string">'Name'</span>] = images[<span class="string">'username'</span>]</span><br><span class="line">        item[<span class="string">'id'</span>] = images[<span class="string">'id'</span>]</span><br><span class="line">        <span class="keyword">yield</span> item</span><br></pre></td></tr></table></figure></li></ul><h5 id="items-py"><a href="#items-py" class="headerlink" title="items.py"></a>items.py</h5><p>这个是构建Item()的.(HuoxiongItem(scrapy.Item)类)：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># define the fields for your item here like:</span><br><span class="line"># name = scrapy.Field()</span><br><span class="line">title = Field()</span><br><span class="line">img = Field()</span><br><span class="line">Name = Field()</span><br><span class="line">id = Field()</span><br></pre></td></tr></table></figure><h5 id="pipelines-py"><a href="#pipelines-py" class="headerlink" title="pipelines.py"></a>pipelines.py</h5><p>需要引入scrapy.pipelines.images的ImagesPipeline</p><p>并将HuoxiongPipeline()类继承imagesPipeline类，重写file_path()和get_media_requests()方法。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuoxiongPipeline</span><span class="params">(ImagesPipeline)</span>:</span></span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># def process_item(self, item, spider):</span></span><br><span class="line"><span class="comment">#     return item</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">file_path</span><span class="params">(self, request, response=None, info=None)</span>:</span></span><br><span class="line">    item = request.meta[<span class="string">'meta'</span>]</span><br><span class="line">    file_name = item[<span class="string">'Name'</span>] + <span class="string">"/"</span> + item[<span class="string">'id'</span>] + <span class="string">"/"</span> + item[<span class="string">'title'</span>] + <span class="string">"/"</span> + item[<span class="string">'img'</span>].split(<span class="string">"/"</span>)[<span class="number">-1</span>] <span class="comment"># 这个是构建一个具有层次结构的文件的小尝试。</span></span><br><span class="line">    <span class="keyword">return</span> file_name</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_media_requests</span><span class="params">(self, item, info)</span>:</span></span><br><span class="line">    <span class="keyword">yield</span> Request(url=item[<span class="string">'img'</span>], meta=&#123;<span class="string">'meta'</span>: item&#125;)</span><br></pre></td></tr></table></figure><h5 id="settings-py"><a href="#settings-py" class="headerlink" title="settings.py"></a>settings.py</h5><p>写好上面这些就够了吗？答案当然是还没完成！！！！</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">    <span class="string">'Huoxiong.pipelines.HuoxiongPipeline'</span>: <span class="number">300</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">IMAGES_STORE = <span class="string">'./image'</span></span><br></pre></td></tr></table></figure><p>需要去掉<em>ITEM_PIPELINES</em>所在的三行的注释，然后写上<strong>IMAGES_STORE = ‘./image’</strong>，其中注意<strong>“IMAGES_STORE”</strong>不能写错。</p><h5 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h5><p>最后在Terminal上scrapy crawl  huoXiongImage就可以爬了，目前可以正常爬取的，当然，如果有余力的话，可以学学如何构建IP代理池，这样避免封IP的可能性大大提升了，也可以加上请求头等等。</p><h3 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h3><p>完整的代码见于：</p><p><a href="https://github.com/liuweixu/Python-crawler/tree/master/Scrapy/Huoxiong" target="_blank" rel="noopener">liuweixu’s Github</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 爬虫 </category>
+          
+          <category> scrapy </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 爬虫 </tag>
+            
+            <tag> scrapy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Scrapy爬取Bing美图</title>
       <link href="/2019/10/01/Scrapy%E7%88%AC%E5%8F%96Bing%E7%BE%8E%E5%9B%BE/"/>
       <url>/2019/10/01/Scrapy%E7%88%AC%E5%8F%96Bing%E7%BE%8E%E5%9B%BE/</url>
@@ -225,11 +254,11 @@
       
         <tags>
             
-            <tag> Python </tag>
+            <tag> oj </tag>
             
             <tag> cf </tag>
             
-            <tag> oj </tag>
+            <tag> Python </tag>
             
             <tag> 图论 </tag>
             
@@ -258,11 +287,11 @@
       
         <tags>
             
-            <tag> Python </tag>
+            <tag> oj </tag>
             
             <tag> cf </tag>
             
-            <tag> oj </tag>
+            <tag> Python </tag>
             
             <tag> 图论 </tag>
             
@@ -320,11 +349,11 @@
       
         <tags>
             
-            <tag> Python </tag>
+            <tag> oj </tag>
             
             <tag> cf </tag>
             
-            <tag> oj </tag>
+            <tag> Python </tag>
             
             <tag> 数学 </tag>
             
@@ -353,15 +382,15 @@
       
         <tags>
             
-            <tag> brute force </tag>
-            
-            <tag> 模拟 </tag>
-            
-            <tag> Python </tag>
+            <tag> oj </tag>
             
             <tag> cf </tag>
             
-            <tag> oj </tag>
+            <tag> Python </tag>
+            
+            <tag> brute force </tag>
+            
+            <tag> 模拟 </tag>
             
             <tag> C++ </tag>
             
@@ -429,9 +458,9 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> pytorch </tag>
-            
             <tag> NumPy </tag>
+            
+            <tag> pytorch </tag>
             
         </tags>
       
@@ -464,9 +493,9 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> pytorch </tag>
-            
             <tag> NumPy </tag>
+            
+            <tag> pytorch </tag>
             
         </tags>
       
@@ -530,9 +559,9 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> pytorch </tag>
-            
             <tag> NumPy </tag>
+            
+            <tag> pytorch </tag>
             
         </tags>
       

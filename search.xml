@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Ajax处理之半次元周榜部分爬虫]]></title>
+    <url>%2F2020%2F02%2F09%2FAjax%E5%A4%84%E7%90%86%E4%B9%8B%E5%8D%8A%E6%AC%A1%E5%85%83%E5%91%A8%E6%A6%9C%E9%83%A8%E5%88%86%E7%88%AC%E8%99%AB%2F</url>
+    <content type="text"><![CDATA[Ajax处理之半次元周榜部分爬虫Ajax数据爬取的一个简单的例子 前言这个是在动态页面的爬虫，而一般来说，现在大部分动态页面通过Ajax加载的，Ajax即Asynchronous Javascript and XML，这个Ajax的作用就是可以让页面在不被全部刷新的情况下可以进行全部更新，我们不能直接用requests.get(url)直接爬取页面的源代码，因为一般来说很难爬到或爬不全我们需要的信息。 确定页面的类型我们先打开半次元周榜（https://bcy.net/illust/toppost100），当我们下滑到底部时，会发现底部**新**加载了一些图片，我们可以确定这个网址用Ajax加载的。 Ajax分析接下来打开开发者工具(Ctrl+Shift+I或F12)，然后打开NetWork, 为了更快的找到自己需要找的信息，我们可以直接点击“XHR”（XMLHttpRequests，这个与Ajax加载有关），最后在不断的下滑中，会发现这个XHR界面不断出现一些东西，其中一些东西就是我们需要找的目标。 这个Preview界面我们可以看出里面有一些我们需要的信息，对了，这个没有JS加密，所以可以直接爬，但是 ，这个比较难以用Beautifulsoup或Xpath解析，不过，由于它是json格式的，可以利用json的特点来查找我们需要的信息（即图片的链接）。对了，为了方便分析和查找，推荐使用Google的json-handle插件，这个会让Preview的json更有条理和清晰（直接点击“itemInfo?p=4….”，就可以看见这个处理好的json）。 效果图： Ajax爬取 首先，我们确定爬取的链接，点击Headers，可以看见有Requests URL，我们可以看出这个请求链接有个规律，除了p有所不同外，其他是一样的，我们可以认为这个p是page，页码，同时，这个链接里面是用“&amp;”链接各个部分的。于是可以利用urllib的urlencode，先构造合适的参数，然后用urlencode解析这个参数，进而得到链接，然后就用requests.get()直接爬取这个json，为了应对可能的反爬，可以添加请求头。 123456789101112131415161718192021222324def getHTMLText(page): # 构建请求头 headers = &#123; "accept": "*/*", "accept-encoding": "gzip, deflate, br", "accept-language": "zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7,ja-CN;q=0.6,ja;q=0.5", "x-requested-with": "xmlhttprequest", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \ (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36" &#125; # 构建参数 params = &#123; 'p': page, 'ttype': 'illust', 'sub_type': 'week', 'date': '20190923' &#125; # 利用urlencode将参数解析为带有"&amp;"链接的的字符串，和base_url组成可以访问的链接。 url = base_url + urlencode(params) txt = requests.get(url, headers=headers, timeout=50) if txt.status_code == 200: return txt.json() # 返回json文件 else: return None 然后利用这个爬取得到的json，我们可以利用json的特点（类似于字典）一步一步得到我们需要的图片链接： 1234567# 解析，不过由于返回的是json文件，可以利用json的特点（类似字典）来查找自己需要找的信息。def parse_page(json): if json: for i in range(20): ls = json['data']['top_list_item_info'][i]['item_detail']['multi'] for item in ls: links.append(item['path']) 最后就是保存图片，可以利用保存txt文件的方式来保存图片，只不过后缀名需要从“.txt”改为”.jpg”或”.png”等等。 12345def Image_save(links, num): for i in range(1, num + 1): html = requests.get(links[i - 1]) with open("./Image/&#123;&#125;.jpg".format(i), "wb") as f: f.write(html.content) 全部代码：1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556# encoding='utf-8'import requestsfrom urllib.parse import urlencodelinks = []base_url = "https://bcy.net/apiv3/rank/list/itemInfo?"def getHTMLText(page): # 构建请求头 headers = &#123; "accept": "*/*", "accept-encoding": "gzip, deflate, br", "accept-language": "zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7,ja-CN;q=0.6,ja;q=0.5", "x-requested-with": "xmlhttprequest", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \ (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36" &#125; # 构建参数 params = &#123; 'p': page, 'ttype': 'illust', 'sub_type': 'week', 'date': '20190923' &#125; # 利用urlencode将参数解析为带有"&amp;"链接的的字符串，和base_url组成可以访问的链接。 url = base_url + urlencode(params) txt = requests.get(url, headers=headers, timeout=50) if txt.status_code == 200: return txt.json() # 返回json文件 else: return None# 解析，不过由于返回的是json文件，可以利用json的特点（类似字典）来查找自己需要找的信息。def parse_page(json): if json: for i in range(20): ls = json['data']['top_list_item_info'][i]['item_detail']['multi'] for item in ls: links.append(item['path'])def Image_save(links, num): for i in range(1, num + 1): html = requests.get(links[i - 1]) with open("./Image/&#123;&#125;.jpg".format(i), "wb") as f: f.write(html.content)if __name__ == "__main__": for page in range(1, 4): json = getHTMLText(page) parse_page(json) length = len(links) Image_save(links, length) 对了，大家如果有时间，可以看看保存在Github的这个代码：Ajax处理 参考链接 崔庆才博客 《Python3网络爬虫》崔庆才]]></content>
+      <categories>
+        <category>爬虫</category>
+        <category>Ajax</category>
+      </categories>
+      <tags>
+        <tag>爬虫</tag>
+        <tag>Ajax</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[scrapy提交表单——爬取火熊网最新上传一栏并下载图片]]></title>
-    <url>%2F2019%2F10%2F05%2Fscrapy%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95%E2%80%94%E2%80%94%E7%88%AC%E5%8F%96%E7%81%AB%E7%86%8A%E7%BD%91%E6%9C%80%E6%96%B0%E4%B8%8A%E4%BC%A0%E4%B8%80%E6%A0%8F%E5%B9%B6%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%2F</url>
+    <url>%2F2020%2F01%2F08%2Fscrapy%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95%E2%80%94%E2%80%94%E7%88%AC%E5%8F%96%E7%81%AB%E7%86%8A%E7%BD%91%E6%9C%80%E6%96%B0%E4%B8%8A%E4%BC%A0%E4%B8%80%E6%A0%8F%E5%B9%B6%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87%2F</url>
     <content type="text"><![CDATA[通过scrapy提交表单获得需要的信息（json），并通过这些信息下载图片。 前言我起初在爬这个火熊网却发现这个是JS加载，所以我就打开谷歌开发者工具，查看XHR，找到了http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList 在这个链接中，用Google的JSON-handleg工具查看json，却发现这个json和preview是有所不同的： （上面两个无论是title还是id以及imageUrl均是不同的） 所以我很困惑，一度误认为这个是JS加密或JS混淆的，所以就学了如何js加密的破解，不过还是没有找到关于这个的解决办法。后来，在Header一栏中，却发现有“Form data”： 这时，我才想起，这个也许是需要通过提交表单才能获取preview上的json，所以就开始尝试提交表单了。 开始爬取确定爬取的目标我确定在火熊网上爬取最新上传一栏的前10页，其中，对于排序并没有要求，能爬取并下载图片就行。网址：http://cgartt.com/ 确定爬取时所用的语言和框架Python的scrapy，同时，用scrapy的ImagePipeline来下载图片。 爬虫程序Begin:12scrapy startproject Huoxiongscrapy genspider huoXiongImage cgartt.com/ 上面建立scrapy spider/huoXiongImage.py这个是整个爬虫程序的重中之重，与爬虫是否成功息息相关的。 其中，base_url_1指的是之前在开发者工具中找到的要查找的json所在的网址；而base_url_2是我在分析图片页的网址时，发现这个是共同的链接，比如： http://cgartt.com/index_writing_detail.php?work=0&amp;id=2761 http://cgartt.com/index_writing_detail.php?work=0&amp;id=27614 http://cgartt.com/index_writing_detail.php?work=0&amp;id=27676 在上面随机选择的3个图片页的链接中，可以看出它们几乎相似，唯一不同的地方是id，所以从这个思路下手，得到图片页的链接；最后的base_url_3中，这个的查找方法和base_url_1类似，也需要提交表单才能得到需要的信息,用scrapy.Request()，method为‘POST’，指提交。 接下来我觉得需要重写start_requests()，因为如果不重写，那程序将会从start_urls中开始爬取，不符合要从http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList提交表单的目的。 下面就是通过base_url_1提交表单得到json后处理，主要是得到id，便于和base_url_2组成图片页的链接。 然后就是对base_url_3进行提交表单，用scrapy.FormRequest()，不过用scrapy.Request()并不能得到需要的内容。最后就是获取图片页的各个图片的链接，图片的标题、作者名字等等。 代码如下（HuoxiongimageSpider(scrapy.Spider)类里面）： 1234567891011121314151617181920212223242526272829303132333435363738394041424344name = 'huoXiongImage' # 这个name必不可少。allowed_domains = ['cgartt.com']start_urls = ['http://cgartt.com/']base_url_1 = "http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList"base_url_2 = "http://cgartt.com/index_writing_detail.php?work=0&amp;id="base_url_3 = "http://cgartt.com/api/api.php?d=find&amp;c=FindInfo&amp;action=getWorkDetial" # 爬取前10页。def start_requests(self): for page in range(1, 11): data = &#123;'order': 2&#125; data['page'] = page # 提交表单，为了得到最新上传一栏的1到10页的json。 yield Request(url=self.base_url_1, method='POST', body=json.dumps(data), callback=self.parse) # 分析提交表单后得到的数据。def parse(self, response): text = response.text text = text[18:] # 这个是为了去掉空格，从而能确保转化为json过程中没有出错。 text = json.loads(text) for list in text['list']: id = list['id'] url = self.base_url_2 + id yield Request(url=url, callback=self.parse_page, meta=&#123;'id': id&#125;) def parse_page(self, response): id = response.meta['id'] # 这个不能写成response['id'] data = &#123;'id': id&#125; # 不知怎么的，用FormRequest能得到需要的数据，而Request不能，所以一个不能用时，考虑用另一个。 yield FormRequest(url=self.base_url_3, formdata=data, method='POST', callback=self.parse_detail) # 在图片页面获取图片的链接用于下载。另外也获取图片的id，标题和作者。def parse_detail(self, response): text = response.text text = text[8:] text = json.loads(text) images = text['worksInfo'][0] for image in images['imageUrl']: item = HuoxiongItem() item['img'] = image['imageUrl'] item['title'] = images['title'] item['Name'] = images['username'] item['id'] = images['id'] yield item items.py这个是构建Item()的.(HuoxiongItem(scrapy.Item)类)： 123456# define the fields for your item here like:# name = scrapy.Field()title = Field()img = Field()Name = Field()id = Field() pipelines.py需要引入scrapy.pipelines.images的ImagesPipeline 并将HuoxiongPipeline()类继承imagesPipeline类，重写file_path()和get_media_requests()方法。 1class HuoxiongPipeline(ImagesPipeline): 123456789# def process_item(self, item, spider):# return itemdef file_path(self, request, response=None, info=None): item = request.meta['meta'] file_name = item['Name'] + "/" + item['id'] + "/" + item['title'] + "/" + item['img'].split("/")[-1] # 这个是构建一个具有层次结构的文件的小尝试。 return file_namedef get_media_requests(self, item, info): yield Request(url=item['img'], meta=&#123;'meta': item&#125;) settings.py写好上面这些就够了吗？答案当然是还没完成！！！！ 12345ITEM_PIPELINES = &#123; 'Huoxiong.pipelines.HuoxiongPipeline': 300,&#125;IMAGES_STORE = './image' 需要去掉ITEM_PIPELINES所在的三行的注释，然后写上IMAGES_STORE = ‘./image’，其中注意“IMAGES_STORE”不能写错。 运行最后在Terminal上scrapy crawl huoXiongImage就可以爬了，目前可以正常爬取的，当然，如果有余力的话，可以学学如何构建IP代理池，这样避免封IP的可能性大大提升了，也可以加上请求头等等。 Github完整的代码见于： liuweixu’s Github]]></content>
       <categories>
         <category>爬虫</category>
@@ -37,19 +50,6 @@
       <tags>
         <tag>爬虫</tag>
         <tag>Scrapy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Ajax处理之半次元周榜部分爬虫]]></title>
-    <url>%2F2019%2F10%2F01%2FAjax%E5%A4%84%E7%90%86%E4%B9%8B%E5%8D%8A%E6%AC%A1%E5%85%83%E5%91%A8%E6%A6%9C%E9%83%A8%E5%88%86%E7%88%AC%E8%99%AB%2F</url>
-    <content type="text"><![CDATA[Ajax处理之半次元周榜部分爬虫Ajax数据爬取的一个简单的例子 前言这个是在动态页面的爬虫，而一般来说，现在大部分动态页面通过Ajax加载的，Ajax即Asynchronous Javascript and XML，这个Ajax的作用就是可以让页面在不被全部刷新的情况下可以进行全部更新，我们不能直接用requests.get(url)直接爬取页面的源代码，因为一般来说很难爬到或爬不全我们需要的信息。 确定页面的类型我们先打开半次元周榜（https://bcy.net/illust/toppost100），当我们下滑到底部时，会发现底部**新**加载了一些图片，我们可以确定这个网址用Ajax加载的。 Ajax分析接下来打开开发者工具(Ctrl+Shift+I或F12)，然后打开NetWork, 为了更快的找到自己需要找的信息，我们可以直接点击“XHR”（XMLHttpRequests，这个与Ajax加载有关），最后在不断的下滑中，会发现这个XHR界面不断出现一些东西，其中一些东西就是我们需要找的目标。 这个Preview界面我们可以看出里面有一些我们需要的信息，对了，这个没有JS加密，所以可以直接爬，但是 ，这个比较难以用Beautifulsoup或Xpath解析，不过，由于它是json格式的，可以利用json的特点来查找我们需要的信息（即图片的链接）。对了，为了方便分析和查找，推荐使用Google的json-handle插件，这个会让Preview的json更有条理和清晰（直接点击“itemInfo?p=4….”，就可以看见这个处理好的json）。 效果图： Ajax爬取 首先，我们确定爬取的链接，点击Headers，可以看见有Requests URL，我们可以看出这个请求链接有个规律，除了p有所不同外，其他是一样的，我们可以认为这个p是page，页码，同时，这个链接里面是用“&amp;”链接各个部分的。于是可以利用urllib的urlencode，先构造合适的参数，然后用urlencode解析这个参数，进而得到链接，然后就用requests.get()直接爬取这个json，为了应对可能的反爬，可以添加请求头。 123456789101112131415161718192021222324def getHTMLText(page): # 构建请求头 headers = &#123; "accept": "*/*", "accept-encoding": "gzip, deflate, br", "accept-language": "zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7,ja-CN;q=0.6,ja;q=0.5", "x-requested-with": "xmlhttprequest", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \ (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36" &#125; # 构建参数 params = &#123; 'p': page, 'ttype': 'illust', 'sub_type': 'week', 'date': '20190923' &#125; # 利用urlencode将参数解析为带有"&amp;"链接的的字符串，和base_url组成可以访问的链接。 url = base_url + urlencode(params) txt = requests.get(url, headers=headers, timeout=50) if txt.status_code == 200: return txt.json() # 返回json文件 else: return None 然后利用这个爬取得到的json，我们可以利用json的特点（类似于字典）一步一步得到我们需要的图片链接： 1234567# 解析，不过由于返回的是json文件，可以利用json的特点（类似字典）来查找自己需要找的信息。def parse_page(json): if json: for i in range(20): ls = json['data']['top_list_item_info'][i]['item_detail']['multi'] for item in ls: links.append(item['path']) 最后就是保存图片，可以利用保存txt文件的方式来保存图片，只不过后缀名需要从“.txt”改为”.jpg”或”.png”等等。 12345def Image_save(links, num): for i in range(1, num + 1): html = requests.get(links[i - 1]) with open("./Image/&#123;&#125;.jpg".format(i), "wb") as f: f.write(html.content) 全部代码：1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556# encoding='utf-8'import requestsfrom urllib.parse import urlencodelinks = []base_url = "https://bcy.net/apiv3/rank/list/itemInfo?"def getHTMLText(page): # 构建请求头 headers = &#123; "accept": "*/*", "accept-encoding": "gzip, deflate, br", "accept-language": "zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7,ja-CN;q=0.6,ja;q=0.5", "x-requested-with": "xmlhttprequest", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \ (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36" &#125; # 构建参数 params = &#123; 'p': page, 'ttype': 'illust', 'sub_type': 'week', 'date': '20190923' &#125; # 利用urlencode将参数解析为带有"&amp;"链接的的字符串，和base_url组成可以访问的链接。 url = base_url + urlencode(params) txt = requests.get(url, headers=headers, timeout=50) if txt.status_code == 200: return txt.json() # 返回json文件 else: return None# 解析，不过由于返回的是json文件，可以利用json的特点（类似字典）来查找自己需要找的信息。def parse_page(json): if json: for i in range(20): ls = json['data']['top_list_item_info'][i]['item_detail']['multi'] for item in ls: links.append(item['path'])def Image_save(links, num): for i in range(1, num + 1): html = requests.get(links[i - 1]) with open("./Image/&#123;&#125;.jpg".format(i), "wb") as f: f.write(html.content)if __name__ == "__main__": for page in range(1, 4): json = getHTMLText(page) parse_page(json) length = len(links) Image_save(links, length) 对了，大家如果有时间，可以看看保存在Github的这个代码：Ajax处理 参考链接 崔庆才博客 《Python3网络爬虫》崔庆才]]></content>
-      <categories>
-        <category>爬虫</category>
-        <category>Ajax</category>
-      </categories>
-      <tags>
-        <tag>爬虫</tag>
-        <tag>Ajax</tag>
       </tags>
   </entry>
   <entry>
@@ -190,8 +190,8 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Deep Learning</tag>
         <tag>pytorch</tag>
+        <tag>Deep Learning</tag>
       </tags>
   </entry>
   <entry>
@@ -205,8 +205,8 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Deep Learning</tag>
         <tag>pytorch</tag>
+        <tag>Deep Learning</tag>
         <tag>NumPy</tag>
       </tags>
   </entry>
@@ -221,8 +221,8 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Deep Learning</tag>
         <tag>pytorch</tag>
+        <tag>Deep Learning</tag>
         <tag>NumPy</tag>
       </tags>
   </entry>
@@ -236,8 +236,8 @@
         <category>PyTorch</category>
       </categories>
       <tags>
-        <tag>Deep Learning</tag>
         <tag>pytorch</tag>
+        <tag>Deep Learning</tag>
       </tags>
   </entry>
   <entry>
@@ -251,8 +251,8 @@
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Deep Learning</tag>
         <tag>pytorch</tag>
+        <tag>Deep Learning</tag>
         <tag>NumPy</tag>
       </tags>
   </entry>

@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Ajax处理之半次元周榜部分爬虫</title>
+    <url>/2023/09/06/Ajax%E5%A4%84%E7%90%86%E4%B9%8B%E5%8D%8A%E6%AC%A1%E5%85%83%E5%91%A8%E6%A6%9C%E9%83%A8%E5%88%86%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<p>Ajax数据爬取的一个简单的例子</p>
+<span id="more"></span>
+
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这个是在动态页面的爬虫，而一般来说，现在大部分动态页面通过Ajax加载的，Ajax即Asynchronous Javascript and XML，这个Ajax的作用就是可以让页面在不被全部刷新的情况下可以进行全部更新，我们不能直接用requests.get(url)直接爬取页面的源代码，因为一般来说很难爬到或爬不全我们需要的信息。</p>
+<h4 id="确定页面的类型"><a href="#确定页面的类型" class="headerlink" title="确定页面的类型"></a>确定页面的类型</h4><p>我们先打开半次元周榜（<a href="https://bcy.net/illust/toppost100%EF%BC%89%EF%BC%8C%E5%BD%93%E6%88%91%E4%BB%AC%E4%B8%8B%E6%BB%91%E5%88%B0%E5%BA%95%E9%83%A8%E6%97%B6%EF%BC%8C%E4%BC%9A%E5%8F%91%E7%8E%B0%E5%BA%95%E9%83%A8**%E6%96%B0**%E5%8A%A0%E8%BD%BD%E4%BA%86%E4%B8%80%E4%BA%9B%E5%9B%BE%E7%89%87%EF%BC%8C%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%A1%AE%E5%AE%9A%E8%BF%99%E4%B8%AA%E7%BD%91%E5%9D%80%E7%94%A8Ajax%E5%8A%A0%E8%BD%BD%E7%9A%84%E3%80%82">https://bcy.net/illust/toppost100），当我们下滑到底部时，会发现底部<strong>新</strong>加载了一些图片，我们可以确定这个网址用Ajax加载的。</a></p>
+<h4 id="Ajax分析"><a href="#Ajax分析" class="headerlink" title="Ajax分析"></a>Ajax分析</h4><p>接下来打开开发者工具(Ctrl+Shift+I或F12)，然后打开NetWork, 为了更快的找到自己需要找的信息，我们可以直接点击“XHR”（XMLHttpRequests，这个与Ajax加载有关），最后在不断的下滑中，会发现这个XHR界面不断出现一些东西，其中一些东西就是我们需要找的目标。</p>
+<p><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Ajax.jpg"></p>
+<p>这个Preview界面我们可以看出里面有一些我们需要的信息，对了，这个没有JS加密，所以可以直接爬，但是 ，这个比较难以用Beautifulsoup或Xpath解析，不过，由于它是json格式的，可以利用json的特点来查找我们需要的信息（即图片的链接）。对了，为了方便分析和查找，推荐使用Google的<strong>json-handle</strong>插件，这个会让Preview的json更有条理和清晰（直接点击“itemInfo?p&#x3D;4….”，就可以看见这个处理好的json）。</p>
+<p>效果图：</p>
+<p><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Ajax1.png"></p>
+<h4 id="Ajax爬取"><a href="#Ajax爬取" class="headerlink" title="Ajax爬取"></a>Ajax爬取</h4><ul>
+<li><p>首先，我们确定爬取的链接，点击Headers，可以看见有Requests URL，我们可以看出这个请求链接有个规律，除了p有所不同外，其他是一样的，我们可以认为这个p是page，页码，同时，这个链接里面是用“&amp;”链接各个部分的。于是可以利用urllib的urlencode，先构造合适的参数，然后用urlencode解析这个参数，进而得到链接，然后就用requests.get()直接爬取这个json，为了应对可能的反爬，可以添加请求头。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def getHTMLText(page):</span><br><span class="line">    # 构建请求头</span><br><span class="line">    headers = &#123;</span><br><span class="line">        &quot;accept&quot;: &quot;*/*&quot;,</span><br><span class="line">        &quot;accept-encoding&quot;: &quot;gzip, deflate, br&quot;,</span><br><span class="line">        &quot;accept-language&quot;: &quot;zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7,ja-CN;q=0.6,ja;q=0.5&quot;,</span><br><span class="line">        &quot;x-requested-with&quot;: &quot;xmlhttprequest&quot;,</span><br><span class="line">        &quot;user-agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \</span><br><span class="line">        (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    # 构建参数</span><br><span class="line">    params = &#123;</span><br><span class="line">        &#x27;p&#x27;: page,</span><br><span class="line">        &#x27;ttype&#x27;: &#x27;illust&#x27;,</span><br><span class="line">        &#x27;sub_type&#x27;: &#x27;week&#x27;,</span><br><span class="line">        &#x27;date&#x27;: &#x27;20190923&#x27;</span><br><span class="line">    &#125;</span><br><span class="line">    # 利用urlencode将参数解析为带有&quot;&amp;&quot;链接的的字符串，和base_url组成可以访问的链接。</span><br><span class="line">    url = base_url + urlencode(params)</span><br><span class="line">    txt = requests.get(url, headers=headers, timeout=50)</span><br><span class="line">    if txt.status_code == 200:</span><br><span class="line">        return txt.json()  # 返回json文件</span><br><span class="line">    else:</span><br><span class="line">        return None</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后利用这个爬取得到的json，我们可以利用json的特点（类似于字典）一步一步得到我们需要的图片链接：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 解析，不过由于返回的是json文件，可以利用json的特点（类似字典）来查找自己需要找的信息。</span><br><span class="line">def parse_page(json):</span><br><span class="line">    if json:</span><br><span class="line">        for i in range(20):</span><br><span class="line">            ls = json[&#x27;data&#x27;][&#x27;top_list_item_info&#x27;][i][&#x27;item_detail&#x27;][&#x27;multi&#x27;]</span><br><span class="line">            for item in ls:</span><br><span class="line">                links.append(item[&#x27;path&#x27;])</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最后就是保存图片，可以利用保存txt文件的方式来保存图片，只不过后缀名需要从“.txt”改为”.jpg”或”.png”等等。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def Image_save(links, num):</span><br><span class="line">    for i in range(1, num + 1):</span><br><span class="line">        html = requests.get(links[i - 1])</span><br><span class="line">        with open(&quot;./Image/&#123;&#125;.jpg&quot;.format(i), &quot;wb&quot;) as f:</span><br><span class="line">            f.write(html.content)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="全部代码："><a href="#全部代码：" class="headerlink" title="全部代码："></a>全部代码：</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># encoding=&#x27;utf-8&#x27;</span><br><span class="line">import requests</span><br><span class="line">from urllib.parse import urlencode</span><br><span class="line"></span><br><span class="line">links = []</span><br><span class="line">base_url = &quot;https://bcy.net/apiv3/rank/list/itemInfo?&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def getHTMLText(page):</span><br><span class="line">    # 构建请求头</span><br><span class="line">    headers = &#123;</span><br><span class="line">        &quot;accept&quot;: &quot;*/*&quot;,</span><br><span class="line">        &quot;accept-encoding&quot;: &quot;gzip, deflate, br&quot;,</span><br><span class="line">        &quot;accept-language&quot;: &quot;zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7,ja-CN;q=0.6,ja;q=0.5&quot;,</span><br><span class="line">        &quot;x-requested-with&quot;: &quot;xmlhttprequest&quot;,</span><br><span class="line">        &quot;user-agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \</span><br><span class="line">        (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    # 构建参数</span><br><span class="line">    params = &#123;</span><br><span class="line">        &#x27;p&#x27;: page,</span><br><span class="line">        &#x27;ttype&#x27;: &#x27;illust&#x27;,</span><br><span class="line">        &#x27;sub_type&#x27;: &#x27;week&#x27;,</span><br><span class="line">        &#x27;date&#x27;: &#x27;20190923&#x27;</span><br><span class="line">    &#125;</span><br><span class="line">    # 利用urlencode将参数解析为带有&quot;&amp;&quot;链接的的字符串，和base_url组成可以访问的链接。</span><br><span class="line">    url = base_url + urlencode(params)</span><br><span class="line">    txt = requests.get(url, headers=headers, timeout=50)</span><br><span class="line">    if txt.status_code == 200:</span><br><span class="line">        return txt.json()  # 返回json文件</span><br><span class="line">    else:</span><br><span class="line">        return None</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 解析，不过由于返回的是json文件，可以利用json的特点（类似字典）来查找自己需要找的信息。</span><br><span class="line">def parse_page(json):</span><br><span class="line">    if json:</span><br><span class="line">        for i in range(20):</span><br><span class="line">            ls = json[&#x27;data&#x27;][&#x27;top_list_item_info&#x27;][i][&#x27;item_detail&#x27;][&#x27;multi&#x27;]</span><br><span class="line">            for item in ls:</span><br><span class="line">                links.append(item[&#x27;path&#x27;])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def Image_save(links, num):</span><br><span class="line">    for i in range(1, num + 1):</span><br><span class="line">        html = requests.get(links[i - 1])</span><br><span class="line">        with open(&quot;./Image/&#123;&#125;.jpg&quot;.format(i), &quot;wb&quot;) as f:</span><br><span class="line">            f.write(html.content)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    for page in range(1, 4):</span><br><span class="line">        json = getHTMLText(page)</span><br><span class="line">        parse_page(json)</span><br><span class="line">    length = len(links)</span><br><span class="line">    Image_save(links, length)</span><br></pre></td></tr></table></figure>
+
+<p>对了，大家如果有时间，可以看看保存在Github的这个代码：<a href="https://github.com/liuweixu/Python-crawler/blob/master/Ajax/%E5%8D%8A%E6%AC%A1%E5%85%83%E5%91%A8%E6%A6%9C%E9%83%A8%E5%88%86%E7%88%AC%E8%99%AB.py">Ajax处理</a></p>
+<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><ul>
+<li><a href="https://cuiqingcai.com/5590.html">崔庆才博客</a></li>
+<li>《Python3网络爬虫》崔庆才</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Beautifulsoup 简单爬取笔趣阁的一本小说</title>
+    <url>/2023/09/06/Beautifulsoup-%E7%AE%80%E5%8D%95%E7%88%AC%E5%8F%96%E7%AC%94%E8%B6%A3%E9%98%81%E7%9A%84%E4%B8%80%E6%9C%AC%E5%B0%8F%E8%AF%B4/</url>
+    <content><![CDATA[<p>我写这个代码的主要目的是针对一个关于上面的题目的博文进行修改，其实，这个博文讲的不错，但是由于网站更新了，他的代码有些地方是不灵的。所以我就修改了一些。</p>
+<blockquote>
+<p><a href="https://www.w3cschool.cn/python3/python3-enbl2pw9.html">这个博文</a></p>
+</blockquote>
+<p>修改后的代码：(解释见注释)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">import requests, sys</span><br><span class="line"></span><br><span class="line">class downloader(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.server = &quot;http://www.biqukan.com/&quot;</span><br><span class="line">        self.target = &quot;http://www.biqukan.com/1_1094/&quot;</span><br><span class="line">        self.name = []</span><br><span class="line">        self.url = []</span><br><span class="line">        self.nums = 0</span><br><span class="line"></span><br><span class="line">    def get_download_url(self):</span><br><span class="line">        req = requests.get(url = self.target)   # 获取网页的内容。</span><br><span class="line">        req.encoding = req.apparent_encoding    # 为了防止出现乱码，如果没有加这个的话，会出现乱码的。</span><br><span class="line">        html = req.text</span><br><span class="line">        div_soup = BeautifulSoup(html, &quot;lxml&quot;)  # 解析，注意要加上&#x27;lxml&#x27;</span><br><span class="line">        div = div_soup.find_all(&#x27;div&#x27;, class_ = &#x27;listmain&#x27;) # div的类型是bs4.element.ResultSet，是一个列表，不过在这个列表中，它的长度仅为1。</span><br><span class="line">                                                            # 所以用div[0]读取内容。</span><br><span class="line">        a_soup = BeautifulSoup(str(div[0]), &quot;lxml&quot;) # Beautifulsoup()里面传入的是str类型。</span><br><span class="line">        a = a_soup.find_all(&#x27;a&#x27;)</span><br><span class="line">        self.nums = len(a[16:])</span><br><span class="line">        for i in a[16:]:</span><br><span class="line">            self.name.append(i.string)</span><br><span class="line">            self.url.append(self.server + i.get(&#x27;href&#x27;))    # i.get(&#x27;href&#x27;)是str类型。</span><br><span class="line"></span><br><span class="line">    def get_content(self, target):</span><br><span class="line">        req = requests.get(target)</span><br><span class="line">        req.encoding = req.apparent_encoding    # 这个也是为了防止出现乱码的。</span><br><span class="line">        html = req.text</span><br><span class="line"></span><br><span class="line">        soup = BeautifulSoup(html, &#x27;lxml&#x27;)</span><br><span class="line">        texts = soup.find_all(&#x27;div&#x27;, class_ = &#x27;showtxt&#x27;)</span><br><span class="line">        texts = texts[0].text.replace(&#x27; &#x27;,&#x27;\n&#x27;).replace(&#x27;\xa0&#x27;*8,&#x27; &#x27;) # 这个我不懂为什么为什么要加这个。反正只要加了这个，</span><br><span class="line">                                                                      # 就会输出需要的内容。</span><br><span class="line">        return texts</span><br><span class="line"></span><br><span class="line">    def writer(self, name, path, text):</span><br><span class="line">        with open(path, &#x27;a&#x27;, encoding= &#x27;utf-8&#x27;) as f:</span><br><span class="line">            f.write(name + &#x27;\n&#x27;)</span><br><span class="line">            f.writelines(text)</span><br><span class="line">            f.write(&#x27;\n\n&#x27;)</span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    dl = downloader()</span><br><span class="line">    dl.get_download_url()</span><br><span class="line">    print(&quot;开始下载：&quot;)</span><br><span class="line">    for i in range(dl.nums):</span><br><span class="line">        dl.writer(dl.name[i], &#x27;一念永恒.txt&#x27;, dl.get_content(dl.url[i]))</span><br><span class="line">        # print(&quot;  已下载:%.3f%%&quot; %  float(i/dl.nums) + &#x27;\r&#x27;)</span><br><span class="line">        sys.stdout.write(&quot;\r&quot; + &quot;已下载:%.2f%%&quot; %  float(100.0 * i/dl.nums)) # 在一行动态输出，下面的一行也必须要写。</span><br><span class="line">        sys.stdout.flush()</span><br><span class="line">    print(&quot;下载结束&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>其中，关于在一行动态输出的博文可以见：<br><a href="https://blog.csdn.net/weixin_33736048/article/details/86263346">python实现原地刷新方式输出-可用于百分比进度显示输出_weixin_33736048的博客-CSDN博客</a></p>
+]]></content>
+      <tags>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Beautifulsoup和requests爬取笔趣看</title>
+    <url>/2023/09/06/Beautifulsoup%E5%92%8Crequests%E7%88%AC%E5%8F%96%E7%AC%94%E8%B6%A3%E7%9C%8B/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<p>这个是用来爬取笔趣看的一本书的所有文章，理论上可以成功地爬取笔趣看的每本书。</p>
+<p>关于讲解这个代码之前，我觉得需要注意的一些必要的内容：</p>
+<ul>
+<li>这个爬虫实质上就是利用某种工具帮助我们从网上爬取相应的HTML或其他结构，而一般来说，这个HTML或其他结构里面会有我们需要的内容，并且这些一般是<strong>字符串</strong>类型，也有可能是<strong>json</strong>类型。</li>
+<li>爬取到这些字符串后，我们接下来用<strong>Xpath</strong>、<strong>Beautifulsoup</strong>或<strong>PyQuery</strong>等等工具解析，因为这样会让我们更高效的找到自己所需要的内容。当然，我们可以不用这些，直接利用字符串的操作函数来找，比如python的split()等等，不过我觉得会比较费事和费力的，我个人不太推荐这个方式的。如果没有特殊的情况的话，还是先用这些解析工具比较好。</li>
+<li>最后利用这些解析工具或用自己的方式找到这些需要的数据以某种形式保存下去，保存的方式有：保存到csv文件，json文件，txt文件，以及保存到MySQL、MongoDB、Redis等等，选自己喜欢的就好。</li>
+<li>这个爬虫，我们需要面对静态页面和有js加载的动态页面，而前者会更简单，可以“可见即可爬”，后者比较困难，不能做到“可见即可爬”，需要利用Google等浏览器的开发者工具来帮助我们查找，就算如此，也有可能碰壁，这时我们可以利用Selenium等工具来帮助我们查找，做到“可见即可爬”，所以，我们有必要区分这两个页面类型，从而选取合适的爬虫方式。</li>
+<li>当我们学爬虫到一定的程度时，我们最好先学习框架，比如Python的<strong>Scrapy</strong>或Java的<strong>WebMagic</strong>等等，因为这些优秀的框架可以帮助我们省下不少的爬虫功夫，直接用好的轮子总会比自己闷头造轮子更好的吧。</li>
+<li>最后爬虫的流程一般是：</li>
+</ul>
+<p>接下来讲解代码：</p>
+<ol>
+<li><p>首先我们可以打开Google，进入笔趣看的极品家丁的目录页，然后打开开发者工具（用Ctrl+Shift+I），确定需要爬取的各个标题的位置。</p>
+</li>
+<li><p>然后用requests.get(url) 这个url是目录页的链接，这个功能是爬取网页的源代码（在静态网页上是通用的，而动态网页也许是失效的），其中，为了反爬，特意添加headers，构建一个请求头，具体过程如下：</p>
+<p><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Beautifulsoup(1).png"></p>
+<p>最后注意编码格式的问题，因为一般来说，中文网的编码格式是gbk的，而我们如果不注意这个情况，爬下来的源代码中涉及到的中文可能出现乱码，因此我们需要进行处理：text.encoding &#x3D; text.apparent_encoding,</p>
+<p>也可以用text.encoding &#x3D; “utf-8”。</p>
+</li>
+<li><p>然后就是利用Beautifulsoup解析了，关于Beautifulsoup的推荐链接是：<a href="https://cuiqingcai.com/5548.html">崔庆才的博客</a>， 最后并把爬下来的各个标题的链接进行整理，用于接下来的爬虫。</p>
+</li>
+<li><p>用requests遍历，爬取每个链接里面的内容，其中注意“&amp;nbsp”，这个是\xa0，最好替换掉，否则会爬不出内容，这个也是反爬的一个比较简单的措施。最后把爬取的内容一个一个的保存到txt文件就行。</p>
+</li>
+</ol>
+<p>代码见下面。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">    &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)\</span><br><span class="line">     Chrome/77.0.3865.90 Safari/537.36&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">list_url = []</span><br><span class="line">list_title = []</span><br><span class="line">target = &quot;https://www.biqukan.com&quot; # 这个是用来和在目录页爬取的链接相结合，从而得到一个可以访问的链接。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 爬取笔趣看的《极品家丁》的目录页</span><br><span class="line">def getHtmlList(url):</span><br><span class="line">    text = requests.get(url, headers=headers)</span><br><span class="line">    text.encoding = text.apparent_encoding</span><br><span class="line">    if text.status_code == 200:</span><br><span class="line">        text = text.text</span><br><span class="line">        soup = BeautifulSoup(text, &#x27;lxml&#x27;)</span><br><span class="line">        soup = soup.prettify()</span><br><span class="line">        soup = BeautifulSoup(soup, &#x27;lxml&#x27;)</span><br><span class="line">        div = soup.find_all(&quot;div&quot;, class_=&quot;listmain&quot;)</span><br><span class="line">        a_soup = div[0].find_all(&quot;a&quot;)</span><br><span class="line">        for item in a_soup:</span><br><span class="line">            list_url.append(target + item.get(&quot;href&quot;))</span><br><span class="line">            list_title.append(item.string.replace(&quot;\n&quot;, &quot;&quot;).strip())</span><br><span class="line">    else:</span><br><span class="line">        return None</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 爬取每个目录文章的内容，由于在笔趣看的书中，每个目录的的内容格式是几乎一样的。</span><br><span class="line">def getHtmlContent(url):</span><br><span class="line">    txt = requests.get(url, headers=headers)</span><br><span class="line">    txt.encoding = txt.apparent_encoding</span><br><span class="line">    if txt.status_code == 200:</span><br><span class="line">        return txt.text</span><br><span class="line">    else:</span><br><span class="line">        return None</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 用Beautifulsoup解析爬取的内容，注意&quot;\xa0&quot;。</span><br><span class="line">def parse_content(txt):</span><br><span class="line">    soup = BeautifulSoup(txt, &#x27;lxml&#x27;)</span><br><span class="line">    div = soup.find_all(&#x27;div&#x27;, class_=&#x27;showtxt&#x27;)</span><br><span class="line">    text = div[0].text.replace(&quot; &quot;, &quot;\n&quot;).replace(&quot;\xa0&quot; * 8, &#x27; &#x27;)</span><br><span class="line">    return text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 保存到txt文件中</span><br><span class="line">def save_text(text, path):</span><br><span class="line">    with open(&quot;./极品家丁/&#123;&#125;.txt&quot;.format(path), &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:</span><br><span class="line">        f.writelines(text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    url = &#x27;https://www.biqukan.com/3_3053/&#x27;</span><br><span class="line">    getHtmlList(url)</span><br><span class="line">    list_url = list_url[13:]</span><br><span class="line">    list_title = list_title[13:]</span><br><span class="line">    for i in range(len(list_url)):</span><br><span class="line">        text = getHtmlContent(list_url[i])</span><br><span class="line">        text = parse_content(text)</span><br><span class="line">        save_text(text, list_title[i])</span><br><span class="line">        print(&quot;\r&quot; + &quot;下载进度：&#123;:.2f&#125;%&quot;.format(i / len(list_url) * 100), end=&quot;&quot;, flush=True) # 这个可以实现原地刷新，flush=True 和\r 这两个不能少。</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Scrapy爬取Bing美图</title>
+    <url>/2023/09/06/Scrapy%E7%88%AC%E5%8F%96Bing%E7%BE%8E%E5%9B%BE/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<p>这个是Image Pipeline 练习</p>
+<h4 id="确定爬取的目标"><a href="#确定爬取的目标" class="headerlink" title="确定爬取的目标"></a>确定爬取的目标</h4><p>我们要爬取的是Bing美图，<a href="http://bing.plmeizi.com/">Bing今日美图</a>，我们可以发现，这个网页没有ajax加载，有页面，其中URL里面只有页码不同，可以考虑先爬取页面的信息，然后在每个页面爬取每个图片的链接赋值给item。</p>
+<h4 id="开始编写代码"><a href="#开始编写代码" class="headerlink" title="开始编写代码"></a>开始编写代码</h4><ul>
+<li><p>创建item</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define here the models for your scraped items</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># See documentation in:</span></span><br><span class="line"><span class="comment"># https://docs.scrapy.org/en/latest/topics/items.html</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br></pre></td></tr></table></figure>
+
+<p>class BingItem(scrapy.Item):<br># define the fields for your item here like:<br># name &#x3D; scrapy.Field()<br># 图片标题<br>title &#x3D; scrapy.Field()<br># 图片链接<br>url &#x3D; scrapy.Field()</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">建立图片的标题和链接作为“键”。</span><br><span class="line"></span><br><span class="line">- spiders/bing_images.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import scrapy</span><br><span class="line">from Bing.items import BingItem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class BingImagesSpider(scrapy.Spider):</span><br><span class="line">    name = &#x27;bing_images&#x27;</span><br><span class="line">    allowed_domains = [&#x27;bing.plmeizi.com&#x27;]</span><br><span class="line">    start_urls = [&#x27;http://bing.plmeizi.com/&#x27;]</span><br><span class="line"></span><br><span class="line">    def parse(self, response):</span><br><span class="line">        base_url = &quot;http://bing.plmeizi.com/?page=&quot;</span><br><span class="line">        for page in range(1, 129):</span><br><span class="line">            url = base_url + str(page)</span><br><span class="line">            yield scrapy.Request(url, callback=self.parse)</span><br><span class="line">        # 这个有必要进行循环，因为在pipeline.py 中scrapy.Request()里面的url是需要url的，而不是一个列表的。</span><br><span class="line">        for image in response.css(&quot;.clearfix .item&quot;):</span><br><span class="line">            item = BingItem()</span><br><span class="line">            item[&#x27;url&#x27;] = image.css(&quot;div img::attr(src)&quot;).extract_first()</span><br><span class="line">            item[&#x27;title&#x27;] = image.css(&quot;p::text&quot;).extract_first()</span><br><span class="line">            yield item</span><br></pre></td></tr></table></figure>
+
+<p>  这个代码中，我们先循环获取1到128页的页面的源代码，回调到parse()中，然后用response.css()获取每个页面的的图片的链接和标题。注意，这个也需要循环，因为接下来的pipeline.py中的scrapyRequest()里面的URL是一个一个的，不是列表的。</p>
+<ul>
+<li><p>pipelines.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define your item pipelines here</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Don&#x27;t forget to add your pipeline to the ITEM_PIPELINES setting</span></span><br><span class="line"><span class="comment"># See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html</span></span><br><span class="line"><span class="keyword">from</span> scrapy.pipelines.images <span class="keyword">import</span> ImagesPipeline</span><br><span class="line"><span class="keyword">import</span> scrapy</span><br></pre></td></tr></table></figure>
+
+<p>class BingPipeline(ImagesPipeline):<br># def process_item(self, item, spider):<br>#     return item<br><br># 用来确定图片的文件名。<br>def file_path(self, request, response&#x3D;None, info&#x3D;None):<br>    # 由于标题过长，会分成自动分成两半，前面的部作为文件夹的名字，后面的部分作为图片的名字。<br>    # 所以，我们有必要进行删除一些不必要的名字的部分，可以发现，这些标题基本是在后面有一个括号，我们可以删去<br>    # 这些无关紧要的括号就行。<br>    file_name &#x3D; request.meta[‘meta’][‘title’].split(“(“)[0] + “.png”<br>    return file_name<br><br>def item_completed(self, results, item, info):<br>    image_paths &#x3D; [x[‘path’] for ok, x in results if ok]<br>    if not image_paths:<br>        raise scrapy.DropItem(‘Image Download Failed’)<br>    return item<br><br>def get_media_requests(self, item, info):<br>    yield scrapy.Request(url&#x3D;item[‘url’], meta&#x3D;{‘meta’: item})</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">注意先导入ImagesPipeline，并且BingPipeline需要**继承**ImagesPipeline，这个是必须的。然后就是重写file_path()、item_completed()和get_media_requests()。其中file_path()就是确定图片的文件名，不过这个文件名需要处理下，因为这个得到的文件名过长。在item_completed()中，是用来确定当爬取图片失败后的返回警告信息。而get_media_requests()是用来处理spider传递过来的每个item。</span><br><span class="line"></span><br><span class="line">- settings.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">ROBOTSTXT_OBEY = False</span><br><span class="line"></span><br><span class="line">ROBOTSTXT_OBEY = &#123;</span><br><span class="line">   &#x27;Bing.pipelines.BingPipeline&#x27;: 300,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">IMAGES_STORE = &quot;./images&quot;</span><br></pre></td></tr></table></figure>
+
+<p>  需要对ROBOTSTXT_OBEY和ROBOTSTXT_OBEY去掉注释。然后添加IMAGES_STORE，作为保存的文件夹。</p>
+<h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>这些完整的代码见于 <a href="https://github.com/liuweixu/Python-crawler/tree/master/Scrapy/Bing%E7%BE%8E%E5%9B%BE/Bing">Github</a></p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li>《Python3 网络爬虫开发实战》崔庆才</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(brute force, implementation)A. Fafa and his Company</title>
+    <url>/2023/09/06/brute-force-implementation-A-Fafa-and-his-Company/</url>
+    <content><![CDATA[<p>水题</p>
+<span id="more"></span>
+
+<p>题目链接：<a href="http://codeforces.com/problemset/problem/935/A">935A - Fafa and his Company</a></p>
+<h4 id="A-Fafa-and-his-Company"><a href="#A-Fafa-and-his-Company" class="headerlink" title="A. Fafa and his Company"></a>A. Fafa and his Company</h4><p>Fafa owns a company that works on huge projects. There are <em>n</em> employees in Fafa’s company. Whenever the company has a new project to start working on, Fafa has to divide the tasks of this project among all the employees.</p>
+<p>Fafa finds doing this every time is very tiring for him. So, he decided to choose the best <em>l</em> employees in his company as team leaders. Whenever there is a new project, Fafa will divide the tasks among only the team leaders and each team leader will be responsible of some positive number of employees to give them the tasks. To make this process fair for the team leaders, each one of them should be responsible for the same number of employees. Moreover, every employee, who is not a team leader, has to be under the responsibility of exactly one team leader, and no team leader is responsible for another team leader.</p>
+<p>Given the number of employees <em>n</em>, <strong>find in how many ways</strong> Fafa could choose the number of team leaders <em>l</em> in such a way that it is possible to divide employees between them evenly.</p>
+<p>Input</p>
+<p>The input consists of a single line containing a positive integer <em>n</em> (2 ≤ <em>n</em> ≤ 105) — the number of employees in Fafa’s company.</p>
+<p>Output</p>
+<p>Print a single integer representing the answer to the problem.</p>
+<p>Examples</p>
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
+
+<p>复制</p>
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<p>Note</p>
+<p>In the second sample Fafa has 3 ways:</p>
+<ul>
+<li>choose only 1 employee as a team leader with 9 employees under his responsibility.</li>
+<li>choose 2 employees as team leaders with 4 employees under the responsibility of each of them.</li>
+<li>choose 5 employees as team leaders with 1 employee under the responsibility of each of them.</li>
+</ul>
+<p>这个是一个基础的题，注意题目中的 <strong>“find in how many ways”</strong> ，可以看出，这个是求分配的方案的总数，这个分配必须保证每个领导带领的人是一样的。因此可以采取模拟。</p>
+<p>Python代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">sum = 0</span><br><span class="line">i = 1</span><br><span class="line">while i &lt;= n // 2:</span><br><span class="line">    if (n - i) % i == 0:</span><br><span class="line">        sum += 1</span><br><span class="line">    i += 1</span><br><span class="line">print(sum)</span><br></pre></td></tr></table></figure>
+
+<p>C++代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">    int n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    int sum = 0;</span><br><span class="line">    int i = 1;</span><br><span class="line">    while (i &lt;= n / 2) &#123;</span><br><span class="line">        if ((n - i) % i == 0) &#123;</span><br><span class="line">            sum++;</span><br><span class="line">        &#125;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; sum &lt;&lt; endl;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题：</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu18.04 主题美化（MaxOS主题）</title>
+    <url>/2023/09/06/Ubuntu18-04-%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%EF%BC%88MaxOS%E4%B8%BB%E9%A2%98%EF%BC%89/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<p>Ubuntu时可以进行主题的美化，可以改为MacOS主题。</p>
+<h3 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h3><p>要安装主题，首先要安装三个包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gnome-tweak-tool</span><br><span class="line">sudo apt install gnome-shell-extensions</span><br><span class="line">sudo apt install gnome-shell-extension-dashtodock</span><br></pre></td></tr></table></figure>
+
+<h3 id="Tweak修改（注意，下面这些已经经过主题美化了）"><a href="#Tweak修改（注意，下面这些已经经过主题美化了）" class="headerlink" title="Tweak修改（注意，下面这些已经经过主题美化了）"></a>Tweak修改（注意，下面这些已经经过主题美化了）</h3><ol>
+<li>经过安装三个包后，我们可以打开Tweaks</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles15.png" alt="1"></p>
+<p>像上面修改，我们可以发现本来在右上角的按钮放到了左上角了。</p>
+<ol start="2">
+<li><p>修改鼠标的指针的样式</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles16.png" alt="2"></p>
+<p>如图，我们可以通过修改cursor ,修改鼠标的箭头的样式。</p>
+</li>
+<li><p>去掉Shell的无法修改的感叹号</p>
+<p>Extensions -&gt; User themes 打开它</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles17.png" alt="3"></p>
+<p><strong>重启</strong>，然后可以发现那个感叹号不见了。</p>
+</li>
+<li><p>将侧边栏放到底部。</p>
+<p>Extensions -&gt; Dash to dock 点击settings图标，像下面的图，然后进一步修改。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles18.png" alt="4"></p>
+</li>
+</ol>
+<h3 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h3><h4 id="安装GTK主题"><a href="#安装GTK主题" class="headerlink" title="安装GTK主题"></a>安装GTK主题</h4><p><a href="https://www.pling.com/s/Gnome/p/1013714/">McHigh Sierra https://www.pling.com/s/Gnome/p/1013714/</a></p>
+<p><a href="https://www.pling.com/s/Gnome/p/1013741/">McSierra Compact https://www.pling.com/s/Gnome/p/1013741/</a></p>
+<p>在第一个链接中。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles19.png" alt="5"></p>
+<p>下载这个，到桌面或其他比较便于管理的位置。</p>
+<p>然后再这个位置打开terminal</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar xvf Sierra-light.tar.xz</span><br></pre></td></tr></table></figure>
+
+<p>得到解压后的文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mv Sierra-light /usr/share/themes</span><br></pre></td></tr></table></figure>
+
+<p>最后在Tweaks中</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles20.png" alt="6"></p>
+<p>在applications中修改为Sierra-light，我们可以发现GTK主题改变了。</p>
+<h4 id="安装shell主题"><a href="#安装shell主题" class="headerlink" title="安装shell主题"></a>安装shell主题</h4><p>其实，shell主题和GTK主题一样，也可以在shell中修改为Sierra-light 也可以。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles21.png" alt="7"></p>
+<p>也可以安装其他主题，比如Sierra-compact-light主题等等。可以在<strong><a href="https://www.pling.com/s/Gnome/">https://www.pling.com/s/Gnome/</a></strong> 中寻找。</p>
+<h4 id="安装icons主题"><a href="#安装icons主题" class="headerlink" title="安装icons主题"></a>安装icons主题</h4><p>我选的是MacOS11主题，不过由于这个主题比较大，下载费时，所以下面给出了百度云链接：</p>
+<p> 链接：<a href="https://pan.baidu.com/s/1tVP9dghyHvNwq4kMNtyu5g">百度网盘 请输入提取码</a><br>提取码：f34j</p>
+<p>然后放到某一位置，解压，并把解压后得到的文件夹移动到&#x2F;usr&#x2F;share&#x2F;icons</p>
+<p>最后打开Tweaks，在Appearance 中打开icon，选MacOS11就行。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles22.png" alt="8"></p>
+<h4 id="安装GDM主题（登陆界面主题）"><a href="#安装GDM主题（登陆界面主题）" class="headerlink" title="安装GDM主题（登陆界面主题）"></a>安装GDM主题（登陆界面主题）</h4><p>百度云链接：<a href="https://pan.baidu.com/s/1f-PPWVILeovdIWmvQjXkVw">百度网盘 请输入提取码</a> <br>提取码：yetv </p>
+<p>来源：<a href="https://www.pling.com/s/Gnome/p/1207015/">High Ubunterra - Gnome-look.org</a></p>
+<p>把下载得到的文件解压，得到文件夹，文件夹的内容：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles23.png" alt="9"></p>
+<p>备份&#x2F;usr&#x2F;share&#x2F;gnome-shell&#x2F;theme&#x2F;ubuntu.css</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp /usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css.backup</span><br></pre></td></tr></table></figure>
+
+<p>用上图中的ubuntu.css替换掉系统自带的&#x2F;usr&#x2F;share&#x2F;gnome-shell&#x2F;theme&#x2F;ubuntu.css</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp -i ~/Desktop/liu/setaswallpaper/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css</span><br></pre></td></tr></table></figure>
+
+<p>（上面的注意位置别写错）</p>
+<p>把SetAsWallpaper脚本文件复制到~&#x2F;.local&#x2F;share&#x2F;nautilus&#x2F;scripts&#x2F;目录下，然后修改下权限（如果需要）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp ~/Desktop/liu/setaswallpaper/SetAsWallpaper ~/.local/share/nautilus/scripts/</span><br><span class="line">sudo chmod +x SetAsWallpaper</span><br></pre></td></tr></table></figure>
+
+<p>然后重启nautilus（下面的命令是关闭）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nautilus -q</span><br></pre></td></tr></table></figure>
+
+<p>执行如下命令，修改下 &#x2F;usr&#x2F;share&#x2F;backgrounds 的权限.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod 777 /usr/share/backgrounds/</span><br></pre></td></tr></table></figure>
+
+<p>去~&#x2F;.local&#x2F;share&#x2F;nautilus&#x2F;scripts&#x2F; 目录下执行下SetAsWallpaper脚本。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ./SetAsWallpape</span><br></pre></td></tr></table></figure>
+
+<p><strong>重启系统</strong>（这个必须的）</p>
+<p>不过此时壁纸应该会没了，可以重新设置，另外，最好先设置自己喜欢的壁纸，这样的话得到的登陆界面的模糊界面可以是基于自己选的壁纸了。</p>
+<p>效果图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles24.png" alt="10"></p>
+<h3 id="其他主题的一些修改"><a href="#其他主题的一些修改" class="headerlink" title="其他主题的一些修改"></a>其他主题的一些修改</h3><h4 id="桌面壁纸和锁屏界面壁纸修改"><a href="#桌面壁纸和锁屏界面壁纸修改" class="headerlink" title="桌面壁纸和锁屏界面壁纸修改"></a>桌面壁纸和锁屏界面壁纸修改</h4><p>在桌面右键点击，点Change background。可以修改壁纸，当然，我们也可以从网上下载自己喜欢的壁纸，存到~&#x2F;Pictures就行。</p>
+<h4 id="头像的修改"><a href="#头像的修改" class="headerlink" title="头像的修改"></a>头像的修改</h4><p>在Settings中，Details -&gt; Users 点击头像，可以选择自己喜欢的图作为自己的头像。</p>
+<h3 id="最终成色"><a href="#最终成色" class="headerlink" title="最终成色"></a>最终成色</h3><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles25.png" alt="11"></p>
+<p><img src="https://ws4.sinaimg.cn/large/006QU0Psly1g67jolkk33j31gy0nsdm7.jpg" alt="12"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles26.png" alt="13"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles27.png" alt="14"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles28.png" alt="15"></p>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ul>
+<li><a href="https://www.cnblogs.com/feipeng8848/p/8970556.html">给Ubuntu18.04(18.10)安装mac os主题</a></li>
+<li>[<a href="https://www.pling.com/s/Gnome/">Gnome-look.org</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scrapy提交表单——爬取火熊网最新上传一栏并下载图片</title>
+    <url>/2023/09/06/scrapy%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95%E2%80%94%E2%80%94%E7%88%AC%E5%8F%96%E7%81%AB%E7%86%8A%E7%BD%91%E6%9C%80%E6%96%B0%E4%B8%8A%E4%BC%A0%E4%B8%80%E6%A0%8F%E5%B9%B6%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>我起初在爬这个<a href="http://cgartt.com/">火熊网</a>却发现这个是JS加载，所以我就打开谷歌开发者工具，查看<strong>XHR</strong>，找到了<em><a href="http://cgartt.com/api/api.php?d=index&c=Index&action=getWorkList">http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList</a></em></p>
+<p>在这个链接中，用Google的JSON-handleg工具查看json，却发现这个json和preview是有所不同的：</p>
+<p><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Form_data1.png"><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Form_data2.png"></p>
+<p>（上面两个无论是title还是id以及imageUrl均是不同的）</p>
+<p>所以我很困惑，一度误认为这个是JS加密或JS混淆的，所以就学了如何js加密的破解，不过还是没有找到关于这个的解决办法。后来，在Header一栏中，却发现有“Form data”：</p>
+<p><img src="https://raw.githubusercontent.com/liuweixu/cdn/master/Python-crawler/Form_data3.png"></p>
+<p>这时，我才想起，这个也许是需要通过提交表单才能获取preview上的json，所以就开始尝试提交表单了。</p>
+<h3 id="开始爬取"><a href="#开始爬取" class="headerlink" title="开始爬取"></a>开始爬取</h3><h4 id="确定爬取的目标"><a href="#确定爬取的目标" class="headerlink" title="确定爬取的目标"></a>确定爬取的目标</h4><p>我确定在火熊网上爬取最新上传一栏的前10页，其中，对于排序并没有要求，能爬取并下载图片就行。网址：<a href="http://cgartt.com/">http://cgartt.com/</a></p>
+<h4 id="确定爬取时所用的语言和框架"><a href="#确定爬取时所用的语言和框架" class="headerlink" title="确定爬取时所用的语言和框架"></a>确定爬取时所用的语言和框架</h4><p>Python的<strong>scrapy</strong>，同时，用scrapy的<strong>ImagePipeline</strong>来下载图片。</p>
+<h4 id="爬虫程序"><a href="#爬虫程序" class="headerlink" title="爬虫程序"></a>爬虫程序</h4><h5 id="Begin"><a href="#Begin" class="headerlink" title="Begin:"></a>Begin:</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">scrapy startproject Huoxiong</span><br><span class="line">scrapy genspider huoXiongImage cgartt.com/</span><br></pre></td></tr></table></figure>
+
+<p>上面建立scrapy</p>
+<h5 id="spider-huoXiongImage-py"><a href="#spider-huoXiongImage-py" class="headerlink" title="spider&#x2F;huoXiongImage.py"></a>spider&#x2F;huoXiongImage.py</h5><p>这个是整个爬虫程序的重中之重，与爬虫是否成功息息相关的。</p>
+<ul>
+<li><p>其中，base_url_1指的是之前在开发者工具中找到的要查找的json所在的网址；而base_url_2是我在分析图片页的网址时，发现这个是共同的链接，比如：</p>
+<ul>
+<li><p><a href="http://cgartt.com/index_writing_detail.php?work=0&id=2761">http://cgartt.com/index_writing_detail.php?work=0&amp;id=2761</a></p>
+</li>
+<li><p><a href="http://cgartt.com/index_writing_detail.php?work=0&id=27614">http://cgartt.com/index_writing_detail.php?work=0&amp;id=27614</a></p>
+</li>
+<li><p><a href="http://cgartt.com/index_writing_detail.php?work=0&id=27676">http://cgartt.com/index_writing_detail.php?work=0&amp;id=27676</a></p>
+</li>
+</ul>
+<p>在上面随机选择的3个图片页的链接中，可以看出它们几乎相似，唯一不同的地方是<strong>id</strong>，所以从这个思路下手，得到图片页的链接；最后的base_url_3中，这个的查找方法和base_url_1类似，也需要提交表单才能得到需要的信息,用<strong>scrapy.Request()<strong>，method为</strong>‘POST’</strong>，指提交。</p>
+</li>
+<li><p>接下来我觉得需要重写start_requests()，因为如果不重写，那程序将会从start_urls中开始爬取，不符合要从<a href="http://cgartt.com/api/api.php?d=index&c=Index&action=getWorkList%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95%E7%9A%84%E7%9B%AE%E7%9A%84%E3%80%82">http://cgartt.com/api/api.php?d=index&c=Index&action=getWorkList提交表单的目的。</a></p>
+</li>
+<li><p>下面就是通过base_url_1提交表单得到json后处理，主要是得到<strong>id</strong>，便于和base_url_2组成图片页的链接。</p>
+</li>
+<li><p>然后就是对base_url_3进行提交表单，用**scrapy.FormRequest()**，不过用scrapy.Request()并不能得到需要的内容。最后就是获取图片页的各个图片的链接，图片的标题、作者名字等等。</p>
+</li>
+<li><p>代码如下（HuoxiongimageSpider(scrapy.Spider)类里面）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">name = <span class="string">&#x27;huoXiongImage&#x27;</span>  <span class="comment"># 这个name必不可少。</span></span><br><span class="line">allowed_domains = [<span class="string">&#x27;cgartt.com&#x27;</span>]</span><br><span class="line">start_urls = [<span class="string">&#x27;http://cgartt.com/&#x27;</span>]</span><br><span class="line">base_url_1 = <span class="string">&quot;http://cgartt.com/api/api.php?d=index&amp;c=Index&amp;action=getWorkList&quot;</span></span><br><span class="line">base_url_2 = <span class="string">&quot;http://cgartt.com/index_writing_detail.php?work=0&amp;id=&quot;</span></span><br><span class="line">base_url_3 = <span class="string">&quot;http://cgartt.com/api/api.php?d=find&amp;c=FindInfo&amp;action=getWorkDetial&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 爬取前10页。</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">start_requests</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="keyword">for</span> page <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">11</span>):</span><br><span class="line">        data = &#123;<span class="string">&#x27;order&#x27;</span>: <span class="number">2</span>&#125;</span><br><span class="line">        data[<span class="string">&#x27;page&#x27;</span>] = page</span><br><span class="line">        <span class="comment"># 提交表单，为了得到最新上传一栏的1到10页的json。</span></span><br><span class="line">        <span class="keyword">yield</span> Request(url=self.base_url_1, method=<span class="string">&#x27;POST&#x27;</span>, body=json.dumps(data), callback=self.parse)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分析提交表单后得到的数据。</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse</span>(<span class="params">self, response</span>):</span><br><span class="line">    text = response.text</span><br><span class="line">    text = text[<span class="number">18</span>:] <span class="comment"># 这个是为了去掉空格，从而能确保转化为json过程中没有出错。</span></span><br><span class="line">    text = json.loads(text)</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">list</span> <span class="keyword">in</span> text[<span class="string">&#x27;list&#x27;</span>]:</span><br><span class="line">        <span class="built_in">id</span> = <span class="built_in">list</span>[<span class="string">&#x27;id&#x27;</span>]</span><br><span class="line">        url = self.base_url_2 + <span class="built_in">id</span></span><br><span class="line">        <span class="keyword">yield</span> Request(url=url, callback=self.parse_page, meta=&#123;<span class="string">&#x27;id&#x27;</span>: <span class="built_in">id</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_page</span>(<span class="params">self, response</span>):</span><br><span class="line">    <span class="built_in">id</span> = response.meta[<span class="string">&#x27;id&#x27;</span>]  <span class="comment"># 这个不能写成response[&#x27;id&#x27;]</span></span><br><span class="line">    data = &#123;<span class="string">&#x27;id&#x27;</span>: <span class="built_in">id</span>&#125;</span><br><span class="line">    <span class="comment"># 不知怎么的，用FormRequest能得到需要的数据，而Request不能，所以一个不能用时，考虑用另一个。</span></span><br><span class="line">    <span class="keyword">yield</span> FormRequest(url=self.base_url_3, formdata=data, method=<span class="string">&#x27;POST&#x27;</span>, callback=self.parse_detail)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在图片页面获取图片的链接用于下载。另外也获取图片的id，标题和作者。</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_detail</span>(<span class="params">self, response</span>):</span><br><span class="line">    text = response.text</span><br><span class="line">    text = text[<span class="number">8</span>:]</span><br><span class="line">    text = json.loads(text)</span><br><span class="line">    images = text[<span class="string">&#x27;worksInfo&#x27;</span>][<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> image <span class="keyword">in</span> images[<span class="string">&#x27;imageUrl&#x27;</span>]:</span><br><span class="line">        item = HuoxiongItem()</span><br><span class="line">        item[<span class="string">&#x27;img&#x27;</span>] = image[<span class="string">&#x27;imageUrl&#x27;</span>]</span><br><span class="line">        item[<span class="string">&#x27;title&#x27;</span>] = images[<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">        item[<span class="string">&#x27;Name&#x27;</span>] = images[<span class="string">&#x27;username&#x27;</span>]</span><br><span class="line">        item[<span class="string">&#x27;id&#x27;</span>] = images[<span class="string">&#x27;id&#x27;</span>]</span><br><span class="line">        <span class="keyword">yield</span> item</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="items-py"><a href="#items-py" class="headerlink" title="items.py"></a>items.py</h5><p>这个是构建Item()的.(HuoxiongItem(scrapy.Item)类)：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># define the fields for your item here like:</span></span><br><span class="line"><span class="comment"># name = scrapy.Field()</span></span><br><span class="line">title = Field()</span><br><span class="line">img = Field()</span><br><span class="line">Name = Field()</span><br><span class="line"><span class="built_in">id</span> = Field()</span><br></pre></td></tr></table></figure>
+
+<h5 id="pipelines-py"><a href="#pipelines-py" class="headerlink" title="pipelines.py"></a>pipelines.py</h5><p>&#x3D;需要引入scrapy.pipelines.images的ImagesPipeline</p>
+<p>并将HuoxiongPipeline()类继承imagesPipeline类，重写file_path()和get_media_requests()方法。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HuoxiongPipeline</span>(<span class="title class_ inherited__">ImagesPipeline</span>):</span><br><span class="line"><span class="comment"># def process_item(self, item, spider):</span></span><br><span class="line"><span class="comment">#     return item</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">file_path</span>(<span class="params">self, request, response=<span class="literal">None</span>, info=<span class="literal">None</span></span>):</span><br><span class="line">    item = request.meta[<span class="string">&#x27;meta&#x27;</span>]</span><br><span class="line">    file_name = item[<span class="string">&#x27;Name&#x27;</span>] + <span class="string">&quot;/&quot;</span> + item[<span class="string">&#x27;id&#x27;</span>] + <span class="string">&quot;/&quot;</span> + item[<span class="string">&#x27;title&#x27;</span>] + <span class="string">&quot;/&quot;</span> + item[<span class="string">&#x27;img&#x27;</span>].split(<span class="string">&quot;/&quot;</span>)[-<span class="number">1</span>] <span class="comment"># 这个是构建一个具有层次结构的文件的小尝试。</span></span><br><span class="line">    <span class="keyword">return</span> file_name</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_media_requests</span>(<span class="params">self, item, info</span>):</span><br><span class="line">    <span class="keyword">yield</span> Request(url=item[<span class="string">&#x27;img&#x27;</span>], meta=&#123;<span class="string">&#x27;meta&#x27;</span>: item&#125;)</span><br></pre></td></tr></table></figure>
+
+<h5 id="settings-py"><a href="#settings-py" class="headerlink" title="settings.py"></a>settings.py</h5><p>还得添加如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">    <span class="string">&#x27;Huoxiong.pipelines.HuoxiongPipeline&#x27;</span>: <span class="number">300</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">IMAGES_STORE = <span class="string">&#x27;./image&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>需要去掉<em>ITEM_PIPELINES</em>所在的三行的注释，然后写上<strong>IMAGES_STORE &#x3D; ‘.&#x2F;image’</strong>，其中注意 <strong>“IMAGES_STORE”</strong> 不能写错。</p>
+<h5 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h5><p>最后在Terminal上scrapy crawl huoXiongImage就可以爬了，目前可以正常爬取的。</p>
+<h3 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h3><p>完整的代码见于：</p>
+<p><a href="https://github.com/liuweixu/Python-crawler/tree/master/Scrapy/%E7%81%AB%E7%86%8A%E7%BD%91%E5%9B%BE%E7%89%87%E7%88%AC%E5%8F%96%E4%B8%8B%E8%BD%BD/Huoxiong">liuweixu’s Github</a></p>
+]]></content>
+      <tags>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scrapy爬取笔趣看的小说</title>
+    <url>/2023/09/06/scrapy%E7%88%AC%E5%8F%96%E7%AC%94%E8%B6%A3%E7%9C%8B%E7%9A%84%E5%B0%8F%E8%AF%B4/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前用了requests和Beautifulsoup爬取笔趣看的小说了<a href="https://liuweixu.github.io/2019/10/01/Beautifulsoup/#more">《极品家丁》</a>，不过现在用爬虫框架——Scrapy爬取，这个框架比较好用，自带分布式，可以让我们省下时间快速爬取自己需要的内容，这个是一个很优秀的轮子，我们干嘛不能学和用呢？不过这个scrapy学习相对来说比较难上手。</p>
+<h3 id="开始入门"><a href="#开始入门" class="headerlink" title="开始入门"></a>开始入门</h3><h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>安装好Scrapy，在windows可以用pip install scrapy就安装好，其他的可以看看<a href="https://cuiqingcai.com/5421.html">崔庆才博客</a></p>
+<h4 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">scrapy startproject Jipin</span><br></pre></td></tr></table></figure>
+
+<p>这个可以在cmd的命令行运行，也可以在Pycharm的下面的Terminal运行，我用的是Pycharm，所以接下来的步骤都是在Pycharm上运行的，不在Pycharm的，也可以运行的。</p>
+<h4 id="创建Spider"><a href="#创建Spider" class="headerlink" title="创建Spider"></a>创建Spider</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cd Jipin</span><br><span class="line">scrapy genspider jipinjiading www.biqukan.com/<span class="number">3_3053</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在Pycharm打开Jipin文件夹。</p>
+<h4 id="开始编写代码"><a href="#开始编写代码" class="headerlink" title="开始编写代码"></a>开始编写代码</h4><ul>
+<li><p>首先在items.py中,需要定义item（也可以不用定义Item），这个Item可以理解为字典，下面的两行可以认为是定义字典的键。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"><span class="keyword">from</span> Jipin.items <span class="keyword">import</span> JipinItem</span><br></pre></td></tr></table></figure>
+
+<p>class JipinjiadingSpider(scrapy.Spider):<br>name &#x3D; ‘jipinjiading’<br>allowed_domains &#x3D; [‘<a href="http://www.biqukan.com']">www.biqukan.com&#39;]</a><br>start_urls &#x3D; [‘<a href="http://www.biqukan.com/3_3053/']">http://www.biqukan.com/3_3053/&#39;]</a><br><br># 抓取目录页的标题的链接<br>def parse(self, response):<br>    links &#x3D; response.css(“.listmain dl dd a::attr(href)”).extract()<br>    for link in links:<br>        yield scrapy.Request(url&#x3D;parse.urljoin(response.url, link), callback&#x3D;self.parse_page)<br><br># 抓取文章页面的标题和内容。<br>def parse_page(self, response):<br>    item &#x3D; JipinItem()<br>    item[‘title’] &#x3D; response.css(“.content h1::text”).extract_first()<br>    texts &#x3D; response.xpath(“&#x2F;&#x2F;*[@id&#x3D;&quot;content&quot;]&#x2F;text()”).extract()<br>    item[‘text’] &#x3D; “”.join(texts).replace(“\xa0” * 8, “”)<br>    yield item</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- spider/jipinjiading.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import scrapy</span><br><span class="line">from urllib import parse</span><br><span class="line">from Jipin.items import JipinItem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class JipinjiadingSpider(scrapy.Spider):</span><br><span class="line">    name = &#x27;jipinjiading&#x27;</span><br><span class="line">    allowed_domains = [&#x27;www.biqukan.com&#x27;]</span><br><span class="line">    start_urls = [&#x27;http://www.biqukan.com/3_3053/&#x27;]</span><br><span class="line"></span><br><span class="line">    # 抓取目录页的标题的链接</span><br><span class="line">    def parse(self, response):</span><br><span class="line">        links = response.css(&quot;.listmain dl dd a::attr(href)&quot;).extract()</span><br><span class="line">        for link in links:</span><br><span class="line">            yield scrapy.Request(url=parse.urljoin(response.url, link), callback=self.parse_page)</span><br><span class="line"></span><br><span class="line">    # 抓取文章页面的标题和内容。</span><br><span class="line">    def parse_page(self, response):</span><br><span class="line">        item = JipinItem()</span><br><span class="line">        item[&#x27;title&#x27;] = response.css(&quot;.content h1::text&quot;).extract_first()</span><br><span class="line">        texts = response.xpath(&quot;//*[@id=\&quot;content\&quot;]/text()&quot;).extract()</span><br><span class="line">        item[&#x27;text&#x27;] = &quot;&quot;.join(texts).replace(&quot;\xa0&quot; * 8, &quot;&quot;)</span><br><span class="line">        yield item</span><br></pre></td></tr></table></figure>
+
+<p>  注意这个allowed_domains 里面的是域名，start_urls里面的可以是小说的目录页的链接。接下来就是爬取了。</p>
+<p>  在抓取目录页的标题的链接中，parse()方法的参数response是start_urls里面的链接爬取后的结果，所以在parse()方法中，我们可以直接对response变量包含的内容进行解析，解析的方式有正则表达式，Xpath或css选择器。有：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">links = response.css(<span class="string">&quot;.listmain dl dd a::attr(href)&quot;</span>).extract()</span><br></pre></td></tr></table></figure>
+
+<p>  其中，extract()里的extract的意思是提取，它的作用就是对于response.css()或response.xpath()获取的结果提取为整个列表。</p>
+<p>  然后循环遍历</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> link <span class="keyword">in</span> links:</span><br><span class="line">    <span class="keyword">yield</span> scrapy.Request(url=parse.urljoin(response.url, link), callback=self.parse_page)</span><br></pre></td></tr></table></figure>
+
+<p>  这两行代码比较重要，也比较难理解。</p>
+<ol>
+<li><p>scrapy会根据<strong>yield</strong>返回的示例类型来执行不同的操作。在上面的代码中，对于scrapy.Request对象，scrapy框架会去获得该对象指向的链接并在请求完成后调用该对象的回调函数。</p>
+</li>
+<li><p>在callback回调函数中，我个人觉得就是对于这个scrapy.Request()获取的链接调到这个回调函数，而回调函数里面会对这个链接的内容进一步处理，得到需要的内容。</p>
+<p>在parse_page()函数中，这个作用就是使用item，把上面的回调过来的链接用Request获取内容作为值赋值给item，然后用yield把这个item传给Item Pipeline。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"><span class="keyword">from</span> Jipin.items <span class="keyword">import</span> JipinItem</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>  class JipinjiadingSpider(scrapy.Spider):<br>      name &#x3D; ‘jipinjiading’<br>      allowed_domains &#x3D; [‘<a href="http://www.biqukan.com']">www.biqukan.com&#39;]</a><br>      start_urls &#x3D; [‘<a href="http://www.biqukan.com/3_3053/']">http://www.biqukan.com/3_3053/&#39;]</a></p>
+<pre><code>  # 抓取目录页的标题的链接
+  def parse(self, response):
+      links = response.css(&quot;.listmain dl dd a::attr(href)&quot;).extract()
+      for link in links:
+          yield scrapy.Request(url=parse.urljoin(response.url, link), callback=self.parse_page)
+
+  # 抓取文章页面的标题和内容。
+  def parse_page(self, response):
+      item = JipinItem()
+      item[&#39;title&#39;] = response.css(&quot;.content h1::text&quot;).extract_first()
+      texts = response.xpath(&quot;//*[@id=\&quot;content\&quot;]/text()&quot;).extract()
+      item[&#39;text&#39;] = &quot;&quot;.join(texts).replace(&quot;\xa0&quot; * 8, &quot;&quot;)
+      yield item # 这个是难点，需要理解。
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- pipelines.py</span><br><span class="line"></span><br><span class="line">这个是Item Pipeline，即项目管道。面对Spider传递过来的**一个一个**的item，获取item的内容，保存到文件中。</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line"># Define your item pipelines here</span><br><span class="line">#</span><br><span class="line"># Don&#x27;t forget to add your pipeline to the ITEM_PIPELINES setting</span><br><span class="line"># See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class JipinPipeline(object):</span><br><span class="line">    def process_item(self, item, spider):</span><br><span class="line">        try:</span><br><span class="line">            path = &quot;Jipinjiading&quot;</span><br><span class="line">            if not os.path.exists(path):</span><br><span class="line">                os.makedirs(path)</span><br><span class="line">            text = item[&#x27;text&#x27;]</span><br><span class="line">            title = item[&#x27;title&#x27;]</span><br><span class="line">            print(len(title))</span><br><span class="line">            with open(&quot;./&quot; + path + &quot;/&#123;&#125;.txt&quot;.format(title), &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:</span><br><span class="line">                f.write(text)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line">        return item</span><br></pre></td></tr></table></figure>
+
+<p>  注意<strong>不能用数组</strong>，比如*for i in item[‘text’]*等等，因为由于是异步，所以Spider是<strong>一个一个</strong>向Item Pipeline传递item，而每个item一般包含一组信息。而这个Item Pipeline则会一个一个处理item，这个循环是内定的。我这么理解的。</p>
+<ul>
+<li><p>settings.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">   <span class="string">&#x27;Jipin.pipelines.JipinPipeline&#x27;</span>: <span class="number">300</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个需要去掉注释，如果不这样做，就不能实现将Item Pipeline 的作用了。</p>
+</li>
+</ul>
+<h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>这些完整的代码见于：<a href="https://github.com/liuweixu/Python-crawler/tree/master/Scrapy/%E7%88%AC%E5%8F%96%E3%80%8A%E6%9E%81%E5%93%81%E5%AE%B6%E4%B8%81%E3%80%8B%E5%B0%8F%E8%AF%B4/Jipin">Github</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li>《Python3 网络爬虫开发实战》崔庆才</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(图论) A. Love Triangle</title>
+    <url>/2023/09/06/%E5%9B%BE%E8%AE%BA-A-Love-Triangle/</url>
+    <content><![CDATA[<p>这个其实是一个很基础的图论题。</p>
+<span id="more"></span>
+
+<p>题目链接：<a href="http://codeforces.com/problemset/problem/939/A">Problem - 939A - Codeforces</a></p>
+<h4 id="A-Love-Triangle"><a href="#A-Love-Triangle" class="headerlink" title="A. Love Triangle"></a>A. Love Triangle</h4><p>As you could know there are no male planes nor female planes. However, each plane on Earth likes some other plane. There are <em>n</em> planes on Earth, numbered from 1 to <em>n</em>, and the plane with number <em>i</em> likes the plane with number <em>f**i</em>, where 1 ≤ <em>f**i</em> ≤ <em>n</em> and <em>f**i</em> ≠ <em>i</em>.</p>
+<p>We call a love triangle a situation in which plane <em>A</em> likes plane <em>B</em>, plane <em>B</em> likes plane <em>C</em> and plane <em>C</em> likes plane <em>A</em>. Find out if there is any love triangle on Earth.</p>
+<p>Input</p>
+<p>The first line contains a single integer <em>n</em> (2 ≤ <em>n</em> ≤ 5000) — the number of planes.</p>
+<p>The second line contains <em>n</em> integers <em>f</em>1, <em>f</em>2, …, <em>f**n</em> (1 ≤ <em>f**i</em> ≤ <em>n</em>, <em>f**i</em> ≠ <em>i</em>), meaning that the <em>i</em>-th plane likes the <em>f**i</em>-th.</p>
+<p>Output</p>
+<p>Output «YES» if there is a love triangle consisting of planes on Earth. Otherwise, output «NO».</p>
+<p>You can output any letter in lower case or in upper case.</p>
+<p>Examples</p>
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">5</span><br><span class="line">2 4 5 1 3</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">YES</span><br></pre></td></tr></table></figure>
+
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">5</span><br><span class="line">5 5 5 5 1</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">NO</span><br></pre></td></tr></table></figure>
+
+<p>Note</p>
+<p>In first example plane 2 likes plane 4, plane 4 likes plane 1, plane 1 likes plane 2 and that is a love triangle.</p>
+<p>In second example there are no love triangles.</p>
+<p>这个是一个很基础的图论题，只要有f[f[f[i]]] &#x3D;&#x3D; i的话，就说明肯定存在三角关系。</p>
+<p>Python代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">f = list(map(int, input().split()))</span><br><span class="line">f.insert(0, 0)</span><br><span class="line">flag = 0</span><br><span class="line">for i in range(1, n + 1):</span><br><span class="line">    if f[f[f[i]]] == i:</span><br><span class="line">        flag = 1</span><br><span class="line">        break</span><br><span class="line">if flag:</span><br><span class="line">    print(&quot;YES&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(&quot;NO&quot;)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题：图论</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用VMware虚拟机安装Ubuntu18.04</title>
+    <url>/2023/09/06/%E4%BD%BF%E7%94%A8VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Ubuntu18-04/</url>
+    <content><![CDATA[<p>这个是利用VMware虚拟机安装Ubuntu的。由于我的笔记本电脑的硬盘有点问题，所以利用USB安装Ubuntu时，却经常扫描不到硬盘，所以最后放弃安装双系统。改为利用虚拟机了。</p>
+<p>VMware 的百度云链接：<a href="https://pan.baidu.com/s/1QV60f1wv6OVOm9wJ1a0dKw">百度网盘 请输入提取码</a><br>提取码：sr62 </p>
+<p>Ubuntu 的百度云链接：<a href="https://pan.baidu.com/s/1L3NWXms7TSXGV2X_mORMKg">百度网盘 请输入提取码</a></p>
+<p>提取码：hbz4 </p>
+<h3 id="VMware-的安装"><a href="#VMware-的安装" class="headerlink" title="VMware 的安装"></a>VMware 的安装</h3><p>我们可以在上面给出的链接进行下载。这个链接长期有效。然后根据提示一步一步安装，最后根据给出的密钥进行注册。</p>
+<h3 id="Ubuntu18-04下载"><a href="#Ubuntu18-04下载" class="headerlink" title="Ubuntu18.04下载"></a>Ubuntu18.04下载</h3><p>这个要注意！！！，必须从官网进行下载，这个必须的，因为如果不是从官网下载的话，安装过程可能会出错的。推荐下载Ubuntu Desktop 18.04 LTS。当然，如果嫌慢的话，也可以从我给的链接下载（如果你有超级会员或其他破解工具的话），这个是从官网亲自下载的，保证正确。</p>
+<h3 id="虚拟机的配置"><a href="#虚拟机的配置" class="headerlink" title="虚拟机的配置"></a>虚拟机的配置</h3><ol>
+<li><p>打开虚拟机，点击创建虚拟机，然后得到如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles01.png" alt="1"></p>
+<p>可以直接点下一步。</p>
+</li>
+<li><p>然后得到下面的图，像这样。再点下一步。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles02.png" alt="2"></p>
+</li>
+<li><p>既然是要安装Ubuntu，用Ubuntu64就行。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles03.png" alt="3"></p>
+</li>
+<li><p>下面自己设置就行</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles04.png" alt="4"></p>
+</li>
+<li><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles05.png" alt="5"></p>
+<p>​ 这个步骤，磁盘大小最好至少20GB，当然，设置更大就更好了，对了，起初是占用不多，才几GB，然后往里面添加一些文件才会变大。</p>
+</li>
+<li><p>接下来就是继续点下一步，直至完成。然后还要点击编辑虚拟机设置。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles06.png" alt="6"></p>
+<p>​ 最后在下面的图中：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles07.png" alt="7"></p>
+</li>
+</ol>
+<p>用这个，浏览Ubuntu镜像保存的位置。最后点击确定。</p>
+<h3 id="Ubuntu安装"><a href="#Ubuntu安装" class="headerlink" title="Ubuntu安装"></a>Ubuntu安装</h3><p>最后，VMware虚拟机配置好了，接下来就是点击开启此虚拟机，开始安装。安装步骤不难（和那个让我头大的生双系统安装相比太简单了，几乎是傻瓜式的）：（先不放图了）</p>
+<ol>
+<li>点击“Install Ubuntu”（我觉得最好用English比较好，因为用中文可能会有一些bug。。。用English权当练习英语吧）</li>
+<li>点continue,并且在‘Update and other software’ 中划上 ‘minimal installation’ （会省下一些时间）, 也划上 ‘Download updates while installation’ ,再点continue。</li>
+<li>在Installation Type选默认就行。弹出的提示也点继续就行，（注意！！！！，在安装双系统时，这个不能点，要点最下边的那个，方便分区）</li>
+<li>在Where Are You?点击中国，接下来就是填写个人信息，注意密码不能忘了，切记。</li>
+<li>最后就是点击安装了，我这个渣渣的校园网安装这个花了半小时左右。</li>
+<li>安装完毕后，点击restart now,重启虚拟机，当然，有可能会碰上重启时卡了，还一闪一闪的，可以直接打开windows进程，杀死VMware进程，然后进入VMware，点打开虚拟机，启动就行。</li>
+</ol>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ol>
+<li><strong><a href="https://zhuanlan.zhihu.com/p/41940739">良许LInux-知乎-手把手教你安装Linux虚拟机</a></strong></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(图论) B.Badge</title>
+    <url>/2023/09/06/%E5%9B%BE%E8%AE%BA-B-Badge/</url>
+    <content><![CDATA[<p>图论+dfs</p>
+<p>题目链接：<a href="http://codeforces.com/contest/1020/problem/B">Problem - B - Codeforces</a></p>
+<h4 id=""><a href="#" class="headerlink" title=""></a><span id="more"></span></h4><h4 id="B-Badge"><a href="#B-Badge" class="headerlink" title="B. Badge"></a>B. Badge</h4><p>In Summer Informatics School, if a student doesn’t behave well, teachers make a hole in his badge. And today one of the teachers caught a group of n students doing yet another trick.</p>
+<p>Let’s assume that all these students are numbered from 11 to n. The teacher came to student a and put a hole in his badge. The student, however, claimed that the main culprit is some other student papa.</p>
+<p>After that, the teacher came to student papa and made a hole in his badge as well. The student in reply said that the main culprit was student Ppa.</p>
+<p>This process went on for a while, but, since the number of students was finite, eventually the teacher came to the student, who already had a hole in his badge.</p>
+<p>After that, the teacher put a second hole in the student’s badge and decided that he is done with this process, and went to the sauna.</p>
+<p>You don’t know the first student who was caught by the teacher. However, you know all the numbers pi. Your task is to find out for every student a, who would be the student with two holes in the badge if the first caught student was a.</p>
+<p>Input</p>
+<p>The first line of the input contains the only integer n (1≤n≤10001≤n≤1000) — the number of the naughty students.</p>
+<p>The second line contains n integers p1, …, p (1≤pi≤n), where pi indicates the student who was reported to the teacher by student ii.</p>
+<p>Output</p>
+<p>For every student a from 11 to n print which student would receive two holes in the badge, if a was the first student caught by the teacher.</p>
+<p>Examples</p>
+<p>input</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">2 3 2</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2 2 3</span><br></pre></td></tr></table></figure>
+
+<p>Note</p>
+<p>The picture corresponds to the first example test case.</p>
+<img src="http://codeforces.com/predownloaded/e6/2f/e62f6279b291a91d10dcf8b13b483a9dc5659758.png" title="" alt="img" data-align="center">
+
+<p>When a&#x3D;1, the teacher comes to students 1, 2, 3, 2, in this order, and the student 2 is the one who receives a second hole in his badge.</p>
+<p>When a&#x3D;2,the teacher comes to students 2, 3, 2, and the student 2 gets a second hole in his badge. When a&#x3D;3, the teacher will visit students 3, 2, 3 with student 3 getting a second hole in his badge.</p>
+<p>For the second example test case it’s clear that no matter with whom the teacher starts, that student would be the one who gets the second hole in his badge.</p>
+<p>上面的一些特殊的符号需要看看codeforces就行。</p>
+<p>这个是一个图论题，就是在不断根据指控把一个人的标记打上扣，一直继续下去，直到找出已打出两个扣的人。</p>
+<p>Python代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">L = list(map(int, input().split()))</span><br><span class="line">L.insert(0,0)</span><br><span class="line">Q = [i for i in range(n)]</span><br><span class="line">for i in range(1, n + 1):</span><br><span class="line">    vis = [0 for i in range(n + 1)]</span><br><span class="line">    cur = i</span><br><span class="line">    while True:</span><br><span class="line">        if vis[cur] != 0:</span><br><span class="line">            break</span><br><span class="line">        vis[cur] = 1</span><br><span class="line">        cur = L[cur]</span><br><span class="line">    print(cur, end=&quot; &quot;)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题：图论</tag>
+        <tag>刷题：DFS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(数学)A. Restoring Three Numbers</title>
+    <url>/2023/09/06/%E6%95%B0%E5%AD%A6-A-Restoring-Three-Numbers/</url>
+    <content><![CDATA[<p>这个是一个数学题。不过不必是暴力的。</p>
+<span id="more"></span>
+
+<p>题目链接：<a href="http://codeforces.com/problemset/problem/1154/A">Problem - 1154A - Codeforces</a></p>
+<h4 id="A-Restoring-Three-Numbers"><a href="#A-Restoring-Three-Numbers" class="headerlink" title="A. Restoring Three Numbers"></a>A. Restoring Three Numbers</h4><p>Polycarp has guessed three positive integers aa, bb and cc. He keeps these numbers in secret, but he writes down four numbers on a board in arbitrary order — their pairwise sums (three numbers) and sum of all three numbers (one number). So, there are four numbers on a board in random order: a+ba, a+c, b+c and a+b+c.</p>
+<p>You have to guess three numbers aa, bb and cc using given numbers. Print three guessed integers in any order.</p>
+<p>Pay attention that some given numbers a, b and c can be equal (it is also possible that a&#x3D;b&#x3D;c).</p>
+<p>Input</p>
+<p>The only line of the input contains four positive integers x1,x2,x3,x4(2≤xi≤10^9) — numbers written on a board in random order. It is guaranteed that the answer exists for the given number x1,x2,x3,x4.</p>
+<p>Output</p>
+<p>Print such positive integers aa, bb and cc that four numbers written on a board are values a+b, a+c, b+c and a+b+c written in some order. Print a, b and c in any order. If there are several answers, you can print any. It is guaranteed that the answer exists.</p>
+<p>Examples</p>
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 6 5 4</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2 1 3</span><br></pre></td></tr></table></figure>
+
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">40 40 40 60</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">40 40 40 60</span><br></pre></td></tr></table></figure>
+
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">201 101 101 200</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 100 100</span><br></pre></td></tr></table></figure>
+
+<p>这个是一个数学题，不必是从1开始暴力，会超时的。可以从给出的4个数中选出最大的（a+b+c当然是最大的），然后减去其他中的一个，得到a或b或c，最后把剩下的两个减去这个数，得到相应的数。</p>
+<p>Python代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Q = map(int, input().split()) # 最后得到的就是一个tuple类型</span><br><span class="line">L = list(Q) # 将tuple类型转换为list类型。</span><br><span class="line">L.sort() # 排序，为了得到a + b + c的值。</span><br><span class="line">m = L[3]</span><br><span class="line">c = m - L[2]</span><br><span class="line">a = L[0] - c</span><br><span class="line">b = L[1] - c</span><br><span class="line">print(a, b, c)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题：Math</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置VMware的Ubuntu</title>
+    <url>/2023/09/06/%E9%85%8D%E7%BD%AEVMware%E7%9A%84Ubuntu/</url>
+    <content><![CDATA[<p>在上一篇中，我们已经在VMware虚拟机中安装了Ubuntu。接下来还需要对于这个Ubuntu进行配置，使其能够进行一定程度的开发（VMware的Ubuntu的配置和装到硬盘的Ubuntu的配置几乎一样，已经装好了双系统的人，也可以看看这个博文，希望能够给大家带来一些帮助）</p>
+<h2 id="配置内容"><a href="#配置内容" class="headerlink" title="配置内容"></a>配置内容</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>当我们安装好了Ubuntu后，还需要进行一些配置，比如安装vim，切换软件源为清华源，安装搜狗拼音输入法等等。</p>
+<p>###安装VMware tools</p>
+<p>​ 这个VMware tools十分有用，当安装好了后， 界面的大小可以自动适应屏幕，还可以打开共享文件夹。</p>
+<p>​ 首先，点击界面的左上方的“虚拟机”，然后点击“安装VMware tools”，等待一些时间，我们可以在桌面中看见：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles09.png" alt="1"></p>
+<p>（忽略背景和主题，这些是我已经进行<strong>美化</strong>了，具体的美化方法可以见我的下一篇博文）</p>
+<h4 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h4><ul>
+<li>然后在这个VMware tools界面中， ctrl + alt + t， 打开terminal，输入</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mv VMwareTools-10.2.5-8068393.tar.gz ~/Desktop</span><br></pre></td></tr></table></figure>
+
+<p>移动压缩文件到桌面，方便管理。</p>
+<ul>
+<li>解压安装包</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd ~/Desktop</span><br><span class="line">tar xvf VMwareTools-10.2.5-8068393.tar.gz</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>进到vmware-tools-distrib, 用sudo 运行 vmware-install.pl, 安装VMware tools。安装过程第一次询问的时候，输入 yes, 之后一路回车即可。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd vmware-tools-distrib</span><br><span class="line">sudo ./vmware-install.pl</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当我们再点击界面左上方的虚拟机时，如果出现“重新安装VMware Tools”时，安装VMware就算是完成了。</li>
+<li>关于自动调整大小，需要在虚拟机界面中 查看-&gt;自动调整大小 勾选自动适应客户机就可以了。</li>
+</ul>
+<h3 id="切换软件源为国内源，比如清华源。"><a href="#切换软件源为国内源，比如清华源。" class="headerlink" title="切换软件源为国内源，比如清华源。"></a>切换软件源为国内源，比如清华源。</h3><p>​ 这个是有必要做的，因为这个会大大加快apt upgrade 和 apt install 的速度，可以在较短的时间内安装和升级包，节省不少时间。</p>
+<p>清华源的网址： <a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+<p>我们选择与自己的版本相对应的。目前没有19.04版本(2019年8月21日)，不过有18.04已经够了。</p>
+<h4 id="步骤：-1"><a href="#步骤：-1" class="headerlink" title="步骤："></a>步骤：</h4><ul>
+<li>切换源之前把相应的配置文件备份一份，保险。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>打开清华源官网，如图：</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles10.png" alt="2"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo gedit /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+
+<p>用gedit 打开这个配置文件，把上面几行网址（去掉注释）替代配置文件上的内容，然后保存。也可以用vi，不过对于linux新手来说可能是比较麻烦的。</p>
+<ul>
+<li>更新软件包缓存</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt upgrade</span><br></pre></td></tr></table></figure>
+
+<p>到此，我们算是正式完成切换到国内源，当然，也可以换成其他的国内源，比如阿里源等等。</p>
+<p>&#x3D;### 打开共享文件夹</p>
+<p>当我们安装好了VMware Tools后，就可以打开共享文件夹了。</p>
+<h4 id="步骤：-2"><a href="#步骤：-2" class="headerlink" title="步骤："></a>步骤：</h4><ul>
+<li><p>在虚拟机界面左上角点击虚拟机。如图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles13.png" alt="3"></p>
+</li>
+<li><p>点击共享文件夹，点击启用</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles14.png" alt="4"></p>
+</li>
+<li><p>然后点击下面的添加，如果没有，就建立一个，继续点下一个，勾选“启用其共享”</p>
+</li>
+</ul>
+<p>这个已建立的文件夹中，如果我们放入一些文件其中，我们便可以在虚拟机中的ubuntu里的 &#x2F;mnt&#x2F;hgfs&#x2F;share 中找到一样的东西，因此，我们可以先在windows中下载一些东西，然后放到这个已建立的文件夹中，我们可以在ubuntu中用这些东西，很方便。</p>
+<h3 id="安装VIM"><a href="#安装VIM" class="headerlink" title="安装VIM"></a>安装VIM</h3><p>Linux虽然有vi，不过Ubuntu自带的vi非常难用，比如在插入模式下方向键不能用，而是会输出ABCD的文字。所以我们得更新vi到vim。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install vim</span><br></pre></td></tr></table></figure>
+
+<p>(我们可能会见到要输入[Y&#x2F;n], 我们只需要输入Y就行)。</p>
+<p><strong>ps</strong>: VIM的主题如何修改： 只需要在VIM界面中用右键点击，点preferences，然后再color中修改就行。</p>
+<h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install git</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装gcc-g"><a href="#安装gcc-g" class="headerlink" title="安装gcc&#x2F;g++"></a>安装gcc&#x2F;g++</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install g++</span><br><span class="line">sudo apt install gcc</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装搜狗拼音输入法"><a href="#安装搜狗拼音输入法" class="headerlink" title="安装搜狗拼音输入法"></a>安装搜狗拼音输入法</h3><p>​ 不过Ubuntu18.04已经有了中文输入法，我们可以在相应的设置中进行修改就可以得到。但是，我个人觉得这个输入法不如搜狗拼音输入法好用，所以我就安装搜狗拼音输入法了。</p>
+<h4 id="步骤：-3"><a href="#步骤：-3" class="headerlink" title="步骤："></a>步骤：</h4><ul>
+<li><p>卸载ibus。</p>
+<p>我们安装搜狗输入法前，必须卸载ibus才能行，否则一安装后，就不得不面对用搜狗输入法打字时却同时出现Ubuntu自带的中文输入法候选框和搜狗拼音输入法的候选框的bug ，所以还不如先卸载ibus，而且卸载ibus不会给Ubuntu带来一些问题。</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt remove ibus</span><br></pre></td></tr></table></figure>
+
+<p>清除ibus配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt purge ibus</span><br></pre></td></tr></table></figure>
+
+<p>卸载顶部面板任务栏上的键盘指示。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo  apt-get remove indicator-keyboard</span><br></pre></td></tr></table></figure>
+
+<p>安装fcitx输入法框架</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install fcitx-table-wbpy fcitx-config-gtk</span><br></pre></td></tr></table></figure>
+
+<p>切换为 Fcitx输入法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">im-config -n fcitx</span><br></pre></td></tr></table></figure>
+
+<p>im-config 配置需要重启系统才能生效（下面的命令就是重启）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo shutdown -r now</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>下载和安装搜狗输入法</p>
+<p>搜狗输入法linux版本的百度云链接：链接：<a href="https://pan.baidu.com/s/1P5oM5vzbaNaWzASOyUHIyA">百度网盘 请输入提取码</a></p>
+<p>提取码：lxe6 </p>
+<p>我们可以从这个链接下载deb文件，然后放到相应的位置上，在这个位置打开terminal</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo dpkg -i sogoupinyin_2.2.0.0108_amd64.deb</span><br></pre></td></tr></table></figure>
+
+<p>​ 这个deb文件用<strong>dpkg</strong>命令实现安装。</p>
+<ul>
+<li><p>修复损坏缺少的包和打开fcitx输入法配置。</p>
+<p>修复：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -f</span><br></pre></td></tr></table></figure>
+
+<p>然后重启（这个再次重启比较好）</p>
+<p>然后打开Fcitx 输入法配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo killall fcitx</span><br></pre></td></tr></table></figure>
+
+<p>如图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles12.png" alt="5"></p>
+<p>如果有Sogou Pinyin，就OK了。</p>
+</li>
+<li><p>最后：</p>
+<p>我们还需要打开setting中的region and language的设置，在Input source 中添加Chinese。</p>
+<p>然后输入一些字时，打开搜狗拼音输入法的设置，然后关闭（这样的话能够可以实现shift切换中英文，如果不这样做的话，shift 键的功能就失效了，emmmmm）。</p>
+</li>
+</ul>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li><p>换国内源，移动文件，打开文件等等操作时，最好用sudo，因为如果不用sudo ，这些操作未必都能实现。</p>
+</li>
+<li><p>如果出现了搜狗输入法的候选框的乱码时：</p>
+<p>用下面就行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo killall fcitx</span><br><span class="line">cd ~/.config</span><br><span class="line">sudo rm -rf SogouPY* sogou*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以用ctrl+shift+f 实现简体和繁体的转换。</p>
+</li>
+</ul>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/42001070">良许Linux-手把手教你配置虚拟机</a></li>
+<li><a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">清华源</a></li>
+<li><a href="https://www.jianshu.com/p/c936a8a2180e">ubuntu 18.04 LTS 安装搜狗输入法</a></li>
+<li>[VMware下共享文件夹的实现</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+</search>

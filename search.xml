@@ -1634,4 +1634,323 @@ def parse_page(self, response):
         <tag>注解与反射</tag>
       </tags>
   </entry>
+  <entry>
+    <title>（Java复习总结）Java数据类型笔记</title>
+    <url>/2023/08/20/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89Java%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p><a href="https://javabetter.cn/basic-grammar/basic-data-type.html">二哥的Java</a></p>
+<h3 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h3><ol>
+<li><p>字符字面量应该用单引号（’’）包围，而不是双引号（””），因为<a href="https://javabetter.cn/string/constant-pool.html">双引号表示字符串字面量</a></p>
+</li>
+<li><p>char 类型比较特殊，char 自动转换成 int、long、float 和 double，但 byte 和 short 不能自动转换为 char，而且 char 也不能自动转换为 byte 或 short。</p>
+<p>自动转换：</p>
+<p>byte -&gt; short -&gt; int -&gt; long -&gt; float -&gt; double<br>char -&gt; int -&gt; long -&gt; float -&gt; double</p>
+<p>强制转换：</p>
+<p>double -&gt; float -&gt; long -&gt; int -&gt; char -&gt; short -&gt; byte</p>
+</li>
+<li><p>Integer.toBinaryString() 将证书转为二进制数，String类型的</p>
+</li>
+<li><p>字符常量</p>
+<p>必须使用单引号</p>
+<p>‘\n’也算是字符常量</p>
+</li>
+</ol>
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><ol>
+<li>接口不能初始化，也就是说不能使用new。</li>
+</ol>
+<h3 id="基本数据与引用数据之间的区别"><a href="#基本数据与引用数据之间的区别" class="headerlink" title="基本数据与引用数据之间的区别"></a>基本数据与引用数据之间的区别</h3><p>基本数据类型：</p>
+<ul>
+<li>1、变量名指向具体的数值。</li>
+<li>2、基本数据类型存储在<strong>栈</strong>上。</li>
+</ul>
+<p>引用数据类型：</p>
+<ul>
+<li>1、变量名指向的是存储对象的内存地址，在栈上。</li>
+<li>2、内存地址<strong>指向的对象</strong>存储在<strong>堆</strong>上。</li>
+</ul>
+<h3 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h3><p>堆：</p>
+<ul>
+<li>是程序运行时在内存中申请的空间（可理解为动态的过程），不是在编译时。</li>
+<li>动态申请的数据存储位置，比如数组与创建的对象（new方式）等。</li>
+</ul>
+<p>栈：</p>
+<ul>
+<li>栈，能够和处理器（CPU，也就是脑子）直接关联，因此访问速度更快。</li>
+<li>一般放的是编程语句等，对象引用也行，即：Object o这样子，作为对象的引用。</li>
+</ul>
+<p>一个例子：【<a href="https://blog.csdn.net/pop1586082213/article/details/118071050#:~:text=%E4%BB%80%E4%B9%88%E6%98%AF%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%EF%BC%9F%201%20new%20Phone%20%28%29%20%E6%98%AF%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E4%B8%BA%E5%AF%B9%E8%B1%A1%E5%BC%80%E8%BE%9F%E7%A9%BA%E9%97%B4%E3%80%82%20%E5%85%B6%E5%AE%9E%E4%B9%9F%E5%B0%B1%E6%98%AF%20new,3%20%E5%BD%93%E7%94%A8%E7%AD%89%E5%8F%B7%E8%B5%8B%E5%80%BC%E6%97%B6%EF%BC%8C%E6%98%AF%E5%B0%86%E5%8F%B3%E4%BE%A7%20new%20Phone%20%28%29%20%E5%9C%A8%E5%A0%86%E4%B8%AD%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%9C%B0%E5%9D%80%E8%B5%8B%E7%BB%99%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%20phone%20%E3%80%82">参考</a>】</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Phone</span> <span class="variable">phone</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Phone</span>;</span><br></pre></td></tr></table></figure>
+
+<p>通常会认为 phone 就是 Phone 类的对象。实际上，phone 是创建 Phone 类的<strong>对象的引用</strong>。</p>
+<p>这个表述实际上执行的操作：</p>
+<ol>
+<li><strong>new Phone()</strong> 是在内存中为对象开辟空间。其实也就是 new 关键字表示在内存的 <strong>堆（heap）</strong> 上为对象<strong>开辟空间</strong>，该空间保存了对象的属性和方法。</li>
+<li>Phone phone ：phone 指代一个 Phone 对象，被称为 <strong>对象引用</strong>。实际上，phone 并不是对象本身，而是一个<strong>类似执行对象的指针</strong>。phone 存在于<strong>内存的栈（stack）</strong> 中。</li>
+<li>当用等号赋值时，是将右侧 new Phone() 在堆中创建对象的地址<strong>赋给</strong>对象引用 phone 。</li>
+</ol>
+<p>为什么要这样操作？简单来讲，有以下几种优点：</p>
+<ol>
+<li>栈的读取速度比堆块，但栈上存储的数据受到有效范围的限制。</li>
+<li>一个对象引用可以赋值给另一个对象引用，此时复制的实际上是对象的地址。因此，一个对象可以由多个对象引用，减少对内存的消耗。</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（Java复习总结）数组与字符串</title>
+    <url>/2023/08/21/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89%E6%95%B0%E7%BB%84%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
+    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/array/array.html">掌握Java数组：一个非常特殊的对象 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<h3 id="数组的初始化方式"><a href="#数组的初始化方式" class="headerlink" title="数组的初始化方式"></a>数组的初始化方式</h3><ol>
+<li>int[] anArray &#x3D; new int[10]; new 方式创建数组对象</li>
+<li>int anOtherArray[] &#x3D; new int[] {1, 2, 3, 4, 5};</li>
+</ol>
+<h3 id="无效的数组初始化方式"><a href="#无效的数组初始化方式" class="headerlink" title="无效的数组初始化方式"></a>无效的数组初始化方式</h3><p>以下是一些初始化数组的无效方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 无效，因为未提供维度</span></span><br><span class="line"><span class="type">int</span>[] a = <span class="keyword">new</span> <span class="title class_">int</span>[];</span><br><span class="line"><span class="comment">// 无效，因为未提供最左侧的维度值</span></span><br><span class="line"><span class="type">int</span>[][] aa = <span class="keyword">new</span> <span class="title class_">int</span>[][<span class="number">5</span>];</span><br></pre></td></tr></table></figure>
+
+<p>以下是在java中声明数组的一些其他变体，但强烈建议不要使用它们以避免混淆。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] twoArrInt[] = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">4</span>][<span class="number">5</span>];</span><br><span class="line"><span class="type">int</span> twoIntArr[][] = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">5</span>][];</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="String的声明（String不可变）"><a href="#String的声明（String不可变）" class="headerlink" title="String的声明（String不可变）"></a>String的声明（String不可变）</h3><ol>
+<li>“第一，String 类是 final的，意味着它不能被子类继承。”</li>
+<li>“第二，String 类实现了 <a href="https://javabetter.cn/io/Serializbale.html">Serializable 接口</a>，意味着它可以<a href="https://javabetter.cn/io/serialize.html">序列化</a>。”</li>
+<li>“第三，String 类实现了 <a href="https://javabetter.cn/basic-extra-meal/comparable-omparator.html">Comparable 接口</a>，意味着最好不要用‘&#x3D;&#x3D;’来<a href="https://javabetter.cn/string/equals.html">比较两个字符串是否相等</a>，而应该用 <code>compareTo()</code> 方法去比较。”</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（Java复习总结）面对对象</title>
+    <url>/2023/08/22/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89%E9%9D%A2%E5%AF%B9%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><ol>
+<li><p>在 Java 中，构造方法是一种特殊的方法，当一个类被实例化的时候，就会调用构造方法。只有在构造方法被调用的时候，对象才会被<strong>分配内存空间</strong>。每次使用 <code>new</code> 关键字创建对象的时候，构造方法至少会被调用一次。构造方法有无参构造方法与有参构造方法两种。</p>
+<p>注意，之所以叫它构造方法，是因为对象在创建的时候，需要通过<strong>构造方法初始化值</strong>——描写对象有哪些<strong>初始化状态</strong>。</p>
+<p>必须得要有构造方法，这样才能让类的对象初始化为null或其他值。</p>
+<p><strong>没有返回值，但是返回的是类的对象。</strong></p>
+<p><strong>不仅能做初始化工作，还可以做其他工作，比如启动线程、调用其他方法等</strong>。</p>
+</li>
+<li><p>构造方法必须符合以下<strong>规则</strong>：</p>
+<p>1）构造方法的名字必须和类名一样；</p>
+<p>2）构造方法<strong>没有返回类型</strong>，包括 void，否则会当成普通方法来处理。</p>
+<p>3）构造方法<strong>不能是抽象</strong>的（abstract）、静态的（static）、最终的（final）、同步的（synchronized）。</p>
+<p>简单解析一下最后一条规则：</p>
+<p>1）由于构造方法<strong>不能被子类继承</strong>，所以用 final 和 abstract 关键字修饰没有意义；</p>
+<p>2）构造方法用于初始化一个对象，所以用 static 关键字修饰没有意义；</p>
+<p>3）多个线程不会同时创建内存地址相同的同一个对象，所以用 synchronized 关键字修饰没有必要。</p>
+</li>
+<li><p>方法与构造方法之间的<strong>区别</strong>：</p>
+<p><img src="https://secure2.wostatic.cn/static/srA7J9pcmRUVvGVNsTP6AZ/image.png?auth_key=1694066108-wbvoTLTecKhRTraVMeMRYt-0-11c19ff298088815d26bd98274099f63"></p>
+</li>
+<li><p>复制对象的方式</p>
+<p>复制一个对象可以通过下面三种方式完成：</p>
+<ul>
+<li>通过构造方法</li>
+<li>通过对象的值</li>
+<li>通过 Object 类的 <code>clone()</code> 方法</li>
+</ul>
+</li>
+</ol>
+<h3 id="权限修饰符"><a href="#权限修饰符" class="headerlink" title="权限修饰符"></a>权限修饰符</h3><ol>
+<li><p>补充一些关于 Java 包和类文件的知识：</p>
+<p>1）Java 中的包主要是为了防止<strong>类文件命名冲突</strong>以及方便<strong>进行代码组织和管理</strong>；</p>
+<p>2）对于一个 <strong>Java 源代码文件</strong>，如果存在 public 类的话，<strong>只能有一个 public 类</strong>，且此时源代码文件的名称必须和 <strong>public 类的名称完全相同</strong>。</p>
+<p>另外，如果还存在其他类，这些类在包外是不可见的。如果源代码文件没有 public 类，则源代码文件的名称可以随意命名。</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（Java复习总结）JVM简要总结</title>
+    <url>/2023/09/02/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89JVM%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<h2 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h2><h4 id="字节码-1"><a href="#字节码-1" class="headerlink" title="字节码"></a>字节码</h4><ol>
+<li><p>Java分为编译时与运行时，而字节码与编译时有关。</p>
+</li>
+<li><p><strong>类加载机制</strong>与字节码密切相关。</p>
+</li>
+<li><p>IDEA 默认会用 Fernflower 反编译工具将<strong>字节码文件（后缀为 .class 的文件，也就是 Java 源代码编译后的文件）</strong>反编译为我们可以看得懂的 Java 源代码。</p>
+</li>
+<li><p>在编译阶段，Java会将Java源代码文件编译为字节码文件。在这个阶段，编译器会进行一些检查工作，比如说，某个关键字是不是写错了，语法上是不是符合预期了，不能有很明显的错误，否则带到运行时再检查出来就会比较麻烦了。</p>
+</li>
+<li><p>Java 字节码是沟通 JVM 与 Java 代码的桥梁，可以用javap查看。</p>
+</li>
+<li><p>Java虚拟机采用基于栈的架构，其指令由操作码与操作数组成。</p>
+<p>0xb2 getstatic 获取静态字段的值<br>0x12 ldc 常量池中的常量值入栈<br>0xb6 invokevirtual 运行时方法绑定调用方法<br>0xb1 return void 函数返回</p>
+</li>
+<li><p>JVM会在<strong>准备阶段</strong>对类变量（静态变量， static修饰）<strong>分配内存并初始化</strong>（对应数据类型的默认初始值，如 0、0L、null、false 等）。</p>
+<p>也就是说，假如有这样一段代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">String</span> <span class="variable">chenmo</span> <span class="operator">=</span> <span class="string">&quot;沉默&quot;</span>; <span class="comment">//会查看常量池是否存在，只创建一个对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">wanger</span> <span class="operator">=</span> <span class="string">&quot;王二&quot;</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">cmower</span> <span class="operator">=</span> <span class="string">&quot;沉默王二&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>chenmo 不会被分配内存，而 wanger 会；但 wanger 的初始值不是“王二”而是 <code>null</code>。</p>
+<p>需要注意的是，<code>static final</code> 修饰的变量被称作为常量，和类变量不同。常量一旦赋值就不会改变了，所以 cmower 在准备阶段的值为“沉默王二”而不是 <code>null</code>。</p>
+</li>
+</ol>
+<h4 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h4><p><a href="https://tobebetterjavaer.com/jvm/class-file-jiegou.html">详解Java的类文件（class文件）结构 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<ul>
+<li>使用xxd命令后，得到16进制内容，其中如果开头有cafe base这个魔数，说明这个class文件可以被JVM接受。</li>
+</ul>
+<p>上面往后抽空看。</p>
+<h4 id="Javap与字节码"><a href="#Javap与字节码" class="headerlink" title="Javap与字节码"></a>Javap与字节码</h4><p><a href="https://tobebetterjavaer.com/jvm/bytecode.html">从javap的角度轻松看懂字节码 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<p>上面抽空看</p>
+<ol>
+<li><p>Java 内置了一个反编译命令 javap，可以通过 <code>javap -help</code> 了解 javap 的基本用法</p>
+</li>
+<li><p>常量池</p>
+<p>Constant pool，也就是字节码文件最重要的常量池部分。可以把常量池理解为<strong>字节码文件中的资源仓库，主要存放两大类信息。</strong></p>
+<p>1）<strong>字面量</strong>（Literal），有点类似 Java 中的常量概念，比如文本字符串，final 常量等。</p>
+<p>2）<strong>符号引用</strong>（Symbolic References），属于编译原理方面的概念，包括 3 种：</p>
+<ul>
+<li>类和接口的全限定名（Fully Qualified Name）</li>
+<li>字段的名称和描述符（Descriptor）</li>
+<li>方法的名称和描述符</li>
+</ul>
+<p>Java 虚拟机是在加载字节码文件的时候才进行的动态链接，也就是说，字段和方法的符号引用只有经过<strong>运行期转换后才能获得真正的内存地址</strong>。当 <strong>Java 虚拟机运行</strong>时，需要从常量池获取对应的符号引用，然后在类创建或者运行时解析并翻译到具体的内存地址上。</p>
+</li>
+</ol>
+<h4 id="JVM字节码详情"><a href="#JVM字节码详情" class="headerlink" title="JVM字节码详情"></a>JVM字节码详情</h4><h4 id="虚拟机-字节码"><a href="#虚拟机-字节码" class="headerlink" title="虚拟机 字节码"></a>虚拟机 字节码</h4><h4 id="HSDB"><a href="#HSDB" class="headerlink" title="HSDB"></a>HSDB</h4><h4 id="ASM"><a href="#ASM" class="headerlink" title="ASM"></a>ASM</h4><p><a href="https://tobebetterjavaer.com/jvm/asm.html">史上最通俗易懂的ASM教程 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<p>前面有讲基础内容。</p>
+<h4 id="自己编译JDK"><a href="#自己编译JDK" class="headerlink" title="自己编译JDK"></a>自己编译JDK</h4><h2 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h2><h4 id="类加载-1"><a href="#类加载-1" class="headerlink" title="类加载"></a>类加载</h4><ol>
+<li><p>类<strong>加载</strong>过程</p>
+<p>Loading</p>
+<p>Verification</p>
+<p>Preparation【编译时阶段】</p>
+<p>Resolution【运行时阶段】</p>
+<ul>
+<li><p>该阶段将常量池中的<strong>符号引用</strong>转化为<strong>直接引用</strong>。</p>
+<p><strong>符号引用</strong>以一组符号（任何形式的字面量，只要在使用时能够无歧义的定位到目标即可）来描述所引用的目标。（<strong>就是不知道内存地址，先暂时用它的名字，也就是符号</strong>）</p>
+<p>在编译时，Java 类并不知道所引用的类的实际地址，因此只能使用符号引用来代替。比如 <code>com.Wanger</code> 类引用了 <code>com.Chenmo</code> 类，编译时 Wanger 类并不知道 Chenmo 类的实际内存地址，因此只能使用符号 <code>com.Chenmo</code>。</p>
+<p><strong>直接引用</strong>通过对<strong>符号引用进行解析</strong>，找到引用的实际内存地址。</p>
+</li>
+</ul>
+<p>Initialization</p>
+<ul>
+<li>该阶段是类加载过程的最后一步。<strong>在准备阶段，类变量已经被赋过默认初始值</strong>，而在初始化阶段【运行时阶段】，类变量将<strong>被赋值为代码期望赋的值</strong>。换句话说，初始化阶段是执行<strong>类构造器方法</strong>的过程。</li>
+</ul>
+</li>
+<li><p>类加载器</p>
+<p>Java 类加载器可以分为三种。<strong>【黑马八股文有讲】</strong></p>
+<p>注意：这个三种是JDK8之前的情况，JDK9有改动。</p>
+<p>1）启动类（或者说引导类）加载器（Bootstrap Class-Loader），加载 <code>jre/lib</code> 包下面的 jar 文件，比如说常见的 rt.jar，通常以null表示。</p>
+<p>2）扩展类加载器（Extension or Ext Class-Loader），加载 <code>jre/lib/ext</code> 包下面的 jar 文件，它的父类加载器为引导类加载器。</p>
+<p>3）应用类加载器（Application or App Clas-Loader），根据程序的类路径（classpath）来加载 Java 类。它的父类加载器为扩展类加载器。</p>
+<p>JDK9的改动：</p>
+<p>Java 9仍然保留了三层类加载器结构，<strong>不过为了支持模块系统</strong>，对它们做了一些调整。扩展机制被移除，扩展类加载器由于向后兼容性的原因被保留，不过被重命名为<strong>平台类加载器（platform class loader）</strong>。可以通过<code>ClassLoader</code>的新方法<code>getPlatformClassLoader()</code>来获取。Java 9中的内置类加载器如下所示。</p>
+<ul>
+<li><p>引导类加载器：定义<strong>核心</strong>Java SE和JDK模块。</p>
+</li>
+<li><p>平台类加载器：定义<strong>部分</strong>Java SE和JDK模块。</p>
+</li>
+<li><p>应用或系统类加载器：定义<strong>CLASSPATH上的类和模块路径中的模块</strong>。</p>
+</li>
+</ul>
+<p><strong>关键程序：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">```Java</span><br><span class="line"><span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> ClassLoaderMain.class.getClassLoader();</span><br><span class="line"><span class="keyword">while</span> (classLoader != <span class="literal">null</span>) &#123;</span><br><span class="line">  System.out.println(classLoader);</span><br><span class="line">  classLoader = classLoader.getParent();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>
+</code></pre>
+</li>
+<li><p>双亲委派模型</p>
+<p>如果以上三种类加载器不能满足要求的话，程序员还可以自定义类加载器（继承 <code>java.lang.ClassLoader</code> 类），它们之间的层级关系如下图所示。</p>
+<p>【图片见<a href="https://cdn.tobebetterjavaer.com/tobebetterjavaer/images/jvm/class-load-02.png%E3%80%91">https://cdn.tobebetterjavaer.com/tobebetterjavaer/images/jvm/class-load-02.png】</a></p>
+<p>自定义类加载器的父类是应用类加载器（JDK8前）</p>
+<p>这种层次关系被称作为<strong>双亲委派模型</strong>：如果一个类加载器收到了加载类的请求，它会<strong>先把请求委托给上层加载器去完成</strong>，上层加载器<strong>又会委托</strong>上上层加载器，一直到最顶层的类加载器；如果上层加载器<strong>无法完成类的加载工作时</strong>，当前类加载器才会尝试自己去加载这个类。</p>
+<p>使用双亲委派模型有一个很明显的好处，那就是 Java 类随着它的类加载器一起具备了<strong>一种带有优先级的层次关系</strong>，这对于保证 Java 程序的稳定运作很重要。</p>
+<p>上文中曾提到，如果两个类的加载器不同，即使两个类来源于同一个字节码文件，<strong>那这两个类就必定不相等</strong>——双亲委派模型能够保证同一个类最终会被特定的类加载器加载。</p>
+</li>
+</ol>
+<h2 id="内存与垃圾回收"><a href="#内存与垃圾回收" class="headerlink" title="内存与垃圾回收"></a>内存与垃圾回收</h2><h3 id="JVM内存结构"><a href="#JVM内存结构" class="headerlink" title="JVM内存结构"></a>JVM内存结构</h3><h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ol>
+<li><p>程序计数器（Program Counter Register）所占的内存空间不大，很小一块，可以看作是当前线程所执行的字节码指令的行号指示器。字节码解释器会在工作的时候改变这个计数器的值来选取下一条需要执行的字节码指令，像分支、循环、跳转、异常处理、线程恢复等功能都需要依赖这个计数器来完成。</p>
+</li>
+<li><p>在 JVM 中，多线程是通过线程轮流切换来获得 CPU 执行时间的，因此，在任一具体时刻，一个 CPU 的内核只会执行一条线程中的指令，因此，为了线程切换后能恢复到正确的执行位置，每个线程都需要有一个独立的程序计数器，并且不能互相干扰，否则就会影响到程序的正常执行次序。</p>
+<p>也就是说，我们要求程序计数器是<strong>线程私有</strong>的。</p>
+</li>
+<li><p>《Java 虚拟机规范》中规定，如果线程执行的是非本地（native）方法，则程序计数器中保存的是当前需要执行的指令地址；如果线程执行的是本地方法，则程序计数器中的值是 undefined。</p>
+<p>为什么本地方法在程序计数器中的值是 undefined 的？因为本地方法大多是通过 C&#x2F;C++ 实现的，并未编译成需要执行的字节码指令。</p>
+<p>由于程序计数器中存储的数据所占的空间不会随程序的执行而发生大小上的改变，因此，程序计数器是不会发生内存溢出现象（OutOfMemory）的。</p>
+</li>
+</ol>
+<h4 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h4><p><a href="https://tobebetterjavaer.com/jvm/how-jvm-run-zijiema-zhiling.html">Java虚拟机是如何执行字节码指令的？ | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
+<li>所有线程共享的一块内存区域。在 <strong>Java 虚拟机启动的时候创建</strong>，用来存储<strong>对象</strong>（数组也是一种对象，new创建）。</li>
+<li>以前，Java 中“几乎”所有的对象都会在堆中分配，但随着 JIT（Just-In-Time）编译器的发展和逃逸技术的逐渐成熟，所有的对象都分配到堆上渐渐变得不那么“绝对”了。<strong>从 JDK 7 开始，Java 虚拟机已经默认开启逃逸分析了</strong>，意味着如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。</li>
+<li>堆是 Java 垃圾收集器管理的主要区域，因此也被称作 GC 堆（Garbage Collected Heap）。从垃圾回收的角度来看，由于垃圾收集器基本都采用了分代垃圾收集的算法，所以堆还可以细分为：<strong>新生代和老年代</strong>。新生代还可以细分为：Eden 空间、From Survivor、To Survivor 空间等。进一步划分的目的是<strong>更好地回收内存，或者更快地分配内存。</strong></li>
+<li>堆这最容易出现的就是 OutOfMemoryError 错误，分为以下几种表现形式：<ul>
+<li><code>OutOfMemoryError: GC Overhead Limit Exceeded</code>：当JVM花费太多时间执行垃圾回收并且只能回收很少的堆空间时，会发生这个错误的，就是堆空间爆满。</li>
+<li><code>java.lang.OutOfMemoryError: Java heap space</code>：假如在创建新的对象时, 堆内存中的空间不足以存放新创建的对象, 就会引发该错误。和本机的物理内存无关，和我们配置的虚拟机内存大小有关！</li>
+</ul>
+</li>
+</ol>
+<h4 id="元空间"><a href="#元空间" class="headerlink" title="元空间"></a>元空间</h4><p><a href="https://tobebetterjavaer.com/jvm/neicun-jiegou.html#_05%E3%80%81%E5%85%83%E7%A9%BA%E9%97%B4">https://tobebetterjavaer.com/jvm/neicun-jiegou.html#_05、元空间</a></p>
+<ol>
+<li><p>JDK8后，元空间取代方法区（或者说永久代），方法区和堆一样，是线程共享的区域，它用来存储已经被 <strong>Java 虚拟机加载的类信息、常量、静态变量，以及编译后的代码</strong>等。</p>
+</li>
+<li><p>在方法区中，还有一块非常重要的部分，也就是<strong>运行时常量池</strong>【字节码上很重要】。在讲 <a href="https://mp.weixin.qq.com/s/uMEZ2Xwctx4n-_8zvtDp5A">class 文件</a>的时候，提到了每个 class 文件都会有个常量池，用来存放字符串常量、类和接口的名字、字段名、常量等等。运行时常量池和 class 文件的常量池是一一对应的，它就是通过 class 文件中的常量池来构建的。</p>
+<p>JDK 7 <strong>之前</strong>，运行时常量池中包含着字符串常量池，都在方法区。</p>
+<p>JDK 7 的时候，字符串常量池从方法区中拿出来放到了堆中，运行时常量池中的其他东西还在方法区中</p>
+</li>
+<li><p>JDK 8 的时候，HotSpot <strong>移除了永久代</strong>，也就是说方法区不存在了，取而代之的是元空间。也就意味着<strong>字符串常量池在堆中</strong>，<strong>运行时常量池跑到了元空间</strong>。</p>
+<p>再来说说为什么要将永久代 (PermGen) 或者说方法区替换为元空间 (MetaSpace) 。</p>
+<p>第一，永久代放在 Java 虚拟机中，就会受到 Java 虚拟机内存大小的限制，<strong>而元空间使用的是本地内存，也就脱离了 Java 虚拟机内存的限制。</strong></p>
+<p>第二，JDK 8 的时候，在 HotSpot 中融合了 JRockit 虚拟机，<strong>而 JRockit 中并没有永久代的概念</strong>，因此新的 HotSpot 就没有必要再开辟一块空间来作为永久代了。</p>
+</li>
+</ol>
+<h3 id="Java创建对象"><a href="#Java创建对象" class="headerlink" title="Java创建对象"></a>Java创建对象</h3><p>问题：创建对象的时候，对象是在堆内存中创建的。但堆内存又分为新生代和老年代，新生代又细分为 Eden 空间、From Survivor 空间、To Survivor 空间。<strong>那我们创建的对象到底在哪里</strong>？</p>
+<p><a href="https://tobebetterjavaer.com/jvm/whereis-the-object.html">Java 创建的对象到底放在哪？ | 二哥的Java进阶之路</a></p>
+<p><img src="https://secure2.wostatic.cn/static/g4Tmp6tkHhSsMFaviUqmud/image.png?auth_key=1694067059-tMcx5kvXmCjJkU6RezCDC4-0-159c031a18e37cc9103f32f89208db95"></p>
+<h3 id="Java垃圾回收"><a href="#Java垃圾回收" class="headerlink" title="Java垃圾回收"></a>Java垃圾回收</h3><p><a href="https://tobebetterjavaer.com/jvm/gc.html">咱们从头到尾说一次Java垃圾回收 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<p><a href="https://tobebetterjavaer.com/jvm/tujie-gc.html">图解Java的垃圾回收机制 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<p><a href="https://tobebetterjavaer.com/jvm/meituan-9-gc.html">Java中9种常见的CMS GC问题分析与解决 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（Java复习总结）多线程简要总结</title>
+    <url>/2023/08/28/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<h3 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h3><ul>
+<li><p>Syschronized是关键字，可以修饰实例方法、静态方法和代码块。</p>
+<ul>
+<li>修饰实例方法，作用于当前实例加锁，进入同步代码前要获得当前实例的锁；</li>
+<li>修饰静态方法，作用于当前类对象加锁，进入同步代码前要获得当前类对象的锁；</li>
+<li>修饰代码块，指定加锁对象，对给定对象加锁，进入同步代码库前要获得给定对象的锁</li>
+</ul>
+<p>可以让实例方法、静态方法等变为一个临界区</p>
+<p>Java的锁都是基于<strong>对象</strong>的。</p>
+</li>
+<li><p>synchronized可以保证原子性、可见性（能够替代volatile）和有序性。</p>
+<p>而volatile只能保证可见性与有序性，不能保证原子性。</p>
+</li>
+<li><p>synchronized是悲观锁。</p>
+</li>
+<li><p>几个锁的等级排序【要回顾】</p>
+<p>无锁&lt;偏向锁&lt;轻量级锁&lt;重量级锁</p>
+</li>
+</ul>
+<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><ol>
+<li><p>synchronized是悲观锁</p>
+<p>而CAS是乐观锁</p>
+<p><strong>悲观锁：</strong></p>
+<p>悲观锁就是我们常说的锁。对于悲观锁来说，它总是认为每次访问共享资源时会发生冲突，所以必须对每次数据操作加上锁，以保证临界区的程序同一时间只能有一个线程在执行。</p>
+<p><strong>乐观锁：</strong></p>
+<p>乐观锁又称为“<strong>无锁</strong>”，顾名思义，它是乐观派。乐观锁总是假设对共享资源的访问没有冲突，线程可以不停地执行，无需加锁也无需等待。而一旦多个线程发生冲突，乐观锁通常是使用一种称为<strong>CAS</strong>的技术来保证<strong>线程执行的安全性</strong>。</p>
+<p>由于无锁操作中没有锁的存在，因此不可能出现死锁的情况，也就是说<strong>乐观锁天生免疫死锁</strong>。</p>
+<p>乐观锁多用于“读多写少“的环境，避免频繁加锁影响性能；而悲观锁多用于”写多读少“的环境，避免频繁失败和重试影响性能。</p>
+</li>
+</ol>
+<h3 id="锁总结-重要，查阅该网址"><a href="#锁总结-重要，查阅该网址" class="headerlink" title="锁总结[重要，查阅该网址]"></a>锁总结[重要，查阅该网址]</h3><p><a href="https://javabetter.cn/thread/suo.html">公司空降一个美团大佬，彻底把Java中的锁”讲清楚了 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<p><img src="https://secure2.wostatic.cn/static/cVT9qmnz3xTwL7aR9HPYpS/image.png?auth_key=1694066438-3YDQC8JfwDMXoryS64KkXq-0-6d773945dfe8f3d988052210c57e10b9"></p>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
 </search>

@@ -771,7 +771,7 @@ def parse_page(self, response):
     <title>（秋招笔试-美团）平均数为k的最长连续子数组</title>
     <url>/2023/09/01/%EF%BC%88%E7%A7%8B%E6%8B%9B%E7%AC%94%E8%AF%95-%E7%BE%8E%E5%9B%A2%EF%BC%89%E5%B9%B3%E5%9D%87%E6%95%B0%E4%B8%BAk%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/</url>
     <content><![CDATA[<p>题的来源：</p>
-<p><a href="https://www.nowcoder.com/exam/test/73242118/detail?pid=52205528&examPageSource=Company&testCallback=https://www.nowcoder.com/exam/company?currentTab=recommand&jobId=100&selectStatus=0&tagIds=179&testclass=%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91">牛客网 - 找工作神器|笔试题库|面试经验|实习招聘内推，求职就业一站解决_牛客网 (nowcoder.com)</a></p>
+<p><a href="https://www.nowcoder.com/questionTerminal/2e47f99735584ac5ba30d75ac14d6524?page=1&onlyReference=false">平均数为k的最长连续子数组__牛客网 (nowcoder.com)</a></p>
 <p>【重要的参考资料：<a href="https://leetcode.cn/problems/subarray-sum-equals-k/solutions/562174/de-liao-yi-wen-jiang-qian-zhui-he-an-pai-yhyf/">560. 和为 K 的子数组 - 力扣（LeetCode）</a>】</p>
 <p>题解：</p>
 <p>因为题意中，有：“连续子数组”与“平均数”这两个重要条件，所以可以用上前缀和，这是因为平均数乘以k就是一个子数组的和，另外，这个题与DP无关的。另外，注意结果要用Long。</p>

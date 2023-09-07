@@ -59,6 +59,25 @@
   </entry>
   
   <entry>
+    <title>（开发笔记）平台开发的注意事项简要记录</title>
+    <link href="http://example.com/2023/04/23/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E7%AE%80%E8%A6%81%E8%AE%B0%E5%BD%95/"/>
+    <id>http://example.com/2023/04/23/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E7%AE%80%E8%A6%81%E8%AE%B0%E5%BD%95/</id>
+    <published>2023-04-23T03:30:58.000Z</published>
+    <updated>2023-09-07T03:35:45.270Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="nacos配置问题"><a href="#nacos配置问题" class="headerlink" title="nacos配置问题"></a>nacos配置问题</h4><p>每次正确添加nacos配置后，如果碰上某个微服务的错误，此时要考虑是不是不小心加上了无关的依赖库，尤其是okhttp 。</p><h4 id="延迟队列问题"><a href="#延迟队列问题" class="headerlink" title="延迟队列问题"></a>延迟队列问题</h4><p>延迟队列  </p><ul><li><p>延迟队列上，判断数据是否到期，就是和当前时间进行比较，用的是System.currentTimeMillis() 。</p></li><li><p>如何将Redis的未来队列的数据同步到list  </p><ul><li><p>从zset中查出数据，并删除  </p></li><li><p>把数据存入到list  </p></li><li><p>用管道方式更快</p></li></ul></li></ul><h4 id="拦截器问题"><a href="#拦截器问题" class="headerlink" title="拦截器问题"></a>拦截器问题</h4><p>每次需要使用AppThred等类时，必须在所在的微服务上添加拦截器！！！！！  </p><h4 id="业务问题"><a href="#业务问题" class="headerlink" title="业务问题"></a>业务问题</h4><p>部分程序存在 ，存在Claims类（自己编写失误）将未登录的用户的id默认为0的情况，此时需要在此处加个判断，将未登录用户不能直接登录。</p>]]></content>
+    
+    
+    <summary type="html">总结自用</summary>
+    
+    
+    
+    
+    <category term="开发" scheme="http://example.com/tags/%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title>（开发笔记）平台使用的技术简要总结_杂记（随时间更新）</title>
     <link href="http://example.com/2023/04/01/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E7%9A%84%E6%8A%80%E6%9C%AF%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93-%E6%9D%82%E8%AE%B0%EF%BC%88%E9%9A%8F%E6%97%B6%E9%97%B4%E6%9B%B4%E6%96%B0%EF%BC%89/"/>
     <id>http://example.com/2023/04/01/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E7%9A%84%E6%8A%80%E6%9C%AF%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93-%E6%9D%82%E8%AE%B0%EF%BC%88%E9%9A%8F%E6%97%B6%E9%97%B4%E6%9B%B4%E6%96%B0%EF%BC%89/</id>
@@ -74,6 +93,27 @@
     
     
     <category term="开发" scheme="http://example.com/tags/%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>（开发笔记）注解总结之@RequestBody</title>
+    <link href="http://example.com/2023/03/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E6%B3%A8%E8%A7%A3%E6%80%BB%E7%BB%93%E4%B9%8B-RequestBody/"/>
+    <id>http://example.com/2023/03/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E6%B3%A8%E8%A7%A3%E6%80%BB%E7%BB%93%E4%B9%8B-RequestBody/</id>
+    <published>2023-03-10T03:28:20.000Z</published>
+    <updated>2023-09-07T03:30:04.344Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>@RequestBody</code> 是一个Spring框架中的注解，用于将HTTP请求的内容（例如JSON、XML等）绑定到方法的参数上。它通常与Spring MVC或Spring Boot中的控制器方法一起使用。  </p><p>使用<code>@RequestBody</code>注解时，Spring框架会自动将请求体的内容解析，并尝试将其转换为指定的参数类型。  </p><p>以下是<code>@RequestBody</code>的示例用法：  </p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span>  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;  </span><br><span class="line">    <span class="meta">@PostMapping(&quot;/users&quot;)</span>  </span><br><span class="line">        <span class="keyword">public</span> ResponseEntity&lt;?&gt; createUser(<span class="meta">@RequestBody</span> User user) &#123;  </span><br><span class="line">        <span class="comment">// 处理请求，使用接收到的User对象  </span></span><br><span class="line">        <span class="comment">// ...  </span></span><br><span class="line">    <span class="keyword">return</span> ResponseEntity.ok().build();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure><p>在上面的示例中，<code>createUser()</code>方法使用<code>@RequestBody</code>注解来接收HTTP POST请求中的请求体，并将其转换为User对象。Spring框架会根据请求的内容类型（例如JSON）以及User类的定义，自动完成请求体到User对象的转换。  </p><p>需要注意的是，在使用<code>@RequestBody</code>时，通常还需要指定请求的Content-Type。例如，如果请求的Content-Type是application&#x2F;json，则Spring会使用相应的JSON转换器将JSON字符串转换为User对象。  </p><p>另外，<code>@RequestBody</code>注解还支持其他参数类型，如<code>Map&lt;String, Object&gt;</code>、<code>List&lt;User&gt;</code>等，以及自定义的数据转换器和处理器。  </p><p>总之，<code>@RequestBody</code>注解允许将HTTP请求的内容转换为方法参数，并方便地在Spring框架中处理和使用请求体数据。</p>]]></content>
+    
+    
+    <summary type="html">对@RequestBody的总结</summary>
+    
+    
+    
+    
+    <category term="开发" scheme="http://example.com/tags/%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="注解与反射" scheme="http://example.com/tags/%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/"/>
     
   </entry>
   
@@ -360,48 +400,6 @@
     
     
     <summary type="html">Ubuntu时可以进行主题的美化，可以改为MacOS主题。</summary>
-    
-    
-    
-    
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
-    
-    <category term="Ubuntu" scheme="http://example.com/tags/Ubuntu/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>配置VMware的Ubuntu</title>
-    <link href="http://example.com/2019/09/06/%E9%85%8D%E7%BD%AEVMware%E7%9A%84Ubuntu/"/>
-    <id>http://example.com/2019/09/06/%E9%85%8D%E7%BD%AEVMware%E7%9A%84Ubuntu/</id>
-    <published>2019-09-06T05:49:08.000Z</published>
-    <updated>2023-09-06T07:14:13.200Z</updated>
-    
-    <content type="html"><![CDATA[<p>在上一篇中，我们已经在VMware虚拟机中安装了Ubuntu。接下来还需要对于这个Ubuntu进行配置，使其能够进行一定程度的开发（VMware的Ubuntu的配置和装到硬盘的Ubuntu的配置几乎一样，已经装好了双系统的人，也可以看看这个博文，希望能够给大家带来一些帮助）</p><h2 id="配置内容"><a href="#配置内容" class="headerlink" title="配置内容"></a>配置内容</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>当我们安装好了Ubuntu后，还需要进行一些配置，比如安装vim，切换软件源为清华源，安装搜狗拼音输入法等等。</p><p>###安装VMware tools</p><p>​ 这个VMware tools十分有用，当安装好了后， 界面的大小可以自动适应屏幕，还可以打开共享文件夹。</p><p>​ 首先，点击界面的左上方的“虚拟机”，然后点击“安装VMware tools”，等待一些时间，我们可以在桌面中看见：</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles09.png" alt="1"></p><p>（忽略背景和主题，这些是我已经进行<strong>美化</strong>了，具体的美化方法可以见我的下一篇博文）</p><h4 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h4><ul><li>然后在这个VMware tools界面中， ctrl + alt + t， 打开terminal，输入</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mv VMwareTools-10.2.5-8068393.tar.gz ~/Desktop</span><br></pre></td></tr></table></figure><p>移动压缩文件到桌面，方便管理。</p><ul><li>解压安装包</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/Desktop</span><br><span class="line">tar xvf VMwareTools-10.2.5-8068393.tar.gz</span><br></pre></td></tr></table></figure><ul><li>进到vmware-tools-distrib, 用sudo 运行 vmware-install.pl, 安装VMware tools。安装过程第一次询问的时候，输入 yes, 之后一路回车即可。</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd vmware-tools-distrib</span><br><span class="line">sudo ./vmware-install.pl</span><br></pre></td></tr></table></figure><ul><li>当我们再点击界面左上方的虚拟机时，如果出现“重新安装VMware Tools”时，安装VMware就算是完成了。</li><li>关于自动调整大小，需要在虚拟机界面中 查看-&gt;自动调整大小 勾选自动适应客户机就可以了。</li></ul><h3 id="切换软件源为国内源，比如清华源。"><a href="#切换软件源为国内源，比如清华源。" class="headerlink" title="切换软件源为国内源，比如清华源。"></a>切换软件源为国内源，比如清华源。</h3><p>​ 这个是有必要做的，因为这个会大大加快apt upgrade 和 apt install 的速度，可以在较短的时间内安装和升级包，节省不少时间。</p><p>清华源的网址： <a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p><p>我们选择与自己的版本相对应的。目前没有19.04版本(2019年8月21日)，不过有18.04已经够了。</p><h4 id="步骤：-1"><a href="#步骤：-1" class="headerlink" title="步骤："></a>步骤：</h4><ul><li>切换源之前把相应的配置文件备份一份，保险。</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak</span><br></pre></td></tr></table></figure><ul><li>打开清华源官网，如图：</li></ul><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles10.png" alt="2"></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/apt/sources.list</span><br></pre></td></tr></table></figure><p>用gedit 打开这个配置文件，把上面几行网址（去掉注释）替代配置文件上的内容，然后保存。也可以用vi，不过对于linux新手来说可能是比较麻烦的。</p><ul><li>更新软件包缓存</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt upgrade</span><br></pre></td></tr></table></figure><p>到此，我们算是正式完成切换到国内源，当然，也可以换成其他的国内源，比如阿里源等等。</p><p>&#x3D;### 打开共享文件夹</p><p>当我们安装好了VMware Tools后，就可以打开共享文件夹了。</p><h4 id="步骤：-2"><a href="#步骤：-2" class="headerlink" title="步骤："></a>步骤：</h4><ul><li><p>在虚拟机界面左上角点击虚拟机。如图</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles13.png" alt="3"></p></li><li><p>点击共享文件夹，点击启用</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles14.png" alt="4"></p></li><li><p>然后点击下面的添加，如果没有，就建立一个，继续点下一个，勾选“启用其共享”</p></li></ul><p>这个已建立的文件夹中，如果我们放入一些文件其中，我们便可以在虚拟机中的ubuntu里的 &#x2F;mnt&#x2F;hgfs&#x2F;share 中找到一样的东西，因此，我们可以先在windows中下载一些东西，然后放到这个已建立的文件夹中，我们可以在ubuntu中用这些东西，很方便。</p><h3 id="安装VIM"><a href="#安装VIM" class="headerlink" title="安装VIM"></a>安装VIM</h3><p>Linux虽然有vi，不过Ubuntu自带的vi非常难用，比如在插入模式下方向键不能用，而是会输出ABCD的文字。所以我们得更新vi到vim。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install vim</span><br></pre></td></tr></table></figure><p>(我们可能会见到要输入[Y&#x2F;n], 我们只需要输入Y就行)。</p><p><strong>ps</strong>: VIM的主题如何修改： 只需要在VIM界面中用右键点击，点preferences，然后再color中修改就行。</p><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install git</span><br></pre></td></tr></table></figure><h3 id="安装gcc-g"><a href="#安装gcc-g" class="headerlink" title="安装gcc&#x2F;g++"></a>安装gcc&#x2F;g++</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install g++</span><br><span class="line">sudo apt install gcc</span><br></pre></td></tr></table></figure><h3 id="安装搜狗拼音输入法"><a href="#安装搜狗拼音输入法" class="headerlink" title="安装搜狗拼音输入法"></a>安装搜狗拼音输入法</h3><p>​ 不过Ubuntu18.04已经有了中文输入法，我们可以在相应的设置中进行修改就可以得到。但是，我个人觉得这个输入法不如搜狗拼音输入法好用，所以我就安装搜狗拼音输入法了。</p><h4 id="步骤：-3"><a href="#步骤：-3" class="headerlink" title="步骤："></a>步骤：</h4><ul><li><p>卸载ibus。</p><p>我们安装搜狗输入法前，必须卸载ibus才能行，否则一安装后，就不得不面对用搜狗输入法打字时却同时出现Ubuntu自带的中文输入法候选框和搜狗拼音输入法的候选框的bug ，所以还不如先卸载ibus，而且卸载ibus不会给Ubuntu带来一些问题。</p></li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove ibus</span><br></pre></td></tr></table></figure><p>清除ibus配置。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt purge ibus</span><br></pre></td></tr></table></figure><p>卸载顶部面板任务栏上的键盘指示。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo  apt-get remove indicator-keyboard</span><br></pre></td></tr></table></figure><p>安装fcitx输入法框架</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install fcitx-table-wbpy fcitx-config-gtk</span><br></pre></td></tr></table></figure><p>切换为 Fcitx输入法</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">im-config -n fcitx</span><br></pre></td></tr></table></figure><p>im-config 配置需要重启系统才能生效（下面的命令就是重启）</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo shutdown -r now</span><br></pre></td></tr></table></figure><ul><li><p>下载和安装搜狗输入法</p><p>搜狗输入法linux版本的百度云链接：链接：<a href="https://pan.baidu.com/s/1P5oM5vzbaNaWzASOyUHIyA">百度网盘 请输入提取码</a></p><p>提取码：lxe6 </p><p>我们可以从这个链接下载deb文件，然后放到相应的位置上，在这个位置打开terminal</p></li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i sogoupinyin_2.2.0.0108_amd64.deb</span><br></pre></td></tr></table></figure><p>​ 这个deb文件用<strong>dpkg</strong>命令实现安装。</p><ul><li><p>修复损坏缺少的包和打开fcitx输入法配置。</p><p>修复：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -f</span><br></pre></td></tr></table></figure><p>然后重启（这个再次重启比较好）</p><p>然后打开Fcitx 输入法配置：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo killall fcitx</span><br></pre></td></tr></table></figure><p>如图：</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles12.png" alt="5"></p><p>如果有Sogou Pinyin，就OK了。</p></li><li><p>最后：</p><p>我们还需要打开setting中的region and language的设置，在Input source 中添加Chinese。</p><p>然后输入一些字时，打开搜狗拼音输入法的设置，然后关闭（这样的话能够可以实现shift切换中英文，如果不这样做的话，shift 键的功能就失效了，emmmmm）。</p></li></ul><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li><p>换国内源，移动文件，打开文件等等操作时，最好用sudo，因为如果不用sudo ，这些操作未必都能实现。</p></li><li><p>如果出现了搜狗输入法的候选框的乱码时：</p><p>用下面就行</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo killall fcitx</span><br><span class="line">cd ~/.config</span><br><span class="line">sudo rm -rf SogouPY* sogou*</span><br></pre></td></tr></table></figure></li><li><p>可以用ctrl+shift+f 实现简体和繁体的转换。</p></li></ul><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul><li><a href="https://zhuanlan.zhihu.com/p/42001070">良许Linux-手把手教你配置虚拟机</a></li><li><a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">清华源</a></li><li><a href="https://www.jianshu.com/p/c936a8a2180e">ubuntu 18.04 LTS 安装搜狗输入法</a></li><li>[VMware下共享文件夹的实现</li></ul>]]></content>
-    
-    
-    <summary type="html">简单配置Ubuntu</summary>
-    
-    
-    
-    
-    <category term="Linux" scheme="http://example.com/tags/Linux/"/>
-    
-    <category term="Ubuntu" scheme="http://example.com/tags/Ubuntu/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用VMware虚拟机安装Ubuntu18.04</title>
-    <link href="http://example.com/2019/09/06/%E4%BD%BF%E7%94%A8VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Ubuntu18-04/"/>
-    <id>http://example.com/2019/09/06/%E4%BD%BF%E7%94%A8VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Ubuntu18-04/</id>
-    <published>2019-09-06T03:35:47.000Z</published>
-    <updated>2023-09-06T07:14:02.814Z</updated>
-    
-    <content type="html"><![CDATA[<p>这个是利用VMware虚拟机安装Ubuntu的。由于我的笔记本电脑的硬盘有点问题，所以利用USB安装Ubuntu时，却经常扫描不到硬盘，所以最后放弃安装双系统。改为利用虚拟机了。</p><p>VMware 的百度云链接：<a href="https://pan.baidu.com/s/1QV60f1wv6OVOm9wJ1a0dKw">百度网盘 请输入提取码</a><br>提取码：sr62 </p><p>Ubuntu 的百度云链接：<a href="https://pan.baidu.com/s/1L3NWXms7TSXGV2X_mORMKg">百度网盘 请输入提取码</a></p><p>提取码：hbz4 </p><h3 id="VMware-的安装"><a href="#VMware-的安装" class="headerlink" title="VMware 的安装"></a>VMware 的安装</h3><p>我们可以在上面给出的链接进行下载。这个链接长期有效。然后根据提示一步一步安装，最后根据给出的密钥进行注册。</p><h3 id="Ubuntu18-04下载"><a href="#Ubuntu18-04下载" class="headerlink" title="Ubuntu18.04下载"></a>Ubuntu18.04下载</h3><p>这个要注意！！！，必须从官网进行下载，这个必须的，因为如果不是从官网下载的话，安装过程可能会出错的。推荐下载Ubuntu Desktop 18.04 LTS。当然，如果嫌慢的话，也可以从我给的链接下载（如果你有超级会员或其他破解工具的话），这个是从官网亲自下载的，保证正确。</p><h3 id="虚拟机的配置"><a href="#虚拟机的配置" class="headerlink" title="虚拟机的配置"></a>虚拟机的配置</h3><ol><li><p>打开虚拟机，点击创建虚拟机，然后得到如下图：</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles01.png" alt="1"></p><p>可以直接点下一步。</p></li><li><p>然后得到下面的图，像这样。再点下一步。</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles02.png" alt="2"></p></li><li><p>既然是要安装Ubuntu，用Ubuntu64就行。</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles03.png" alt="3"></p></li><li><p>下面自己设置就行</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles04.png" alt="4"></p></li><li><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles05.png" alt="5"></p><p>​ 这个步骤，磁盘大小最好至少20GB，当然，设置更大就更好了，对了，起初是占用不多，才几GB，然后往里面添加一些文件才会变大。</p></li><li><p>接下来就是继续点下一步，直至完成。然后还要点击编辑虚拟机设置。</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles06.png" alt="6"></p><p>​ 最后在下面的图中：</p><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles07.png" alt="7"></p></li></ol><p>用这个，浏览Ubuntu镜像保存的位置。最后点击确定。</p><h3 id="Ubuntu安装"><a href="#Ubuntu安装" class="headerlink" title="Ubuntu安装"></a>Ubuntu安装</h3><p>最后，VMware虚拟机配置好了，接下来就是点击开启此虚拟机，开始安装。安装步骤不难（和那个让我头大的生双系统安装相比太简单了，几乎是傻瓜式的）：（先不放图了）</p><ol><li>点击“Install Ubuntu”（我觉得最好用English比较好，因为用中文可能会有一些bug。。。用English权当练习英语吧）</li><li>点continue,并且在‘Update and other software’ 中划上 ‘minimal installation’ （会省下一些时间）, 也划上 ‘Download updates while installation’ ,再点continue。</li><li>在Installation Type选默认就行。弹出的提示也点继续就行，（注意！！！！，在安装双系统时，这个不能点，要点最下边的那个，方便分区）</li><li>在Where Are You?点击中国，接下来就是填写个人信息，注意密码不能忘了，切记。</li><li>最后就是点击安装了，我这个渣渣的校园网安装这个花了半小时左右。</li><li>安装完毕后，点击restart now,重启虚拟机，当然，有可能会碰上重启时卡了，还一闪一闪的，可以直接打开windows进程，杀死VMware进程，然后进入VMware，点打开虚拟机，启动就行。</li></ol><h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ol><li><strong><a href="https://zhuanlan.zhihu.com/p/41940739">良许LInux-知乎-手把手教你安装Linux虚拟机</a></strong></li></ol>]]></content>
-    
-    
-    <summary type="html">虚拟机安装Ubuntu记录</summary>
     
     
     

@@ -1590,4 +1590,48 @@ def parse_page(self, response):
         <tag>开发</tag>
       </tags>
   </entry>
+  <entry>
+    <title>（开发笔记）平台开发的注意事项简要记录</title>
+    <url>/2023/04/23/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E7%AE%80%E8%A6%81%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h4 id="nacos配置问题"><a href="#nacos配置问题" class="headerlink" title="nacos配置问题"></a>nacos配置问题</h4><p>每次正确添加nacos配置后，如果碰上某个微服务的错误，此时要考虑是不是不小心加上了无关的依赖库，尤其是okhttp 。</p>
+<h4 id="延迟队列问题"><a href="#延迟队列问题" class="headerlink" title="延迟队列问题"></a>延迟队列问题</h4><p>延迟队列  </p>
+<ul>
+<li><p>延迟队列上，判断数据是否到期，就是和当前时间进行比较，用的是System.currentTimeMillis() 。</p>
+</li>
+<li><p>如何将Redis的未来队列的数据同步到list  </p>
+<ul>
+<li><p>从zset中查出数据，并删除  </p>
+</li>
+<li><p>把数据存入到list  </p>
+</li>
+<li><p>用管道方式更快</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="拦截器问题"><a href="#拦截器问题" class="headerlink" title="拦截器问题"></a>拦截器问题</h4><p>每次需要使用AppThred等类时，必须在所在的微服务上添加拦截器！！！！！  </p>
+<h4 id="业务问题"><a href="#业务问题" class="headerlink" title="业务问题"></a>业务问题</h4><p>部分程序存在 ，存在Claims类（自己编写失误）将未登录的用户的id默认为0的情况，此时需要在此处加个判断，将未登录用户不能直接登录。</p>
+]]></content>
+      <tags>
+        <tag>开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（开发笔记）注解总结之@RequestBody</title>
+    <url>/2023/03/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E6%B3%A8%E8%A7%A3%E6%80%BB%E7%BB%93%E4%B9%8B-RequestBody/</url>
+    <content><![CDATA[<p><code>@RequestBody</code> 是一个Spring框架中的注解，用于将HTTP请求的内容（例如JSON、XML等）绑定到方法的参数上。它通常与Spring MVC或Spring Boot中的控制器方法一起使用。  </p>
+<p>使用<code>@RequestBody</code>注解时，Spring框架会自动将请求体的内容解析，并尝试将其转换为指定的参数类型。  </p>
+<p>以下是<code>@RequestBody</code>的示例用法：  </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span>  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;  </span><br><span class="line">    <span class="meta">@PostMapping(&quot;/users&quot;)</span>  </span><br><span class="line">        <span class="keyword">public</span> ResponseEntity&lt;?&gt; createUser(<span class="meta">@RequestBody</span> User user) &#123;  </span><br><span class="line">        <span class="comment">// 处理请求，使用接收到的User对象  </span></span><br><span class="line">        <span class="comment">// ...  </span></span><br><span class="line">    <span class="keyword">return</span> ResponseEntity.ok().build();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，<code>createUser()</code>方法使用<code>@RequestBody</code>注解来接收HTTP POST请求中的请求体，并将其转换为User对象。Spring框架会根据请求的内容类型（例如JSON）以及User类的定义，自动完成请求体到User对象的转换。  </p>
+<p>需要注意的是，在使用<code>@RequestBody</code>时，通常还需要指定请求的Content-Type。例如，如果请求的Content-Type是application&#x2F;json，则Spring会使用相应的JSON转换器将JSON字符串转换为User对象。  </p>
+<p>另外，<code>@RequestBody</code>注解还支持其他参数类型，如<code>Map&lt;String, Object&gt;</code>、<code>List&lt;User&gt;</code>等，以及自定义的数据转换器和处理器。  </p>
+<p>总之，<code>@RequestBody</code>注解允许将HTTP请求的内容转换为方法参数，并方便地在Spring框架中处理和使用请求体数据。</p>
+]]></content>
+      <tags>
+        <tag>开发</tag>
+        <tag>注解与反射</tag>
+      </tags>
+  </entry>
 </search>

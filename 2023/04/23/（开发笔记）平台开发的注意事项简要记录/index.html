@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="爬虫," />
+  <meta name="keywords" content="开发," />
 
 
 
@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="Image Pipeline 练习">
+<meta name="description" content="总结自用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scrapy爬取Bing美图">
-<meta property="og:url" content="http://example.com/2021/07/10/Scrapy%E7%88%AC%E5%8F%96Bing%E7%BE%8E%E5%9B%BE/index.html">
+<meta property="og:title" content="（开发笔记）平台开发的注意事项简要记录">
+<meta property="og:url" content="http://example.com/2023/04/23/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E7%AE%80%E8%A6%81%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="liuweixu">
-<meta property="og:description" content="Image Pipeline 练习">
+<meta property="og:description" content="总结自用">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-10T04:59:38.000Z">
-<meta property="article:modified_time" content="2023-09-06T07:12:36.297Z">
+<meta property="article:published_time" content="2023-04-23T03:30:58.000Z">
+<meta property="article:modified_time" content="2023-09-07T03:35:45.270Z">
 <meta property="article:author" content="liuweixu">
-<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="开发">
 <meta name="twitter:card" content="summary">
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2021/07/10/Scrapy爬取Bing美图/"/>
+  <link rel="canonical" href="http://example.com/2023/04/23/（开发笔记）平台开发的注意事项简要记录/"/>
 
 
 
 
 
-  <title>Scrapy爬取Bing美图 | liuweixu</title>
+  <title>（开发笔记）平台开发的注意事项简要记录 | liuweixu</title>
   
 
 
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/10/Scrapy%E7%88%AC%E5%8F%96Bing%E7%BE%8E%E5%9B%BE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/23/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E7%AE%80%E8%A6%81%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scrapy爬取Bing美图</h1>
+          <h1 class="post-title" itemprop="name headline">（开发笔记）平台开发的注意事项简要记录</h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-10T12:59:38+08:00">
-                2021-07-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-04-23T11:30:58+08:00">
+                2023-04-23
               </time>
             
 
@@ -316,7 +316,7 @@
 
           
               <div class="post-description">
-                  Image Pipeline 练习
+                  总结自用
               </div>
           
 
@@ -333,61 +333,24 @@
       
 
       
-        <span id="more"></span>
-
-<p>这个是Image Pipeline 练习</p>
-<h4 id="确定爬取的目标"><a href="#确定爬取的目标" class="headerlink" title="确定爬取的目标"></a>确定爬取的目标</h4><p>我们要爬取的是Bing美图，<a target="_blank" rel="noopener" href="http://bing.plmeizi.com/">Bing今日美图</a>，我们可以发现，这个网页没有ajax加载，有页面，其中URL里面只有页码不同，可以考虑先爬取页面的信息，然后在每个页面爬取每个图片的链接赋值给item。</p>
-<h4 id="开始编写代码"><a href="#开始编写代码" class="headerlink" title="开始编写代码"></a>开始编写代码</h4><ul>
-<li><p>创建item</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define here the models for your scraped items</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># See documentation in:</span></span><br><span class="line"><span class="comment"># https://docs.scrapy.org/en/latest/topics/items.html</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br></pre></td></tr></table></figure>
-
-<p>class BingItem(scrapy.Item):</p>
-<pre><code># define the fields for your item here like:
-# name = scrapy.Field()
-# 图片标题
-title = scrapy.Field()
-# 图片链接
-url = scrapy.Field()
-</code></pre>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">建立图片的标题和链接作为“键”。</span><br><span class="line"></span><br><span class="line">- spiders/bing_images.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import scrapy</span><br><span class="line">from Bing.items import BingItem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class BingImagesSpider(scrapy.Spider):</span><br><span class="line">    name = &#x27;bing_images&#x27;</span><br><span class="line">    allowed_domains = [&#x27;bing.plmeizi.com&#x27;]</span><br><span class="line">    start_urls = [&#x27;http://bing.plmeizi.com/&#x27;]</span><br><span class="line"></span><br><span class="line">    def parse(self, response):</span><br><span class="line">        base_url = &quot;http://bing.plmeizi.com/?page=&quot;</span><br><span class="line">        for page in range(1, 129):</span><br><span class="line">            url = base_url + str(page)</span><br><span class="line">            yield scrapy.Request(url, callback=self.parse)</span><br><span class="line">        # 这个有必要进行循环，因为在pipeline.py 中scrapy.Request()里面的url是需要url的，而不是一个列表的。</span><br><span class="line">        for image in response.css(&quot;.clearfix .item&quot;):</span><br><span class="line">            item = BingItem()</span><br><span class="line">            item[&#x27;url&#x27;] = image.css(&quot;div img::attr(src)&quot;).extract_first()</span><br><span class="line">            item[&#x27;title&#x27;] = image.css(&quot;p::text&quot;).extract_first()</span><br><span class="line">            yield item</span><br></pre></td></tr></table></figure>
-
-<p>  这个代码中，我们先循环获取1到128页的页面的源代码，回调到parse()中，然后用response.css()获取每个页面的的图片的链接和标题。注意，这个也需要循环，因为接下来的pipeline.py中的scrapyRequest()里面的URL是一个一个的，不是列表的。</p>
+        <h4 id="nacos配置问题"><a href="#nacos配置问题" class="headerlink" title="nacos配置问题"></a>nacos配置问题</h4><p>每次正确添加nacos配置后，如果碰上某个微服务的错误，此时要考虑是不是不小心加上了无关的依赖库，尤其是okhttp 。</p>
+<h4 id="延迟队列问题"><a href="#延迟队列问题" class="headerlink" title="延迟队列问题"></a>延迟队列问题</h4><p>延迟队列  </p>
 <ul>
-<li><p>pipelines.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define your item pipelines here</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Don&#x27;t forget to add your pipeline to the ITEM_PIPELINES setting</span></span><br><span class="line"><span class="comment"># See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html</span></span><br><span class="line"><span class="keyword">from</span> scrapy.pipelines.images <span class="keyword">import</span> ImagesPipeline</span><br><span class="line"><span class="keyword">import</span> scrapy</span><br></pre></td></tr></table></figure>
-
-<p>class BingPipeline(ImagesPipeline):</p>
-<pre><code># def process_item(self, item, spider):
-#     return item
-
-# 用来确定图片的文件名。
-def file_path(self, request, response=None, info=None):
-    # 由于标题过长，会分成自动分成两半，前面的部作为文件夹的名字，后面的部分作为图片的名字。
-    # 所以，我们有必要进行删除一些不必要的名字的部分，可以发现，这些标题基本是在后面有一个括号，我们可以删去
-    # 这些无关紧要的括号就行。
-    file_name = request.meta[&#39;meta&#39;][&#39;title&#39;].split(&quot;(&quot;)[0] + &quot;.png&quot;
-    return file_name
-
-def item_completed(self, results, item, info):
-    image_paths = [x[&#39;path&#39;] for ok, x in results if ok]
-    if not image_paths:
-        raise scrapy.DropItem(&#39;Image Download Failed&#39;)
-    return item
-
-def get_media_requests(self, item, info):
-    yield scrapy.Request(url=item[&#39;url&#39;], meta=&#123;&#39;meta&#39;: item&#125;)
-</code></pre>
+<li><p>延迟队列上，判断数据是否到期，就是和当前时间进行比较，用的是System.currentTimeMillis() 。</p>
+</li>
+<li><p>如何将Redis的未来队列的数据同步到list  </p>
+<ul>
+<li><p>从zset中查出数据，并删除  </p>
+</li>
+<li><p>把数据存入到list  </p>
+</li>
+<li><p>用管道方式更快</p>
 </li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">注意先导入ImagesPipeline，并且BingPipeline需要**继承**ImagesPipeline，这个是必须的。然后就是重写file_path()、item_completed()和get_media_requests()。其中file_path()就是确定图片的文件名，不过这个文件名需要处理下，因为这个得到的文件名过长。在item_completed()中，是用来确定当爬取图片失败后的返回警告信息。而get_media_requests()是用来处理spider传递过来的每个item。</span><br><span class="line"></span><br><span class="line">- settings.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">ROBOTSTXT_OBEY = False</span><br><span class="line"></span><br><span class="line">ROBOTSTXT_OBEY = &#123;</span><br><span class="line">   &#x27;Bing.pipelines.BingPipeline&#x27;: 300,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">IMAGES_STORE = &quot;./images&quot;</span><br></pre></td></tr></table></figure>
-
-<p>  需要对ROBOTSTXT_OBEY和ROBOTSTXT_OBEY去掉注释。然后添加IMAGES_STORE，作为保存的文件夹。</p>
-<h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>这些完整的代码见于 <a target="_blank" rel="noopener" href="https://github.com/liuweixu/Python-crawler/tree/master/Scrapy/Bing%E7%BE%8E%E5%9B%BE/Bing">Github</a></p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
-<li>《Python3 网络爬虫开发实战》崔庆才</li>
+</li>
 </ul>
+<h4 id="拦截器问题"><a href="#拦截器问题" class="headerlink" title="拦截器问题"></a>拦截器问题</h4><p>每次需要使用AppThred等类时，必须在所在的微服务上添加拦截器！！！！！  </p>
+<h4 id="业务问题"><a href="#业务问题" class="headerlink" title="业务问题"></a>业务问题</h4><p>部分程序存在 ，存在Claims类（自己编写失误）将未登录的用户的id默认为0的情况，此时需要在此处加个判断，将未登录用户不能直接登录。</p>
 
       
     </div>
@@ -417,7 +380,7 @@ def get_media_requests(self, item, info):
       
         <div class="post-tags">
           
-            <a href="/tags/%E7%88%AC%E8%99%AB/" rel="tag"># 爬虫</a>
+            <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
           
         </div>
       
@@ -430,8 +393,8 @@ def get_media_requests(self, item, info):
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/07/07/scrapy%E7%88%AC%E5%8F%96%E7%AC%94%E8%B6%A3%E7%9C%8B%E7%9A%84%E5%B0%8F%E8%AF%B4/" rel="next" title="scrapy爬取笔趣看的小说">
-                <i class="fa fa-chevron-left"></i> scrapy爬取笔趣看的小说
+              <a href="/2023/04/01/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E7%9A%84%E6%8A%80%E6%9C%AF%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93-%E6%9D%82%E8%AE%B0%EF%BC%88%E9%9A%8F%E6%97%B6%E9%97%B4%E6%9B%B4%E6%96%B0%EF%BC%89/" rel="next" title="（开发笔记）平台使用的技术简要总结_杂记（随时间更新）">
+                <i class="fa fa-chevron-left"></i> （开发笔记）平台使用的技术简要总结_杂记（随时间更新）
               </a>
             
           </div>
@@ -440,8 +403,8 @@ def get_media_requests(self, item, info):
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/07/10/scrapy%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95%E2%80%94%E2%80%94%E7%88%AC%E5%8F%96%E7%81%AB%E7%86%8A%E7%BD%91%E6%9C%80%E6%96%B0%E4%B8%8A%E4%BC%A0%E4%B8%80%E6%A0%8F%E5%B9%B6%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87/" rel="prev" title="scrapy提交表单——爬取火熊网最新上传一栏并下载图片">
-                scrapy提交表单——爬取火熊网最新上传一栏并下载图片 <i class="fa fa-chevron-right"></i>
+              <a href="/2023/05/07/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E8%AE%B0%E5%BD%95%EF%BC%88%E9%9A%8F%E6%97%B6%E9%97%B4%E6%9B%B4%E6%96%B0%EF%BC%89/" rel="prev" title="（开发笔记）平台开发总结记录（随时间更新）">
+                （开发笔记）平台开发总结记录（随时间更新） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -592,7 +555,7 @@ def get_media_requests(self, item, info):
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E7%88%AC%E5%8F%96%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="nav-number">1.</span> <span class="nav-text">确定爬取的目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">开始编写代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Github"><span class="nav-number">3.</span> <span class="nav-text">Github</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#nacos%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">nacos配置问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">延迟队列问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%A6%E6%88%AA%E5%99%A8%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">拦截器问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">业务问题</span></a></li></ol></div>
             
 
           </div>

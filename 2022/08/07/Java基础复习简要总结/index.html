@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="刷题：图论," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="这个其实是一个很基础的图论题。">
+<meta name="description" content="基础复习总结，面对对象和多线程两个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="(图论) A. Love Triangle">
-<meta property="og:url" content="http://example.com/2022/10/06/%E5%9B%BE%E8%AE%BA-A-Love-Triangle/index.html">
+<meta property="og:title" content="Java基础复习简要总结（黑马视频）">
+<meta property="og:url" content="http://example.com/2022/08/07/Java%E5%9F%BA%E7%A1%80%E5%A4%8D%E4%B9%A0%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="liuweixu">
-<meta property="og:description" content="这个其实是一个很基础的图论题。">
+<meta property="og:description" content="基础复习总结，面对对象和多线程两个">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-10-06T05:24:49.000Z">
-<meta property="article:modified_time" content="2023-09-06T07:13:37.266Z">
+<meta property="article:published_time" content="2022-08-07T03:30:37.000Z">
+<meta property="article:modified_time" content="2023-09-07T01:54:31.944Z">
 <meta property="article:author" content="liuweixu">
-<meta property="article:tag" content="刷题：图论">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2022/10/06/图论-A-Love-Triangle/"/>
+  <link rel="canonical" href="http://example.com/2022/08/07/Java基础复习简要总结/"/>
 
 
 
 
 
-  <title>(图论) A. Love Triangle | liuweixu</title>
+  <title>Java基础复习简要总结（黑马视频） | liuweixu</title>
   
 
 
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/06/%E5%9B%BE%E8%AE%BA-A-Love-Triangle/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/07/Java%E5%9F%BA%E7%A1%80%E5%A4%8D%E4%B9%A0%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">(图论) A. Love Triangle</h1>
+          <h1 class="post-title" itemprop="name headline">Java基础复习简要总结（黑马视频）</h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-10-06T13:24:49+08:00">
-                2022-10-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-08-07T11:30:37+08:00">
+                2022-08-07
               </time>
             
 
@@ -315,6 +315,10 @@
           
 
           
+              <div class="post-description">
+                  基础复习总结，面对对象和多线程两个
+              </div>
+          
 
         </div>
       </header>
@@ -329,41 +333,100 @@
       
 
       
-        <p>这个其实是一个很基础的图论题。</p>
-<span id="more"></span>
+        <p>为了打好基础，我跟着Java黑马教程学习一段时间，现在将Java基础与面对对象知识进行总结并标记重要地方（主要对自己不太了解的知识总结）</p>
+<p>视频来源：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV17F411T7Ao/?spm_id_from=333.337.search-card.all.click">黑马程序员Java零基础视频教程_上部(Java入门，含斯坦福大学练习题+力扣算法题和大厂java面试题）_哔哩哔哩_bilibili</a></p>
+<h3 id="面向对象-就近原则和this关键字、构造方法"><a href="#面向对象-就近原则和this关键字、构造方法" class="headerlink" title="面向对象-就近原则和this关键字、构造方法"></a>面向对象-就近原则和this关键字、构造方法</h3><ul>
+<li><p>this表示当前对象的地址</p>
+<ul>
+<li><p>this可以区分成员变量和局部变量</p>
+</li>
+<li><p>this 本质 代表方法调用者的地址值，Car c &#x3D; new Car()上，c和this的地址值是一样的，所以指代的也一样。</p>
+</li>
+</ul>
+</li>
+<li><p>就近原则 指的是谁离我近，就用谁</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"><span class="keyword">void</span> <span class="title function_">show1</span><span class="params">(age)</span>&#123;</span><br><span class="line">    age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>题目链接：<a target="_blank" rel="noopener" href="http://codeforces.com/problemset/problem/939/A">Problem - 939A - Codeforces</a></p>
-<h4 id="A-Love-Triangle"><a href="#A-Love-Triangle" class="headerlink" title="A. Love Triangle"></a>A. Love Triangle</h4><p>As you could know there are no male planes nor female planes. However, each plane on Earth likes some other plane. There are <em>n</em> planes on Earth, numbered from 1 to <em>n</em>, and the plane with number <em>i</em> likes the plane with number <em>f**i</em>, where 1 ≤ <em>f**i</em> ≤ <em>n</em> and <em>f**i</em> ≠ <em>i</em>.</p>
-<p>We call a love triangle a situation in which plane <em>A</em> likes plane <em>B</em>, plane <em>B</em> likes plane <em>C</em> and plane <em>C</em> likes plane <em>A</em>. Find out if there is any love triangle on Earth.</p>
-<p>Input</p>
-<p>The first line contains a single integer <em>n</em> (2 ≤ <em>n</em> ≤ 5000) — the number of planes.</p>
-<p>The second line contains <em>n</em> integers <em>f</em>1, <em>f</em>2, …, <em>f**n</em> (1 ≤ <em>f**i</em> ≤ <em>n</em>, <em>f**i</em> ≠ <em>i</em>), meaning that the <em>i</em>-th plane likes the <em>f**i</em>-th.</p>
-<p>Output</p>
-<p>Output «YES» if there is a love triangle consisting of planes on Earth. Otherwise, output «NO».</p>
-<p>You can output any letter in lower case or in upper case.</p>
-<p>Examples</p>
-<p>input</p>
-<p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">2 4 5 1 3</span><br></pre></td></tr></table></figure>
+<p>根据就近原则，左边的age算是局部变量，age&#x3D;null，所以返回null</p>
+</li>
+<li><p>构造方法的作用：</p>
+<ul>
+<li><p>给成员变量进行初始化，返回其地址</p>
+</li>
+<li><p>Car c &#x3D; new Car() c保存的是地址。（看面向对象-07的对象内存图）</p>
+</li>
+</ul>
+</li>
+<li><p>标准的JavaBean类（只是一个有特定要求的类而已，类似的有工具类）</p>
+<ul>
+<li><p>类名需要见名知意</p>
+</li>
+<li><p>成员变量至少需要用private修饰</p>
+</li>
+<li><p>提供至少2个构造方法，比如无参构造和带全部参数的构造</p>
+</li>
+<li><p>成员方法：提供每一个成员变量所提供的setXxxx()和getXxxx()，如果还其他行为，一并写上。</p>
+</li>
+<li><p>在IDEA上，可以邮件 有PTG to javabean。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="面向对象-07-三种情况的对象内存图【重要-看视频-面试】需要看JVM"><a href="#面向对象-07-三种情况的对象内存图【重要-看视频-面试】需要看JVM" class="headerlink" title="面向对象-07 三种情况的对象内存图【重要 看视频 面试】需要看JVM"></a>面向对象-07 三种情况的对象内存图【重要 看视频 面试】需要看JVM</h3><h3 id="面向对象-09-this的内存原理【看视频】"><a href="#面向对象-09-this的内存原理【看视频】" class="headerlink" title="面向对象-09 this的内存原理【看视频】"></a>面向对象-09 this的内存原理【看视频】</h3><h3 id="面向对象进阶-03-static的注意事项，-02也可以看看一下"><a href="#面向对象进阶-03-static的注意事项，-02也可以看看一下" class="headerlink" title="面向对象进阶-03 static的注意事项， 02也可以看看一下"></a>面向对象进阶-03 static的注意事项， 02也可以看看一下</h3><ul>
+<li><p>总结</p>
+<ul>
+<li><p>静态方法没有this</p>
+</li>
+<li><p>静态方法只能访问静态，因为静态随类加载而加载，此时对象可能未加载，所以没法访问</p>
+</li>
+<li><p>非静态方法可以访问任意</p>
+</li>
+<li><p><em>静态属于类，不属于对象</em></p>
+</li>
+</ul>
+</li>
+<li><p>非静态方法有一个隐藏的this</p>
+<ul>
+<li><pre><code class="java">void show1(Student this)&#123;
 
-<p>output</p>
-<p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">YES</span><br></pre></td></tr></table></figure>
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 多线程 同步代码块 多线程 08</span><br><span class="line"></span><br><span class="line">- 把操作共享数据（比如用static定义的变量等）的代码锁起来。</span><br><span class="line"></span><br><span class="line">- static定义的变量和方法可以被所有对象共享。</span><br><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  synchronized(锁对象)&#123;</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<p>最好在循坏内，否则会成单线程 具体见多线程-08</p>
+<p>看PPT的总结</p>
+<ul>
+<li><p>对于实例方法建议使用this作为锁对象。</p>
+</li>
+<li><p>对于静态方法建议使用字节码（类名.class）对象作为锁对象。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="多线程-同步方法"><a href="#多线程-同步方法" class="headerlink" title="多线程 同步方法"></a>多线程 同步方法</h3><ul>
+<li><p>就是把synchronized关键字加到方法上。</p>
+</li>
+<li><p>用Runnable创建进程对象时，因为只构建一个对象，所以成员变量不需要添加static作为共享变量。</p>
+</li>
+</ul>
+<h3 id="多线程-Lock锁"><a href="#多线程-Lock锁" class="headerlink" title="多线程 Lock锁"></a>多线程 Lock锁</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lock.lock()</span><br><span class="line">lock.unlock()</span><br></pre></td></tr></table></figure>
 
-<p>input</p>
-<p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">5 5 5 5 1</span><br></pre></td></tr></table></figure>
-
-<p>output</p>
-<p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NO</span><br></pre></td></tr></table></figure>
-
-<p>Note</p>
-<p>In first example plane 2 likes plane 4, plane 4 likes plane 1, plane 1 likes plane 2 and that is a love triangle.</p>
-<p>In second example there are no love triangles.</p>
-<p>这个是一个很基础的图论题，只要有f[f[f[i]]] &#x3D;&#x3D; i的话，就说明肯定存在三角关系。</p>
-<p>Python代码:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">f = list(map(int, input().split()))</span><br><span class="line">f.insert(0, 0)</span><br><span class="line">flag = 0</span><br><span class="line">for i in range(1, n + 1):</span><br><span class="line">    if f[f[f[i]]] == i:</span><br><span class="line">        flag = 1</span><br><span class="line">        break</span><br><span class="line">if flag:</span><br><span class="line">    print(&quot;YES&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(&quot;NO&quot;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>要保证所有对象共享同一把锁。</p>
+</li>
+<li><p>用Thread创建多个线程时，需要对Lock对对象添加static</p>
+</li>
+<li><p>使用try-catch-finally</p>
+</li>
+</ul>
+<h3 id="多线程-死锁"><a href="#多线程-死锁" class="headerlink" title="多线程 死锁"></a>多线程 死锁</h3><ul>
+<li>注意安排好线程的先后，否则会卡死</li>
+</ul>
+<h3 id="多线程-线程池-多线程-29"><a href="#多线程-线程池-多线程-29" class="headerlink" title="多线程 线程池 多线程 29"></a>多线程 线程池 多线程 29</h3><ul>
+<li>线程池是线程的复用技术</li>
+<li>1、创建线程池。2、提交任务，池子会创建新的线程对象，任务执行完毕，线程归还给池子，下次提交任务时，不需要创建线程，只需要复用线程即可。3、池子中没有空闲线程时，也无法创建新的线程时，任务就排队等待。4、所有任务执行完毕时，会关闭线程池。</li>
+</ul>
 
       
     </div>
@@ -393,7 +456,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%88%B7%E9%A2%98%EF%BC%9A%E5%9B%BE%E8%AE%BA/" rel="tag"># 刷题：图论</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -406,8 +469,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2022/10/06/%E6%95%B0%E5%AD%A6-A-Restoring-Three-Numbers/" rel="next" title="(数学)A. Restoring Three Numbers">
-                <i class="fa fa-chevron-left"></i> (数学)A. Restoring Three Numbers
+              <a href="/2021/07/10/scrapy%E6%8F%90%E4%BA%A4%E8%A1%A8%E5%8D%95%E2%80%94%E2%80%94%E7%88%AC%E5%8F%96%E7%81%AB%E7%86%8A%E7%BD%91%E6%9C%80%E6%96%B0%E4%B8%8A%E4%BC%A0%E4%B8%80%E6%A0%8F%E5%B9%B6%E4%B8%8B%E8%BD%BD%E5%9B%BE%E7%89%87/" rel="next" title="scrapy提交表单——爬取火熊网最新上传一栏并下载图片">
+                <i class="fa fa-chevron-left"></i> scrapy提交表单——爬取火熊网最新上传一栏并下载图片
               </a>
             
           </div>
@@ -416,8 +479,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2022/10/06/%E5%9B%BE%E8%AE%BA-B-Badge/" rel="prev" title="(图论) B.Badge">
-                (图论) B.Badge <i class="fa fa-chevron-right"></i>
+              <a href="/2022/10/06/%E6%95%B0%E5%AD%A6-A-Restoring-Three-Numbers/" rel="prev" title="(数学)A. Restoring Three Numbers">
+                (数学)A. Restoring Three Numbers <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -568,7 +631,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-Love-Triangle"><span class="nav-number">1.</span> <span class="nav-text">A. Love Triangle</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1-%E5%B0%B1%E8%BF%91%E5%8E%9F%E5%88%99%E5%92%8Cthis%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">面向对象-就近原则和this关键字、构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1-07-%E4%B8%89%E7%A7%8D%E6%83%85%E5%86%B5%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%9B%BE%E3%80%90%E9%87%8D%E8%A6%81-%E7%9C%8B%E8%A7%86%E9%A2%91-%E9%9D%A2%E8%AF%95%E3%80%91%E9%9C%80%E8%A6%81%E7%9C%8BJVM"><span class="nav-number">2.</span> <span class="nav-text">面向对象-07 三种情况的对象内存图【重要 看视频 面试】需要看JVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1-09-this%E7%9A%84%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86%E3%80%90%E7%9C%8B%E8%A7%86%E9%A2%91%E3%80%91"><span class="nav-number">3.</span> <span class="nav-text">面向对象-09 this的内存原理【看视频】</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-03-static%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%EF%BC%8C-02%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%9C%8B%E7%9C%8B%E4%B8%80%E4%B8%8B"><span class="nav-number">4.</span> <span class="nav-text">面向对象进阶-03 static的注意事项， 02也可以看看一下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%90%8C%E6%AD%A5%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">多线程 同步方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-Lock%E9%94%81"><span class="nav-number">6.</span> <span class="nav-text">多线程 Lock锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E6%AD%BB%E9%94%81"><span class="nav-number">7.</span> <span class="nav-text">多线程 死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E6%B1%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B-29"><span class="nav-number">8.</span> <span class="nav-text">多线程 线程池 多线程 29</span></a></li></ol></div>
             
 
           </div>

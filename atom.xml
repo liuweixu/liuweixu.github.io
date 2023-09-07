@@ -40,6 +40,25 @@
   </entry>
   
   <entry>
+    <title>（开发笔记）平台数据库开发记录总结</title>
+    <link href="http://example.com/2023/02/21/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%91%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/"/>
+    <id>http://example.com/2023/02/21/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%91%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/</id>
+    <published>2023-02-21T07:42:36.000Z</published>
+    <updated>2023-09-07T02:03:38.586Z</updated>
+    
+    <content type="html"><![CDATA[<p>添加到数据库时  </p><ul><li>如果是Mapper，一般是用insert方法或save方法  </li><li>而用这些方法前，一般会设置dto类，并创建dto方法，然后用BeansUtils将传输过来的类拷贝到这个dto类，但是dto类依然有些属性是空着，要自己从其他地方添加。</li></ul>]]></content>
+    
+    
+    <summary type="html">总结自用</summary>
+    
+    
+    
+    
+    <category term="开发" scheme="http://example.com/tags/%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title>MySQL笔记简要复习总结</title>
     <link href="http://example.com/2023/01/11/MySQL%E7%AC%94%E8%AE%B0%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/"/>
     <id>http://example.com/2023/01/11/MySQL%E7%AC%94%E8%AE%B0%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</id>
@@ -55,6 +74,25 @@
     
     
     <category term="MySQL" scheme="http://example.com/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>（开发笔记）平台开发时所使用的JSON记录总结</title>
+    <link href="http://example.com/2023/01/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%97%B6%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84JSON%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/"/>
+    <id>http://example.com/2023/01/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%97%B6%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84JSON%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/</id>
+    <published>2023-01-10T01:05:01.000Z</published>
+    <updated>2023-09-07T02:12:57.275Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h3><p>JSON的作用是实现序列化，用于将Java中的对象转化为JSON字符串，方便返回给前端。</p><p>平台使用的JSON是fastjson，阿里开源的，但是Java和Spring版本不能过高，否则fastjson可能没法用。</p><p>另外，SpringBoot内置的Jackson和谷歌开源的Gson也可以用（立下flag要学习使用）</p><h3 id="parseArray"><a href="#parseArray" class="headerlink" title="parseArray"></a>parseArray</h3><p>Java中的JSON.parseArray()方法用于将JSON数组字符串解析为Java中的List对象。<br>比如如果给一个JSON语句，然后第二个参数给Map.class，于是该方法就将该语句解析为一个List语句，其中该List里面的类是Map。</p>]]></content>
+    
+    
+    <summary type="html">总结自用</summary>
+    
+    
+    
+    
+    <category term="开发" scheme="http://example.com/tags/%E5%BC%80%E5%8F%91/"/>
     
   </entry>
   

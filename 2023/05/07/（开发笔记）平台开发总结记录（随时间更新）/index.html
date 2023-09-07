@@ -83,13 +83,13 @@
 
 <meta name="description" content="总结自用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="（开发笔记）平台开发时所使用的JSON记录总结">
-<meta property="og:url" content="http://example.com/2023/01/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%97%B6%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84JSON%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:title" content="（开发笔记）平台开发总结记录（随时间更新）">
+<meta property="og:url" content="http://example.com/2023/05/07/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E8%AE%B0%E5%BD%95%EF%BC%88%E9%9A%8F%E6%97%B6%E9%97%B4%E6%9B%B4%E6%96%B0%EF%BC%89/index.html">
 <meta property="og:site_name" content="liuweixu">
 <meta property="og:description" content="总结自用">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-01-10T01:05:01.000Z">
-<meta property="article:modified_time" content="2023-09-07T02:12:57.275Z">
+<meta property="article:published_time" content="2023-05-07T02:32:25.000Z">
+<meta property="article:modified_time" content="2023-09-07T02:52:55.384Z">
 <meta property="article:author" content="liuweixu">
 <meta property="article:tag" content="开发">
 <meta name="twitter:card" content="summary">
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2023/01/10/（开发笔记）平台开发时所使用的JSON记录总结/"/>
+  <link rel="canonical" href="http://example.com/2023/05/07/（开发笔记）平台开发总结记录（随时间更新）/"/>
 
 
 
 
 
-  <title>（开发笔记）平台开发时所使用的JSON记录总结 | liuweixu</title>
+  <title>（开发笔记）平台开发总结记录（随时间更新） | liuweixu</title>
   
 
 
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%97%B6%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84JSON%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/07/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E8%AE%B0%E5%BD%95%EF%BC%88%E9%9A%8F%E6%97%B6%E9%97%B4%E6%9B%B4%E6%96%B0%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">（开发笔记）平台开发时所使用的JSON记录总结</h1>
+          <h1 class="post-title" itemprop="name headline">（开发笔记）平台开发总结记录（随时间更新）</h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-01-10T09:05:01+08:00">
-                2023-01-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-05-07T10:32:25+08:00">
+                2023-05-07
               </time>
             
 
@@ -333,10 +333,214 @@
       
 
       
-        <h3 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h3><p>JSON的作用是实现序列化，用于将Java中的对象转化为JSON字符串，方便返回给前端。</p>
-<p>平台使用的JSON是fastjson，阿里开源的，但是Java和Spring版本不能过高，否则fastjson可能没法用。</p>
-<p>另外，SpringBoot内置的Jackson和谷歌开源的Gson也可以用（立下flag要学习使用）</p>
-<h3 id="parseArray"><a href="#parseArray" class="headerlink" title="parseArray"></a>parseArray</h3><p>Java中的JSON.parseArray()方法用于将JSON数组字符串解析为Java中的List对象。<br>比如如果给一个JSON语句，然后第二个参数给Map.class，于是该方法就将该语句解析为一个List语句，其中该List里面的类是Map。</p>
+        <h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><ul>
+<li>查看是否登录时，一般会看看线程是否有这个用户（网关处理时会把数据保存到线程上）</li>
+</ul>
+<h2 id="MP"><a href="#MP" class="headerlink" title="MP"></a>MP</h2><ul>
+<li>要掌握如何进行分页  <ul>
+<li>MP在处理多个表时，有时用xml更好，尤其是在查询列表时</li>
+</ul>
+</li>
+<li>项目审核上  <ul>
+<li>一般需要一个公共的方法，外加一个code，表示审核失败和审核成功  </li>
+<li>查询验证信息 就是查询是否对象是否存在</li>
+</ul>
+</li>
+<li>进行消息传递时，如果需要传递类，可以用HashMap包装</li>
+</ul>
+<h2 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h2><ul>
+<li>Mono类  </li>
+<li>拦截器 过滤器  </li>
+<li>要加上@Component  </li>
+<li>获取用户的方法  <ul>
+<li>利用网关过滤器，将登录信息包装到thread，然后可以直接读取该thread的信息，得到用户的信息  </li>
+<li>根据传过来的json信息来得到用户的信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><ul>
+<li>AppThreadLocalUtil  </li>
+<li>线程读取用户的id  </li>
+<li>重要，需要认真学习</li>
+</ul>
+<h2 id="延迟任务-用于处理文章定时审核和上架"><a href="#延迟任务-用于处理文章定时审核和上架" class="headerlink" title="延迟任务 用于处理文章定时审核和上架"></a>延迟任务 用于处理文章定时审核和上架</h2><ul>
+<li>延迟任务的实现  <ul>
+<li>用的是Redis的延迟队列，其中有2个队列，当前队列和未来队列  </li>
+<li>需要用上乐观锁  </li>
+<li>也可以用RabbitMQ</li>
+</ul>
+</li>
+<li>分布式锁的解决方案（<strong>因为@Schedule存在做集群任务的重复执行问题，后续的xxl-job任务可以解决</strong>）  <ul>
+<li>SETNX 用的是StringRedisTemplate</li>
+</ul>
+</li>
+<li>定时刷新  <ul>
+<li>未来任务定时刷新到当前任务  <ul>
+<li>是在redis上的处理，就是先清楚掉未来任务的数据（zset），然后将这个数据加入到当前队列（list）</li>
+</ul>
+</li>
+<li>数据库定时刷新到redis（即数据库定时同步到redis）  <ul>
+<li>要先清理缓存中的数据，然后从数据库中查询符合条件的数据，并加入到redis</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GetMapping 和 PostMapping的区别是GetMapping上的连接必须有占位符，即{}，并且参数要有@PathVariable。这个与Http的Get请求特点有关的。  </li>
+<li>延迟任务上，使用的序列化方法是Protostuff，特点是比Jdk的序列化方法快  </li>
+<li>延迟任务上，会使用到的@Scheduled注解，里面用上2个参数  <ul>
+<li>cron  </li>
+<li>fixedRate  </li>
+<li>然后会用上EnableScheduling注解，用于开启调度任务</li>
+</ul>
+</li>
+<li>在文章审核上，需要使用@Asyns实现异步调用，保证文章微服务挂掉时，不影响文章的审核（自媒体的微服务部分）  </li>
+<li>区分延迟任务和定时任务</li>
+</ul>
+<h2 id="Kafka-用于通知文章上下架"><a href="#Kafka-用于通知文章上下架" class="headerlink" title="Kafka 用于通知文章上下架"></a>Kafka 用于通知文章上下架</h2><ul>
+<li>自媒体文章上下架  <ul>
+<li>自媒体微服务如何通知文章微服务？？  <ul>
+<li>Feign远程调用 有耦合性  </li>
+<li>消息队列 RabbitMQ Kafka 系统解耦 流量削峰  </li>
+<li>KafkaProducer 创建Kafka对象</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kafka入门  <ul>
+<li>程序设置  生产者和消费者<ul>
+<li>写程序时需要先用Properties创建配置类（<strong>也可以写入yml配置文件</strong>），里面保存连接信息，key和value的序列化或反序列化，另外消费者还需要添加消费者组，其使用的重要参数有：1. 连接信息。2. key和value的序列化或反序列化。3. ack 消息确认机制 开发中不会专门去设置 默认 ack&#x3D;1。4. retries 尝试重试次数 一般设置10次。5. 消息压缩 snappy</li>
+<li>创建生产者对象或消费者对象 传入配置类</li>
+<li>发送消息或订阅主题并拉取消息</li>
+<li>生产者还需要关闭消息通道</li>
+</ul>
+</li>
+<li>消费者组  <ul>
+<li>一对一接收 同一个消费者组有多个消费者就行 （Topic中的一个消费者组的消息只能由一个消费者消费，这也保证消息的有序性）  </li>
+<li>而一对多时，只需要将不同的消费者放在不同的消费组就行  </li>
+<li>消费组的设置：ConsumerConfig类</li>
+</ul>
+</li>
+<li>Kafka的分区设计和高可用设计 这一块需要查阅资料  </li>
+<li>Kafka的生产者上，有同步和异步发送消息  </li>
+<li>Kafka的参数配置  </li>
+<li>Kafka的消息有序性 （按顺序处理Topic的所有消息，就只提供一个分区）  </li>
+<li>偏移量 提交方式： 同步与异步组合方式提交  </li>
+<li>SpringBoot结合Kafka  <ul>
+<li>用yml写入kafka的一些配置  </li>
+<li>用KafkaTemplate（发送信息）  </li>
+<li>注解接收信息 @KafkaListener  </li>
+<li>序列化处理，使用JSON方法，发送消息时，将对象转为JSON字符串，然后接收消息时，将JSON字符串转化为对象</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="ElasticSearch-搜索总结"><a href="#ElasticSearch-搜索总结" class="headerlink" title="ElasticSearch 搜索总结"></a>ElasticSearch 搜索总结</h2><ul>
+<li>ElasticSearch  <ul>
+<li>数据库批量导入ES  <ul>
+<li>RestHighLevelClient  </li>
+<li>要复习ES  </li>
+<li>SearchRequest  <ul>
+<li>QueryBuilders  </li>
+<li>SearchSourceBuilders</li>
+</ul>
+</li>
+<li>IndexRequest</li>
+</ul>
+</li>
+<li>保存搜索记录  <ul>
+<li>用mongodb数据库  </li>
+<li>mongoTemplate  <ul>
+<li>save  </li>
+<li>findById  </li>
+<li>find  </li>
+<li>remove</li>
+</ul>
+</li>
+<li>Query(与Criteria搭配使用，用于组合查询或排序)  <ul>
+<li>query</li>
+</ul>
+</li>
+<li>更新时间方式  <ul>
+<li>用new Date()就行</li>
+</ul>
+</li>
+<li>Sort</li>
+</ul>
+</li>
+<li>联想词查询  <ul>
+<li>实际上是模糊查询</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="关注、取消、点赞等CRUD处理"><a href="#关注、取消、点赞等CRUD处理" class="headerlink" title="关注、取消、点赞等CRUD处理"></a>关注、取消、点赞等CRUD处理</h2><ul>
+<li>关注与取消关注  <ul>
+<li>添加到Redis，使用zset</li>
+</ul>
+</li>
+<li>点赞  <ul>
+<li>因为点赞只能点赞一次，所以要判断是否点赞，此时可以用哈希表</li>
+</ul>
+</li>
+<li>阅读  <ul>
+<li>要更新登录次数  </li>
+<li>用哈希表</li>
+</ul>
+</li>
+<li>不喜欢  <ul>
+<li>根据交流可知，似乎这个与点赞是区分的，都可以点击，也算是不足之处吧  </li>
+<li>用哈希表</li>
+</ul>
+</li>
+<li>收藏  <ul>
+<li>要判断是否已经收藏 只能收藏一次</li>
+</ul>
+</li>
+<li>每次需要使用AppThred等类时，必须在所在的微服务上添加拦截器！！！！！</li>
+</ul>
+<h2 id="定时任务热点文章计算（问题很大）"><a href="#定时任务热点文章计算（问题很大）" class="headerlink" title="定时任务热点文章计算（问题很大）"></a>定时任务热点文章计算（问题很大）</h2><ul>
+<li>定时任务框架（xxl-job也许主流？？？？ 分布式消息队列？？？？）  <ul>
+<li>定时任务框架-xxl-job 分布式任务调度框架  </li>
+<li>可以解决的问题：  <ul>
+<li>做集群任务的重复执行问题  </li>
+<li>cron表达式定义在代码中，修改不方便  </li>
+<li>定时任务失败，无法重试也没有统计  </li>
+<li>如果任务量过大，不能有效分片执行</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="实时任务-热点文章计算"><a href="#实时任务-热点文章计算" class="headerlink" title="实时任务 热点文章计算"></a>实时任务 热点文章计算</h2><ul>
+<li>SerDe是Serializer&#x2F;Deserializer的缩写。 Serdes.String().getClass() 实际上是得到一个序列化器  </li>
+<li>Topology类 这个可能要注意  </li>
+<li>重要的对象 KStream 键值类型的  </li>
+<li>Duration.ofSeconds  <ul>
+<li>KakfaStream 的flatMapValues方法：<br>在Kafka中，<code>flatMapValues</code>是一个操作符（operator），用于对每个记录的值进行扁平化处理（<strong>就是对一个数据流的数据进行分开处理</strong>），<br>并生成零个或多个新的记录。<code>flatMapValues</code>操作符的功能类似于<code>flatMap</code>操作符，但它只应用于记录的值部分，而不改变键部分。</li>
+</ul>
+</li>
+<li>Kafka的流式处理模块是单独的，需要生产者的topic和消费者的topic  </li>
+<li>需要自己添加配置类，因为SpringBoot对kafkaStream的yml集成效果不太好  <ul>
+<li>需要学习的注解  </li>
+<li>@ConfigurationProperties  </li>
+<li>@Bean  </li>
+<li>@Value</li>
+</ul>
+</li>
+<li>所谓热点文章，就是同时考虑点赞行为和阅读行为，对文章的分值进行计算，要实时的，这个可以用KafkaStream完成的。  </li>
+<li><strong>enum 枚举类或集合方法的撰写 必须要学会</strong>  </li>
+<li><strong>常量类上的方法使用 static 和 final</strong>  </li>
+<li>String.format()</li>
+</ul>
+<h2 id="其他补充"><a href="#其他补充" class="headerlink" title="其他补充"></a>其他补充</h2><ul>
+<li>mongodb处理 <ul>
+<li>分页列表并不像MP那样有插件，需要自己实现  </li>
+<li>涉及到MongoDB的数据操作，是没有mapper的，因为mongoTemplate里面有数据操作的方法</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -379,8 +583,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2022/10/06/%E5%9B%BE%E8%AE%BA-B-Badge/" rel="next" title="(图论) B.Badge">
-                <i class="fa fa-chevron-left"></i> (图论) B.Badge
+              <a href="/2023/04/01/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E7%9A%84%E6%8A%80%E6%9C%AF%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93-%E6%9D%82%E8%AE%B0%EF%BC%88%E9%9A%8F%E6%97%B6%E9%97%B4%E6%9B%B4%E6%96%B0%EF%BC%89/" rel="next" title="（开发笔记）平台使用的技术简要总结_杂记（随时间更新）">
+                <i class="fa fa-chevron-left"></i> （开发笔记）平台使用的技术简要总结_杂记（随时间更新）
               </a>
             
           </div>
@@ -389,8 +593,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2023/01/11/MySQL%E7%AC%94%E8%AE%B0%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/" rel="prev" title="MySQL笔记简要复习总结">
-                MySQL笔记简要复习总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2023/09/01/%EF%BC%88%E7%A7%8B%E6%8B%9B%E7%AC%94%E8%AF%95-%E7%BE%8E%E5%9B%A2%EF%BC%89%E5%B9%B3%E5%9D%87%E6%95%B0%E4%B8%BAk%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/" rel="prev" title="（秋招笔试-美团）平均数为k的最长连续子数组">
+                （秋招笔试-美团）平均数为k的最长连续子数组 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -541,7 +745,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON"><span class="nav-number">1.</span> <span class="nav-text">JSON</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parseArray"><span class="nav-number">2.</span> <span class="nav-text">parseArray</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MP"><span class="nav-number">2.</span> <span class="nav-text">MP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E5%85%B3"><span class="nav-number">3.</span> <span class="nav-text">网关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">拦截器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E4%BB%BB%E5%8A%A1-%E7%94%A8%E4%BA%8E%E5%A4%84%E7%90%86%E6%96%87%E7%AB%A0%E5%AE%9A%E6%97%B6%E5%AE%A1%E6%A0%B8%E5%92%8C%E4%B8%8A%E6%9E%B6"><span class="nav-number">5.</span> <span class="nav-text">延迟任务 用于处理文章定时审核和上架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-%E7%94%A8%E4%BA%8E%E9%80%9A%E7%9F%A5%E6%96%87%E7%AB%A0%E4%B8%8A%E4%B8%8B%E6%9E%B6"><span class="nav-number">6.</span> <span class="nav-text">Kafka 用于通知文章上下架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch-%E6%90%9C%E7%B4%A2%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">ElasticSearch 搜索总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E6%B3%A8%E3%80%81%E5%8F%96%E6%B6%88%E3%80%81%E7%82%B9%E8%B5%9E%E7%AD%89CRUD%E5%A4%84%E7%90%86"><span class="nav-number">8.</span> <span class="nav-text">关注、取消、点赞等CRUD处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%83%AD%E7%82%B9%E6%96%87%E7%AB%A0%E8%AE%A1%E7%AE%97%EF%BC%88%E9%97%AE%E9%A2%98%E5%BE%88%E5%A4%A7%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">定时任务热点文章计算（问题很大）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%97%B6%E4%BB%BB%E5%8A%A1-%E7%83%AD%E7%82%B9%E6%96%87%E7%AB%A0%E8%AE%A1%E7%AE%97"><span class="nav-number">10.</span> <span class="nav-text">实时任务 热点文章计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E8%A1%A5%E5%85%85"><span class="nav-number">11.</span> <span class="nav-text">其他补充</span></a></li></ol></div>
             
 
           </div>

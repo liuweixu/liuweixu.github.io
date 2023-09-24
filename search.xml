@@ -1953,4 +1953,33 @@ def parse_page(self, response):
         <tag>Java</tag>
       </tags>
   </entry>
+  <entry>
+    <title>数据结构-排序算法-堆排序</title>
+    <url>/2023/09/24/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E5%AF%B9%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>在掌握堆排序前需要先理解堆的数据结构：</p>
+<ul>
+<li><p>堆是一个完全二叉树。</p>
+</li>
+<li><p>在构建堆时，需要重点掌握下潜算法、上浮算法和建堆。</p>
+</li>
+<li><p>以大顶堆为例，下潜算法指的是如果所在的节点的数值比左右子节点要小，就需要交换，此时可以使用递归方法。</p>
+</li>
+<li><p>还是以大顶堆为例，上浮算法指的是如果所在的节点的值比其父节点的值要大，就要逐步交换，可以使用while函数</p>
+</li>
+<li><p>如果要从小到大的排序，则需要使用大顶堆</p>
+<ul>
+<li><p>建立大顶堆</p>
+</li>
+<li><p>每次将堆顶元素（最大值）交换到末尾，调整堆顶元素，让其重新符合大顶堆的特性，并逐步缩减，直至堆的元素数量为1为止。</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题</tag>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
 </search>

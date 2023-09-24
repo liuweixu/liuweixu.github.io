@@ -1998,4 +1998,23 @@ def parse_page(self, response):
         <tag>排序算法</tag>
       </tags>
   </entry>
+  <entry>
+    <title>数据结构-排序算法-希尔排序</title>
+    <url>/2023/09/16/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>对插入排序的优化<br>要点：  </p>
+<ul>
+<li>实现分组插入，每组元素之间的间隙为 gap  </li>
+<li>每轮排序后 gap 逐渐变小，直至 gap 为 1 完成排序。  </li>
+<li>对插入排序优化，让元素更快速交换到最终位置。  </li>
+<li>插入排序可以视为希尔排序上的 gap 为 1 时的特殊情况 ，所以<strong>程序上和插入排序类似</strong>。</li>
+<li>平均时间复杂度是 **O(nlogn)**，最差时间复杂度是 O(n^2) ，最好的时间复杂度是O(nlogn)</li>
+<li>算法是<strong>不稳定</strong>的。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">对插入排序的优化</span></span><br><span class="line"><span class="comment">要点：</span></span><br><span class="line"><span class="comment">- 实现分组插入，每组元素之间的间隙为gap</span></span><br><span class="line"><span class="comment">- 每轮排序后gap逐渐变小，直至gap为1完成排序。</span></span><br><span class="line"><span class="comment">- 对插入排序优化，让元素更快速交换到最终位置。</span></span><br><span class="line"><span class="comment">- 插入排序可以视为希尔排序上的gap为1时的特殊情况</span></span><br><span class="line"><span class="comment">- 平均时间复杂度是O(nlogn)，最差时间复杂度是O(n^2)，最好的时间复杂度是O(nlogn)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShellSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">shellsort</span><span class="params">(<span class="type">int</span>[] a)</span>&#123;</span><br><span class="line">        <span class="comment">//a.length / 2</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">gap</span> <span class="operator">=</span> a.length &gt;&gt; <span class="number">1</span>; gap &gt;=<span class="number">1</span>  ; gap &gt;&gt;= <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">low</span> <span class="operator">=</span> gap; low &lt; a.length; low++) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">t</span> <span class="operator">=</span> a[low];</span><br><span class="line">                <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> low - gap;</span><br><span class="line">                <span class="comment">//自右向左找插入位置，如果比待插入元素大，则不断右移，空出插入位置</span></span><br><span class="line">                <span class="keyword">while</span>(i &gt;= <span class="number">0</span> &amp;&amp; t &lt; a[i])&#123;</span><br><span class="line">                    a[i+gap] = a[i];</span><br><span class="line">                    i--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(i != low - gap)&#123;</span><br><span class="line">                    a[i+gap] = t;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">        shellsort(a);</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题</tag>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
 </search>

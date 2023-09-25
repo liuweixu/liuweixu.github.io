@@ -2049,4 +2049,26 @@ def parse_page(self, response):
         <tag>排序算法</tag>
       </tags>
   </entry>
+  <entry>
+    <title>数据结构-排序算法-基数排序</title>
+    <url>/2023/09/17/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>基数排序适合针对位数比较大的数值的排序，比如手机号等，其思路是构建多个桶，然后每个桶按照其个位数放，然后取出来，接着按照十位数放，再取出来，这样循环处理，就可以对数值进行排序。</p>
+<p><strong>基数排序 vs 计数排序 vs 桶排序</strong></p>
+<p>这三种排序算法都利用了桶的概念，但对桶的使用方法上有明显差异：</p>
+<ul>
+<li>基数排序：根据键值的每位数字来分配桶</li>
+<li>计数排序：每个桶只存储单一键值</li>
+<li>桶排序：每个桶存储一定范围的数值</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">针对11位的手机号排序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RadisSort</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">radisSort</span><span class="params">(String[] a)</span>&#123;</span><br><span class="line">        List&lt;String&gt;[] buckets = <span class="keyword">new</span> <span class="title class_">ArrayList</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</span><br><span class="line">            buckets[i] = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        从低位向高位排序</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> a[<span class="number">0</span>].length() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">            <span class="keyword">for</span> (String s : a) &#123;</span><br><span class="line">                buckets[s.charAt(i) - <span class="string">&#x27;0&#x27;</span>].add(s);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (List&lt;String&gt; bucket : buckets) &#123;</span><br><span class="line">                <span class="keyword">for</span> (String s : bucket) &#123;</span><br><span class="line">                    a[k++] = s;</span><br><span class="line">                &#125;</span><br><span class="line">                bucket.clear();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        String[] a = &#123;<span class="string">&quot;1113123123&quot;</span>, <span class="string">&quot;1133123123&quot;</span>, <span class="string">&quot;1133123087&quot;</span>, <span class="string">&quot;1133123123&quot;</span>, <span class="string">&quot;1233123123&quot;</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">        radisSort(a);</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>拓展</strong></p>
+<p>如果数值里面有abc等字符时，如何排序？</p>
+<p>只需要将桶的个数增加就行，比如增加到128，刚好存下ASCII的字符。</p>
+]]></content>
+      <tags>
+        <tag>刷题</tag>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
 </search>

@@ -89,105 +89,161 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础复习简要总结（黑马视频）</title>
-    <url>/2022/08/07/Java%E5%9F%BA%E7%A1%80%E5%A4%8D%E4%B9%A0%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p>为了打好基础，我跟着Java黑马教程学习一段时间，现在将Java基础与面对对象知识进行总结并标记重要地方（主要对自己不太了解的知识总结）</p>
-<p>视频来源：<a href="https://www.bilibili.com/video/BV17F411T7Ao/?spm_id_from=333.337.search-card.all.click">黑马程序员Java零基础视频教程_上部(Java入门，含斯坦福大学练习题+力扣算法题和大厂java面试题）_哔哩哔哩_bilibili</a></p>
-<h3 id="面向对象-就近原则和this关键字、构造方法"><a href="#面向对象-就近原则和this关键字、构造方法" class="headerlink" title="面向对象-就近原则和this关键字、构造方法"></a>面向对象-就近原则和this关键字、构造方法</h3><ul>
-<li><p>this表示当前对象的地址</p>
-<ul>
-<li><p>this可以区分成员变量和局部变量</p>
-</li>
-<li><p>this 本质 代表方法调用者的地址值，Car c &#x3D; new Car()上，c和this的地址值是一样的，所以指代的也一样。</p>
-</li>
-</ul>
-</li>
-<li><p>就近原则 指的是谁离我近，就用谁</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"><span class="keyword">void</span> <span class="title function_">show1</span><span class="params">(age)</span>&#123;</span><br><span class="line">    age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>Scrapy爬取Bing美图</title>
+    <url>/2021/07/10/Scrapy%E7%88%AC%E5%8F%96Bing%E7%BE%8E%E5%9B%BE/</url>
+    <content><![CDATA[<span id="more"></span>
 
-<p>根据就近原则，左边的age算是局部变量，age&#x3D;null，所以返回null</p>
-</li>
-<li><p>构造方法的作用：</p>
-<ul>
-<li><p>给成员变量进行初始化，返回其地址</p>
-</li>
-<li><p>Car c &#x3D; new Car() c保存的是地址。（看面向对象-07的对象内存图）</p>
-</li>
-</ul>
-</li>
-<li><p>标准的JavaBean类（只是一个有特定要求的类而已，类似的有工具类）</p>
-<ul>
-<li><p>类名需要见名知意</p>
-</li>
-<li><p>成员变量至少需要用private修饰</p>
-</li>
-<li><p>提供至少2个构造方法，比如无参构造和带全部参数的构造</p>
-</li>
-<li><p>成员方法：提供每一个成员变量所提供的setXxxx()和getXxxx()，如果还其他行为，一并写上。</p>
-</li>
-<li><p>在IDEA上，可以邮件 有PTG to javabean。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="面向对象-07-三种情况的对象内存图【重要-看视频-面试】需要看JVM"><a href="#面向对象-07-三种情况的对象内存图【重要-看视频-面试】需要看JVM" class="headerlink" title="面向对象-07 三种情况的对象内存图【重要 看视频 面试】需要看JVM"></a>面向对象-07 三种情况的对象内存图【重要 看视频 面试】需要看JVM</h3><h3 id="面向对象-09-this的内存原理【看视频】"><a href="#面向对象-09-this的内存原理【看视频】" class="headerlink" title="面向对象-09 this的内存原理【看视频】"></a>面向对象-09 this的内存原理【看视频】</h3><h3 id="面向对象进阶-03-static的注意事项，-02也可以看看一下"><a href="#面向对象进阶-03-static的注意事项，-02也可以看看一下" class="headerlink" title="面向对象进阶-03 static的注意事项， 02也可以看看一下"></a>面向对象进阶-03 static的注意事项， 02也可以看看一下</h3><ul>
-<li><p>总结</p>
-<ul>
-<li><p>静态方法没有this</p>
-</li>
-<li><p>静态方法只能访问静态，因为静态随类加载而加载，此时对象可能未加载，所以没法访问</p>
-</li>
-<li><p>非静态方法可以访问任意</p>
-</li>
-<li><p><em>静态属于类，不属于对象</em></p>
-</li>
-</ul>
-</li>
-<li><p>非静态方法有一个隐藏的this</p>
-<ul>
-<li><pre><code class="java">void show1(Student this)&#123;
+<p>这个是Image Pipeline 练习</p>
+<h4 id="确定爬取的目标"><a href="#确定爬取的目标" class="headerlink" title="确定爬取的目标"></a>确定爬取的目标</h4><p>我们要爬取的是Bing美图，<a href="http://bing.plmeizi.com/">Bing今日美图</a>，我们可以发现，这个网页没有ajax加载，有页面，其中URL里面只有页码不同，可以考虑先爬取页面的信息，然后在每个页面爬取每个图片的链接赋值给item。</p>
+<h4 id="开始编写代码"><a href="#开始编写代码" class="headerlink" title="开始编写代码"></a>开始编写代码</h4><ul>
+<li><p>创建item</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define here the models for your scraped items</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># See documentation in:</span></span><br><span class="line"><span class="comment"># https://docs.scrapy.org/en/latest/topics/items.html</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br></pre></td></tr></table></figure>
 
-&#125;
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 多线程 同步代码块 多线程 08</span><br><span class="line"></span><br><span class="line">- 把操作共享数据（比如用static定义的变量等）的代码锁起来。</span><br><span class="line"></span><br><span class="line">- static定义的变量和方法可以被所有对象共享。</span><br><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  synchronized(锁对象)&#123;</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>class BingItem(scrapy.Item):</p>
+<pre><code># define the fields for your item here like:
+# name = scrapy.Field()
+# 图片标题
+title = scrapy.Field()
+# 图片链接
+url = scrapy.Field()
 </code></pre>
 </li>
 </ul>
-<p>最好在循坏内，否则会成单线程 具体见多线程-08</p>
-<p>看PPT的总结</p>
-<ul>
-<li><p>对于实例方法建议使用this作为锁对象。</p>
-</li>
-<li><p>对于静态方法建议使用字节码（类名.class）对象作为锁对象。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="多线程-同步方法"><a href="#多线程-同步方法" class="headerlink" title="多线程 同步方法"></a>多线程 同步方法</h3><ul>
-<li><p>就是把synchronized关键字加到方法上。</p>
-</li>
-<li><p>用Runnable创建进程对象时，因为只构建一个对象，所以成员变量不需要添加static作为共享变量。</p>
-</li>
-</ul>
-<h3 id="多线程-Lock锁"><a href="#多线程-Lock锁" class="headerlink" title="多线程 Lock锁"></a>多线程 Lock锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">lock.lock()</span><br><span class="line">lock.unlock()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">建立图片的标题和链接作为“键”。</span><br><span class="line"></span><br><span class="line">- spiders/bing_images.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import scrapy</span><br><span class="line">from Bing.items import BingItem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class BingImagesSpider(scrapy.Spider):</span><br><span class="line">    name = &#x27;bing_images&#x27;</span><br><span class="line">    allowed_domains = [&#x27;bing.plmeizi.com&#x27;]</span><br><span class="line">    start_urls = [&#x27;http://bing.plmeizi.com/&#x27;]</span><br><span class="line"></span><br><span class="line">    def parse(self, response):</span><br><span class="line">        base_url = &quot;http://bing.plmeizi.com/?page=&quot;</span><br><span class="line">        for page in range(1, 129):</span><br><span class="line">            url = base_url + str(page)</span><br><span class="line">            yield scrapy.Request(url, callback=self.parse)</span><br><span class="line">        # 这个有必要进行循环，因为在pipeline.py 中scrapy.Request()里面的url是需要url的，而不是一个列表的。</span><br><span class="line">        for image in response.css(&quot;.clearfix .item&quot;):</span><br><span class="line">            item = BingItem()</span><br><span class="line">            item[&#x27;url&#x27;] = image.css(&quot;div img::attr(src)&quot;).extract_first()</span><br><span class="line">            item[&#x27;title&#x27;] = image.css(&quot;p::text&quot;).extract_first()</span><br><span class="line">            yield item</span><br></pre></td></tr></table></figure>
 
+<p>  这个代码中，我们先循环获取1到128页的页面的源代码，回调到parse()中，然后用response.css()获取每个页面的的图片的链接和标题。注意，这个也需要循环，因为接下来的pipeline.py中的scrapyRequest()里面的URL是一个一个的，不是列表的。</p>
 <ul>
-<li><p>要保证所有对象共享同一把锁。</p>
-</li>
-<li><p>用Thread创建多个线程时，需要对Lock对对象添加static</p>
-</li>
-<li><p>使用try-catch-finally</p>
+<li><p>pipelines.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define your item pipelines here</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Don&#x27;t forget to add your pipeline to the ITEM_PIPELINES setting</span></span><br><span class="line"><span class="comment"># See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html</span></span><br><span class="line"><span class="keyword">from</span> scrapy.pipelines.images <span class="keyword">import</span> ImagesPipeline</span><br><span class="line"><span class="keyword">import</span> scrapy</span><br></pre></td></tr></table></figure>
+
+<p>class BingPipeline(ImagesPipeline):</p>
+<pre><code># def process_item(self, item, spider):
+#     return item
+
+# 用来确定图片的文件名。
+def file_path(self, request, response=None, info=None):
+    # 由于标题过长，会分成自动分成两半，前面的部作为文件夹的名字，后面的部分作为图片的名字。
+    # 所以，我们有必要进行删除一些不必要的名字的部分，可以发现，这些标题基本是在后面有一个括号，我们可以删去
+    # 这些无关紧要的括号就行。
+    file_name = request.meta[&#39;meta&#39;][&#39;title&#39;].split(&quot;(&quot;)[0] + &quot;.png&quot;
+    return file_name
+
+def item_completed(self, results, item, info):
+    image_paths = [x[&#39;path&#39;] for ok, x in results if ok]
+    if not image_paths:
+        raise scrapy.DropItem(&#39;Image Download Failed&#39;)
+    return item
+
+def get_media_requests(self, item, info):
+    yield scrapy.Request(url=item[&#39;url&#39;], meta=&#123;&#39;meta&#39;: item&#125;)
+</code></pre>
 </li>
 </ul>
-<h3 id="多线程-死锁"><a href="#多线程-死锁" class="headerlink" title="多线程 死锁"></a>多线程 死锁</h3><ul>
-<li>注意安排好线程的先后，否则会卡死</li>
-</ul>
-<h3 id="多线程-线程池-多线程-29"><a href="#多线程-线程池-多线程-29" class="headerlink" title="多线程 线程池 多线程 29"></a>多线程 线程池 多线程 29</h3><ul>
-<li>线程池是线程的复用技术</li>
-<li>1、创建线程池。2、提交任务，池子会创建新的线程对象，任务执行完毕，线程归还给池子，下次提交任务时，不需要创建线程，只需要复用线程即可。3、池子中没有空闲线程时，也无法创建新的线程时，任务就排队等待。4、所有任务执行完毕时，会关闭线程池。</li>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">注意先导入ImagesPipeline，并且BingPipeline需要**继承**ImagesPipeline，这个是必须的。然后就是重写file_path()、item_completed()和get_media_requests()。其中file_path()就是确定图片的文件名，不过这个文件名需要处理下，因为这个得到的文件名过长。在item_completed()中，是用来确定当爬取图片失败后的返回警告信息。而get_media_requests()是用来处理spider传递过来的每个item。</span><br><span class="line"></span><br><span class="line">- settings.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">ROBOTSTXT_OBEY = False</span><br><span class="line"></span><br><span class="line">ROBOTSTXT_OBEY = &#123;</span><br><span class="line">   &#x27;Bing.pipelines.BingPipeline&#x27;: 300,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">IMAGES_STORE = &quot;./images&quot;</span><br></pre></td></tr></table></figure>
+
+<p>  需要对ROBOTSTXT_OBEY和ROBOTSTXT_OBEY去掉注释。然后添加IMAGES_STORE，作为保存的文件夹。</p>
+<h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>这些完整的代码见于 <a href="https://github.com/liuweixu/Python-crawler/tree/master/Scrapy/Bing%E7%BE%8E%E5%9B%BE/Bing">Github</a></p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li>《Python3 网络爬虫开发实战》崔庆才</li>
 </ul>
 ]]></content>
       <tags>
-        <tag>Java</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu18.04 主题美化（MaxOS主题）</title>
+    <url>/2019/09/10/Ubuntu18-04-%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%EF%BC%88MaxOS%E4%B8%BB%E9%A2%98%EF%BC%89/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<p>Ubuntu时可以进行主题的美化，可以改为MacOS主题。</p>
+<h3 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h3><p>要安装主题，首先要安装三个包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gnome-tweak-tool</span><br><span class="line">sudo apt install gnome-shell-extensions</span><br><span class="line">sudo apt install gnome-shell-extension-dashtodock</span><br></pre></td></tr></table></figure>
+
+<h3 id="Tweak修改（注意，下面这些已经经过主题美化了）"><a href="#Tweak修改（注意，下面这些已经经过主题美化了）" class="headerlink" title="Tweak修改（注意，下面这些已经经过主题美化了）"></a>Tweak修改（注意，下面这些已经经过主题美化了）</h3><ol>
+<li>经过安装三个包后，我们可以打开Tweaks</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles15.png" alt="1"></p>
+<p>像上面修改，我们可以发现本来在右上角的按钮放到了左上角了。</p>
+<ol start="2">
+<li><p>修改鼠标的指针的样式</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles16.png" alt="2"></p>
+<p>如图，我们可以通过修改cursor ,修改鼠标的箭头的样式。</p>
+</li>
+<li><p>去掉Shell的无法修改的感叹号</p>
+<p>Extensions -&gt; User themes 打开它</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles17.png" alt="3"></p>
+<p><strong>重启</strong>，然后可以发现那个感叹号不见了。</p>
+</li>
+<li><p>将侧边栏放到底部。</p>
+<p>Extensions -&gt; Dash to dock 点击settings图标，像下面的图，然后进一步修改。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles18.png" alt="4"></p>
+</li>
+</ol>
+<h3 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h3><h4 id="安装GTK主题"><a href="#安装GTK主题" class="headerlink" title="安装GTK主题"></a>安装GTK主题</h4><p><a href="https://www.pling.com/s/Gnome/p/1013714/">McHigh Sierra https://www.pling.com/s/Gnome/p/1013714/</a></p>
+<p><a href="https://www.pling.com/s/Gnome/p/1013741/">McSierra Compact https://www.pling.com/s/Gnome/p/1013741/</a></p>
+<p>在第一个链接中。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles19.png" alt="5"></p>
+<p>下载这个，到桌面或其他比较便于管理的位置。</p>
+<p>然后再这个位置打开terminal</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar xvf Sierra-light.tar.xz</span><br></pre></td></tr></table></figure>
+
+<p>得到解压后的文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mv Sierra-light /usr/share/themes</span><br></pre></td></tr></table></figure>
+
+<p>最后在Tweaks中</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles20.png" alt="6"></p>
+<p>在applications中修改为Sierra-light，我们可以发现GTK主题改变了。</p>
+<h4 id="安装shell主题"><a href="#安装shell主题" class="headerlink" title="安装shell主题"></a>安装shell主题</h4><p>其实，shell主题和GTK主题一样，也可以在shell中修改为Sierra-light 也可以。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles21.png" alt="7"></p>
+<p>也可以安装其他主题，比如Sierra-compact-light主题等等。可以在<strong><a href="https://www.pling.com/s/Gnome/">https://www.pling.com/s/Gnome/</a></strong> 中寻找。</p>
+<h4 id="安装icons主题"><a href="#安装icons主题" class="headerlink" title="安装icons主题"></a>安装icons主题</h4><p>我选的是MacOS11主题，不过由于这个主题比较大，下载费时，所以下面给出了百度云链接：</p>
+<p> 链接：<a href="https://pan.baidu.com/s/1tVP9dghyHvNwq4kMNtyu5g">百度网盘 请输入提取码</a><br>提取码：f34j</p>
+<p>然后放到某一位置，解压，并把解压后得到的文件夹移动到&#x2F;usr&#x2F;share&#x2F;icons</p>
+<p>最后打开Tweaks，在Appearance 中打开icon，选MacOS11就行。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles22.png" alt="8"></p>
+<h4 id="安装GDM主题（登陆界面主题）"><a href="#安装GDM主题（登陆界面主题）" class="headerlink" title="安装GDM主题（登陆界面主题）"></a>安装GDM主题（登陆界面主题）</h4><p>百度云链接：<a href="https://pan.baidu.com/s/1f-PPWVILeovdIWmvQjXkVw">百度网盘 请输入提取码</a> <br>提取码：yetv </p>
+<p>来源：<a href="https://www.pling.com/s/Gnome/p/1207015/">High Ubunterra - Gnome-look.org</a></p>
+<p>把下载得到的文件解压，得到文件夹，文件夹的内容：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles23.png" alt="9"></p>
+<p>备份&#x2F;usr&#x2F;share&#x2F;gnome-shell&#x2F;theme&#x2F;ubuntu.css</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp /usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css.backup</span><br></pre></td></tr></table></figure>
+
+<p>用上图中的ubuntu.css替换掉系统自带的&#x2F;usr&#x2F;share&#x2F;gnome-shell&#x2F;theme&#x2F;ubuntu.css</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp -i ~/Desktop/liu/setaswallpaper/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css</span><br></pre></td></tr></table></figure>
+
+<p>（上面的注意位置别写错）</p>
+<p>把SetAsWallpaper脚本文件复制到~&#x2F;.local&#x2F;share&#x2F;nautilus&#x2F;scripts&#x2F;目录下，然后修改下权限（如果需要）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp ~/Desktop/liu/setaswallpaper/SetAsWallpaper ~/.local/share/nautilus/scripts/</span><br><span class="line">sudo chmod +x SetAsWallpaper</span><br></pre></td></tr></table></figure>
+
+<p>然后重启nautilus（下面的命令是关闭）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nautilus -q</span><br></pre></td></tr></table></figure>
+
+<p>执行如下命令，修改下 &#x2F;usr&#x2F;share&#x2F;backgrounds 的权限.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod 777 /usr/share/backgrounds/</span><br></pre></td></tr></table></figure>
+
+<p>去~&#x2F;.local&#x2F;share&#x2F;nautilus&#x2F;scripts&#x2F; 目录下执行下SetAsWallpaper脚本。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ./SetAsWallpape</span><br></pre></td></tr></table></figure>
+
+<p><strong>重启系统</strong>（这个必须的）</p>
+<p>不过此时壁纸应该会没了，可以重新设置，另外，最好先设置自己喜欢的壁纸，这样的话得到的登陆界面的模糊界面可以是基于自己选的壁纸了。</p>
+<p>效果图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles24.png" alt="10"></p>
+<h3 id="其他主题的一些修改"><a href="#其他主题的一些修改" class="headerlink" title="其他主题的一些修改"></a>其他主题的一些修改</h3><h4 id="桌面壁纸和锁屏界面壁纸修改"><a href="#桌面壁纸和锁屏界面壁纸修改" class="headerlink" title="桌面壁纸和锁屏界面壁纸修改"></a>桌面壁纸和锁屏界面壁纸修改</h4><p>在桌面右键点击，点Change background。可以修改壁纸，当然，我们也可以从网上下载自己喜欢的壁纸，存到~&#x2F;Pictures就行。</p>
+<h4 id="头像的修改"><a href="#头像的修改" class="headerlink" title="头像的修改"></a>头像的修改</h4><p>在Settings中，Details -&gt; Users 点击头像，可以选择自己喜欢的图作为自己的头像。</p>
+<h3 id="最终成色"><a href="#最终成色" class="headerlink" title="最终成色"></a>最终成色</h3><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles25.png" alt="11"></p>
+<p><img src="https://ws4.sinaimg.cn/large/006QU0Psly1g67jolkk33j31gy0nsdm7.jpg" alt="12"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles26.png" alt="13"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles27.png" alt="14"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles28.png" alt="15"></p>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ul>
+<li><a href="https://www.cnblogs.com/feipeng8848/p/8970556.html">给Ubuntu18.04(18.10)安装mac os主题</a></li>
+<li>[<a href="https://www.pling.com/s/Gnome/">Gnome-look.org</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -591,211 +647,105 @@
       </tags>
   </entry>
   <entry>
-    <title>Scrapy爬取Bing美图</title>
-    <url>/2021/07/10/Scrapy%E7%88%AC%E5%8F%96Bing%E7%BE%8E%E5%9B%BE/</url>
-    <content><![CDATA[<span id="more"></span>
+    <title>Java基础复习简要总结（黑马视频）</title>
+    <url>/2022/08/07/Java%E5%9F%BA%E7%A1%80%E5%A4%8D%E4%B9%A0%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>为了打好基础，我跟着Java黑马教程学习一段时间，现在将Java基础与面对对象知识进行总结并标记重要地方（主要对自己不太了解的知识总结）</p>
+<p>视频来源：<a href="https://www.bilibili.com/video/BV17F411T7Ao/?spm_id_from=333.337.search-card.all.click">黑马程序员Java零基础视频教程_上部(Java入门，含斯坦福大学练习题+力扣算法题和大厂java面试题）_哔哩哔哩_bilibili</a></p>
+<h3 id="面向对象-就近原则和this关键字、构造方法"><a href="#面向对象-就近原则和this关键字、构造方法" class="headerlink" title="面向对象-就近原则和this关键字、构造方法"></a>面向对象-就近原则和this关键字、构造方法</h3><ul>
+<li><p>this表示当前对象的地址</p>
+<ul>
+<li><p>this可以区分成员变量和局部变量</p>
+</li>
+<li><p>this 本质 代表方法调用者的地址值，Car c &#x3D; new Car()上，c和this的地址值是一样的，所以指代的也一样。</p>
+</li>
+</ul>
+</li>
+<li><p>就近原则 指的是谁离我近，就用谁</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"><span class="keyword">void</span> <span class="title function_">show1</span><span class="params">(age)</span>&#123;</span><br><span class="line">    age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>这个是Image Pipeline 练习</p>
-<h4 id="确定爬取的目标"><a href="#确定爬取的目标" class="headerlink" title="确定爬取的目标"></a>确定爬取的目标</h4><p>我们要爬取的是Bing美图，<a href="http://bing.plmeizi.com/">Bing今日美图</a>，我们可以发现，这个网页没有ajax加载，有页面，其中URL里面只有页码不同，可以考虑先爬取页面的信息，然后在每个页面爬取每个图片的链接赋值给item。</p>
-<h4 id="开始编写代码"><a href="#开始编写代码" class="headerlink" title="开始编写代码"></a>开始编写代码</h4><ul>
-<li><p>创建item</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define here the models for your scraped items</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># See documentation in:</span></span><br><span class="line"><span class="comment"># https://docs.scrapy.org/en/latest/topics/items.html</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scrapy</span><br></pre></td></tr></table></figure>
+<p>根据就近原则，左边的age算是局部变量，age&#x3D;null，所以返回null</p>
+</li>
+<li><p>构造方法的作用：</p>
+<ul>
+<li><p>给成员变量进行初始化，返回其地址</p>
+</li>
+<li><p>Car c &#x3D; new Car() c保存的是地址。（看面向对象-07的对象内存图）</p>
+</li>
+</ul>
+</li>
+<li><p>标准的JavaBean类（只是一个有特定要求的类而已，类似的有工具类）</p>
+<ul>
+<li><p>类名需要见名知意</p>
+</li>
+<li><p>成员变量至少需要用private修饰</p>
+</li>
+<li><p>提供至少2个构造方法，比如无参构造和带全部参数的构造</p>
+</li>
+<li><p>成员方法：提供每一个成员变量所提供的setXxxx()和getXxxx()，如果还其他行为，一并写上。</p>
+</li>
+<li><p>在IDEA上，可以邮件 有PTG to javabean。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="面向对象-07-三种情况的对象内存图【重要-看视频-面试】需要看JVM"><a href="#面向对象-07-三种情况的对象内存图【重要-看视频-面试】需要看JVM" class="headerlink" title="面向对象-07 三种情况的对象内存图【重要 看视频 面试】需要看JVM"></a>面向对象-07 三种情况的对象内存图【重要 看视频 面试】需要看JVM</h3><h3 id="面向对象-09-this的内存原理【看视频】"><a href="#面向对象-09-this的内存原理【看视频】" class="headerlink" title="面向对象-09 this的内存原理【看视频】"></a>面向对象-09 this的内存原理【看视频】</h3><h3 id="面向对象进阶-03-static的注意事项，-02也可以看看一下"><a href="#面向对象进阶-03-static的注意事项，-02也可以看看一下" class="headerlink" title="面向对象进阶-03 static的注意事项， 02也可以看看一下"></a>面向对象进阶-03 static的注意事项， 02也可以看看一下</h3><ul>
+<li><p>总结</p>
+<ul>
+<li><p>静态方法没有this</p>
+</li>
+<li><p>静态方法只能访问静态，因为静态随类加载而加载，此时对象可能未加载，所以没法访问</p>
+</li>
+<li><p>非静态方法可以访问任意</p>
+</li>
+<li><p><em>静态属于类，不属于对象</em></p>
+</li>
+</ul>
+</li>
+<li><p>非静态方法有一个隐藏的this</p>
+<ul>
+<li><pre><code class="java">void show1(Student this)&#123;
 
-<p>class BingItem(scrapy.Item):</p>
-<pre><code># define the fields for your item here like:
-# name = scrapy.Field()
-# 图片标题
-title = scrapy.Field()
-# 图片链接
-url = scrapy.Field()
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 多线程 同步代码块 多线程 08</span><br><span class="line"></span><br><span class="line">- 把操作共享数据（比如用static定义的变量等）的代码锁起来。</span><br><span class="line"></span><br><span class="line">- static定义的变量和方法可以被所有对象共享。</span><br><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  synchronized(锁对象)&#123;</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 </code></pre>
 </li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">建立图片的标题和链接作为“键”。</span><br><span class="line"></span><br><span class="line">- spiders/bing_images.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">import scrapy</span><br><span class="line">from Bing.items import BingItem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class BingImagesSpider(scrapy.Spider):</span><br><span class="line">    name = &#x27;bing_images&#x27;</span><br><span class="line">    allowed_domains = [&#x27;bing.plmeizi.com&#x27;]</span><br><span class="line">    start_urls = [&#x27;http://bing.plmeizi.com/&#x27;]</span><br><span class="line"></span><br><span class="line">    def parse(self, response):</span><br><span class="line">        base_url = &quot;http://bing.plmeizi.com/?page=&quot;</span><br><span class="line">        for page in range(1, 129):</span><br><span class="line">            url = base_url + str(page)</span><br><span class="line">            yield scrapy.Request(url, callback=self.parse)</span><br><span class="line">        # 这个有必要进行循环，因为在pipeline.py 中scrapy.Request()里面的url是需要url的，而不是一个列表的。</span><br><span class="line">        for image in response.css(&quot;.clearfix .item&quot;):</span><br><span class="line">            item = BingItem()</span><br><span class="line">            item[&#x27;url&#x27;] = image.css(&quot;div img::attr(src)&quot;).extract_first()</span><br><span class="line">            item[&#x27;title&#x27;] = image.css(&quot;p::text&quot;).extract_first()</span><br><span class="line">            yield item</span><br></pre></td></tr></table></figure>
-
-<p>  这个代码中，我们先循环获取1到128页的页面的源代码，回调到parse()中，然后用response.css()获取每个页面的的图片的链接和标题。注意，这个也需要循环，因为接下来的pipeline.py中的scrapyRequest()里面的URL是一个一个的，不是列表的。</p>
+<p>最好在循坏内，否则会成单线程 具体见多线程-08</p>
+<p>看PPT的总结</p>
 <ul>
-<li><p>pipelines.py</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define your item pipelines here</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Don&#x27;t forget to add your pipeline to the ITEM_PIPELINES setting</span></span><br><span class="line"><span class="comment"># See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html</span></span><br><span class="line"><span class="keyword">from</span> scrapy.pipelines.images <span class="keyword">import</span> ImagesPipeline</span><br><span class="line"><span class="keyword">import</span> scrapy</span><br></pre></td></tr></table></figure>
-
-<p>class BingPipeline(ImagesPipeline):</p>
-<pre><code># def process_item(self, item, spider):
-#     return item
-
-# 用来确定图片的文件名。
-def file_path(self, request, response=None, info=None):
-    # 由于标题过长，会分成自动分成两半，前面的部作为文件夹的名字，后面的部分作为图片的名字。
-    # 所以，我们有必要进行删除一些不必要的名字的部分，可以发现，这些标题基本是在后面有一个括号，我们可以删去
-    # 这些无关紧要的括号就行。
-    file_name = request.meta[&#39;meta&#39;][&#39;title&#39;].split(&quot;(&quot;)[0] + &quot;.png&quot;
-    return file_name
-
-def item_completed(self, results, item, info):
-    image_paths = [x[&#39;path&#39;] for ok, x in results if ok]
-    if not image_paths:
-        raise scrapy.DropItem(&#39;Image Download Failed&#39;)
-    return item
-
-def get_media_requests(self, item, info):
-    yield scrapy.Request(url=item[&#39;url&#39;], meta=&#123;&#39;meta&#39;: item&#125;)
-</code></pre>
+<li><p>对于实例方法建议使用this作为锁对象。</p>
+</li>
+<li><p>对于静态方法建议使用字节码（类名.class）对象作为锁对象。</p>
 </li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">注意先导入ImagesPipeline，并且BingPipeline需要**继承**ImagesPipeline，这个是必须的。然后就是重写file_path()、item_completed()和get_media_requests()。其中file_path()就是确定图片的文件名，不过这个文件名需要处理下，因为这个得到的文件名过长。在item_completed()中，是用来确定当爬取图片失败后的返回警告信息。而get_media_requests()是用来处理spider传递过来的每个item。</span><br><span class="line"></span><br><span class="line">- settings.py</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">ROBOTSTXT_OBEY = False</span><br><span class="line"></span><br><span class="line">ROBOTSTXT_OBEY = &#123;</span><br><span class="line">   &#x27;Bing.pipelines.BingPipeline&#x27;: 300,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">IMAGES_STORE = &quot;./images&quot;</span><br></pre></td></tr></table></figure>
-
-<p>  需要对ROBOTSTXT_OBEY和ROBOTSTXT_OBEY去掉注释。然后添加IMAGES_STORE，作为保存的文件夹。</p>
-<h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>这些完整的代码见于 <a href="https://github.com/liuweixu/Python-crawler/tree/master/Scrapy/Bing%E7%BE%8E%E5%9B%BE/Bing">Github</a></p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
-<li>《Python3 网络爬虫开发实战》崔庆才</li>
+</li>
 </ul>
-]]></content>
-      <tags>
-        <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu18.04 主题美化（MaxOS主题）</title>
-    <url>/2019/09/10/Ubuntu18-04-%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%EF%BC%88MaxOS%E4%B8%BB%E9%A2%98%EF%BC%89/</url>
-    <content><![CDATA[<span id="more"></span>
-
-<p>Ubuntu时可以进行主题的美化，可以改为MacOS主题。</p>
-<h3 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h3><p>要安装主题，首先要安装三个包</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gnome-tweak-tool</span><br><span class="line">sudo apt install gnome-shell-extensions</span><br><span class="line">sudo apt install gnome-shell-extension-dashtodock</span><br></pre></td></tr></table></figure>
-
-<h3 id="Tweak修改（注意，下面这些已经经过主题美化了）"><a href="#Tweak修改（注意，下面这些已经经过主题美化了）" class="headerlink" title="Tweak修改（注意，下面这些已经经过主题美化了）"></a>Tweak修改（注意，下面这些已经经过主题美化了）</h3><ol>
-<li>经过安装三个包后，我们可以打开Tweaks</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles15.png" alt="1"></p>
-<p>像上面修改，我们可以发现本来在右上角的按钮放到了左上角了。</p>
-<ol start="2">
-<li><p>修改鼠标的指针的样式</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles16.png" alt="2"></p>
-<p>如图，我们可以通过修改cursor ,修改鼠标的箭头的样式。</p>
+<h3 id="多线程-同步方法"><a href="#多线程-同步方法" class="headerlink" title="多线程 同步方法"></a>多线程 同步方法</h3><ul>
+<li><p>就是把synchronized关键字加到方法上。</p>
 </li>
-<li><p>去掉Shell的无法修改的感叹号</p>
-<p>Extensions -&gt; User themes 打开它</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles17.png" alt="3"></p>
-<p><strong>重启</strong>，然后可以发现那个感叹号不见了。</p>
+<li><p>用Runnable创建进程对象时，因为只构建一个对象，所以成员变量不需要添加static作为共享变量。</p>
 </li>
-<li><p>将侧边栏放到底部。</p>
-<p>Extensions -&gt; Dash to dock 点击settings图标，像下面的图，然后进一步修改。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles18.png" alt="4"></p>
-</li>
-</ol>
-<h3 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h3><h4 id="安装GTK主题"><a href="#安装GTK主题" class="headerlink" title="安装GTK主题"></a>安装GTK主题</h4><p><a href="https://www.pling.com/s/Gnome/p/1013714/">McHigh Sierra https://www.pling.com/s/Gnome/p/1013714/</a></p>
-<p><a href="https://www.pling.com/s/Gnome/p/1013741/">McSierra Compact https://www.pling.com/s/Gnome/p/1013741/</a></p>
-<p>在第一个链接中。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles19.png" alt="5"></p>
-<p>下载这个，到桌面或其他比较便于管理的位置。</p>
-<p>然后再这个位置打开terminal</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar xvf Sierra-light.tar.xz</span><br></pre></td></tr></table></figure>
-
-<p>得到解压后的文件。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mv Sierra-light /usr/share/themes</span><br></pre></td></tr></table></figure>
-
-<p>最后在Tweaks中</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles20.png" alt="6"></p>
-<p>在applications中修改为Sierra-light，我们可以发现GTK主题改变了。</p>
-<h4 id="安装shell主题"><a href="#安装shell主题" class="headerlink" title="安装shell主题"></a>安装shell主题</h4><p>其实，shell主题和GTK主题一样，也可以在shell中修改为Sierra-light 也可以。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles21.png" alt="7"></p>
-<p>也可以安装其他主题，比如Sierra-compact-light主题等等。可以在<strong><a href="https://www.pling.com/s/Gnome/">https://www.pling.com/s/Gnome/</a></strong> 中寻找。</p>
-<h4 id="安装icons主题"><a href="#安装icons主题" class="headerlink" title="安装icons主题"></a>安装icons主题</h4><p>我选的是MacOS11主题，不过由于这个主题比较大，下载费时，所以下面给出了百度云链接：</p>
-<p> 链接：<a href="https://pan.baidu.com/s/1tVP9dghyHvNwq4kMNtyu5g">百度网盘 请输入提取码</a><br>提取码：f34j</p>
-<p>然后放到某一位置，解压，并把解压后得到的文件夹移动到&#x2F;usr&#x2F;share&#x2F;icons</p>
-<p>最后打开Tweaks，在Appearance 中打开icon，选MacOS11就行。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles22.png" alt="8"></p>
-<h4 id="安装GDM主题（登陆界面主题）"><a href="#安装GDM主题（登陆界面主题）" class="headerlink" title="安装GDM主题（登陆界面主题）"></a>安装GDM主题（登陆界面主题）</h4><p>百度云链接：<a href="https://pan.baidu.com/s/1f-PPWVILeovdIWmvQjXkVw">百度网盘 请输入提取码</a> <br>提取码：yetv </p>
-<p>来源：<a href="https://www.pling.com/s/Gnome/p/1207015/">High Ubunterra - Gnome-look.org</a></p>
-<p>把下载得到的文件解压，得到文件夹，文件夹的内容：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles23.png" alt="9"></p>
-<p>备份&#x2F;usr&#x2F;share&#x2F;gnome-shell&#x2F;theme&#x2F;ubuntu.css</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp /usr/share/gnome-shell/theme/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css.backup</span><br></pre></td></tr></table></figure>
-
-<p>用上图中的ubuntu.css替换掉系统自带的&#x2F;usr&#x2F;share&#x2F;gnome-shell&#x2F;theme&#x2F;ubuntu.css</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp -i ~/Desktop/liu/setaswallpaper/ubuntu.css /usr/share/gnome-shell/theme/ubuntu.css</span><br></pre></td></tr></table></figure>
-
-<p>（上面的注意位置别写错）</p>
-<p>把SetAsWallpaper脚本文件复制到~&#x2F;.local&#x2F;share&#x2F;nautilus&#x2F;scripts&#x2F;目录下，然后修改下权限（如果需要）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cp ~/Desktop/liu/setaswallpaper/SetAsWallpaper ~/.local/share/nautilus/scripts/</span><br><span class="line">sudo chmod +x SetAsWallpaper</span><br></pre></td></tr></table></figure>
-
-<p>然后重启nautilus（下面的命令是关闭）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nautilus -q</span><br></pre></td></tr></table></figure>
-
-<p>执行如下命令，修改下 &#x2F;usr&#x2F;share&#x2F;backgrounds 的权限.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo chmod 777 /usr/share/backgrounds/</span><br></pre></td></tr></table></figure>
-
-<p>去~&#x2F;.local&#x2F;share&#x2F;nautilus&#x2F;scripts&#x2F; 目录下执行下SetAsWallpaper脚本。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ./SetAsWallpape</span><br></pre></td></tr></table></figure>
-
-<p><strong>重启系统</strong>（这个必须的）</p>
-<p>不过此时壁纸应该会没了，可以重新设置，另外，最好先设置自己喜欢的壁纸，这样的话得到的登陆界面的模糊界面可以是基于自己选的壁纸了。</p>
-<p>效果图</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles24.png" alt="10"></p>
-<h3 id="其他主题的一些修改"><a href="#其他主题的一些修改" class="headerlink" title="其他主题的一些修改"></a>其他主题的一些修改</h3><h4 id="桌面壁纸和锁屏界面壁纸修改"><a href="#桌面壁纸和锁屏界面壁纸修改" class="headerlink" title="桌面壁纸和锁屏界面壁纸修改"></a>桌面壁纸和锁屏界面壁纸修改</h4><p>在桌面右键点击，点Change background。可以修改壁纸，当然，我们也可以从网上下载自己喜欢的壁纸，存到~&#x2F;Pictures就行。</p>
-<h4 id="头像的修改"><a href="#头像的修改" class="headerlink" title="头像的修改"></a>头像的修改</h4><p>在Settings中，Details -&gt; Users 点击头像，可以选择自己喜欢的图作为自己的头像。</p>
-<h3 id="最终成色"><a href="#最终成色" class="headerlink" title="最终成色"></a>最终成色</h3><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles25.png" alt="11"></p>
-<p><img src="https://ws4.sinaimg.cn/large/006QU0Psly1g67jolkk33j31gy0nsdm7.jpg" alt="12"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles26.png" alt="13"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles27.png" alt="14"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles28.png" alt="15"></p>
-<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ul>
-<li><a href="https://www.cnblogs.com/feipeng8848/p/8970556.html">给Ubuntu18.04(18.10)安装mac os主题</a></li>
-<li>[<a href="https://www.pling.com/s/Gnome/">Gnome-look.org</a></li>
 </ul>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>(brute force, implementation)A. Fafa and his Company</title>
-    <url>/2020/09/06/brute-force-implementation-A-Fafa-and-his-Company/</url>
-    <content><![CDATA[<p>水题</p>
-<span id="more"></span>
+<h3 id="多线程-Lock锁"><a href="#多线程-Lock锁" class="headerlink" title="多线程 Lock锁"></a>多线程 Lock锁</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">lock.lock()</span><br><span class="line">lock.unlock()</span><br></pre></td></tr></table></figure>
 
-<p>题目链接：<a href="http://codeforces.com/problemset/problem/935/A">935A - Fafa and his Company</a></p>
-<h4 id="A-Fafa-and-his-Company"><a href="#A-Fafa-and-his-Company" class="headerlink" title="A. Fafa and his Company"></a>A. Fafa and his Company</h4><p>Fafa owns a company that works on huge projects. There are <em>n</em> employees in Fafa’s company. Whenever the company has a new project to start working on, Fafa has to divide the tasks of this project among all the employees.</p>
-<p>Fafa finds doing this every time is very tiring for him. So, he decided to choose the best <em>l</em> employees in his company as team leaders. Whenever there is a new project, Fafa will divide the tasks among only the team leaders and each team leader will be responsible of some positive number of employees to give them the tasks. To make this process fair for the team leaders, each one of them should be responsible for the same number of employees. Moreover, every employee, who is not a team leader, has to be under the responsibility of exactly one team leader, and no team leader is responsible for another team leader.</p>
-<p>Given the number of employees <em>n</em>, <strong>find in how many ways</strong> Fafa could choose the number of team leaders <em>l</em> in such a way that it is possible to divide employees between them evenly.</p>
-<p>Input</p>
-<p>The input consists of a single line containing a positive integer <em>n</em> (2 ≤ <em>n</em> ≤ 105) — the number of employees in Fafa’s company.</p>
-<p>Output</p>
-<p>Print a single integer representing the answer to the problem.</p>
-<p>Examples</p>
-<p>input</p>
-<p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
-
-<p>复制</p>
-<p>output</p>
-<p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
-
-<p>input</p>
-<p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure>
-
-<p>output</p>
-<p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure>
-
-<p>Note</p>
-<p>In the second sample Fafa has 3 ways:</p>
 <ul>
-<li>choose only 1 employee as a team leader with 9 employees under his responsibility.</li>
-<li>choose 2 employees as team leaders with 4 employees under the responsibility of each of them.</li>
-<li>choose 5 employees as team leaders with 1 employee under the responsibility of each of them.</li>
+<li><p>要保证所有对象共享同一把锁。</p>
+</li>
+<li><p>用Thread创建多个线程时，需要对Lock对对象添加static</p>
+</li>
+<li><p>使用try-catch-finally</p>
+</li>
 </ul>
-<p>这个是一个基础的题，注意题目中的 <strong>“find in how many ways”</strong> ，可以看出，这个是求分配的方案的总数，这个分配必须保证每个领导带领的人是一样的。因此可以采取模拟。</p>
-<p>Python代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">sum = 0</span><br><span class="line">i = 1</span><br><span class="line">while i &lt;= n // 2:</span><br><span class="line">    if (n - i) % i == 0:</span><br><span class="line">        sum += 1</span><br><span class="line">    i += 1</span><br><span class="line">print(sum)</span><br></pre></td></tr></table></figure>
-
-<p>C++代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">    int n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    int sum = 0;</span><br><span class="line">    int i = 1;</span><br><span class="line">    while (i &lt;= n / 2) &#123;</span><br><span class="line">        if ((n - i) % i == 0) &#123;</span><br><span class="line">            sum++;</span><br><span class="line">        &#125;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; sum &lt;&lt; endl;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="多线程-死锁"><a href="#多线程-死锁" class="headerlink" title="多线程 死锁"></a>多线程 死锁</h3><ul>
+<li>注意安排好线程的先后，否则会卡死</li>
+</ul>
+<h3 id="多线程-线程池-多线程-29"><a href="#多线程-线程池-多线程-29" class="headerlink" title="多线程 线程池 多线程 29"></a>多线程 线程池 多线程 29</h3><ul>
+<li>线程池是线程的复用技术</li>
+<li>1、创建线程池。2、提交任务，池子会创建新的线程对象，任务执行完毕，线程归还给池子，下次提交任务时，不需要创建线程，只需要复用线程即可。3、池子中没有空闲线程时，也无法创建新的线程时，任务就排队等待。4、所有任务执行完毕时，会关闭线程池。</li>
+</ul>
 ]]></content>
       <tags>
-        <tag>刷题：</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -852,82 +802,6 @@ def get_media_requests(self, item, info):
 ]]></content>
       <tags>
         <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>二分查找的记录</title>
-    <url>/2023/09/14/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E7%9A%84%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h4 id="二分查找程序"><a href="#二分查找程序" class="headerlink" title="二分查找程序"></a>二分查找程序</h4><p>在二分查找上，根据区间的确定，主要有二种不同的写法：左闭右闭，左闭右开。</p>
-<p>在左闭右闭上，需要在 while 循环内满足 $left \leq right$，并且在 right 要为$middle-1$。</p>
-<p>而在左闭右开上，则是需要在 while 循环内满足 $left &lt; right$，并且在 right 要为 $middle$。</p>
-<p>以左闭右闭为例，程序有:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">binarysearch</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>, right = a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">candidate</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(a[middle] &gt; target)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(a[middle] &lt; target)&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> middle;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">13</span>&#125;;</span><br><span class="line">        System.out.println(binarysearch(a, <span class="number">10</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二分查找的最大查找次数"><a href="#二分查找的最大查找次数" class="headerlink" title="二分查找的最大查找次数"></a>二分查找的最大查找次数</h4><p>在上述程序进行修改，就可以得到计算查找次数的程序，如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">binarysearch</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>, right = a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">candidate</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            res++;</span><br><span class="line">            <span class="keyword">if</span>(a[middle] &gt; target)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(a[middle] &lt; target)&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                candidate = middle;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">13</span>&#125;;</span><br><span class="line">        System.out.println(binarysearch(a, <span class="number">15</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出的结果是 4 ，也就是说，如果查找不到元素时，最大的查找次数就是 4，而如果数组长度为 7，相应的最大查找次数是 3，这个是有相应的公式：</p>
-<p>$$<br>res &#x3D; \lfloor log_2(N) \rfloor +1<br>$$</p>
-<p> 其中$N$ 为数组的长度。</p>
-<h4 id="二分查找时的最左和最右元素"><a href="#二分查找时的最左和最右元素" class="headerlink" title="二分查找时的最左和最右元素"></a>二分查找时的最左和最右元素</h4><p>问题：<a href="https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/">34. 在排序数组中查找元素的第一个和最后一个位置 - 力扣（LeetCode）</a></p>
-<p>需要在一个有序数组上，查找某个元素的第一个和最后一个位置，也可以在上述的程序的基础上，加以修改得到的，关键是如果 $left &#x3D;&#x3D; right$ 时，针对 $middle$ 加一或减一，从而让指针向右移动或向左移动，得到目标元素的最后一个位置或第一个位置。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">leftBorder</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>, right = nums.length - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">candidate</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[middle] &lt; target)&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[middle] &gt; target)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                candidate = middle;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> candidate;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">rightBorder</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>, right = nums.length - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">candidate</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[middle] &lt; target)&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[middle] &gt; target)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                candidate = middle;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> candidate;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] searchRange(<span class="type">int</span>[] nums, <span class="type">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;leftBorder(nums, target), rightBorder(nums, target)&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>数据结构</tag>
-        <tag>二分</tag>
-        <tag>刷题</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用VMware虚拟机安装Ubuntu18.04</title>
-    <url>/2019/09/06/%E4%BD%BF%E7%94%A8VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Ubuntu18-04/</url>
-    <content><![CDATA[<p>这个是利用VMware虚拟机安装Ubuntu的。由于我的笔记本电脑的硬盘有点问题，所以利用USB安装Ubuntu时，却经常扫描不到硬盘，所以最后放弃安装双系统。改为利用虚拟机了。</p>
-<p>VMware 的百度云链接：<a href="https://pan.baidu.com/s/1QV60f1wv6OVOm9wJ1a0dKw">百度网盘 请输入提取码</a><br>提取码：sr62 </p>
-<p>Ubuntu 的百度云链接：<a href="https://pan.baidu.com/s/1L3NWXms7TSXGV2X_mORMKg">百度网盘 请输入提取码</a></p>
-<p>提取码：hbz4 </p>
-<h3 id="VMware-的安装"><a href="#VMware-的安装" class="headerlink" title="VMware 的安装"></a>VMware 的安装</h3><p>我们可以在上面给出的链接进行下载。这个链接长期有效。然后根据提示一步一步安装，最后根据给出的密钥进行注册。</p>
-<h3 id="Ubuntu18-04下载"><a href="#Ubuntu18-04下载" class="headerlink" title="Ubuntu18.04下载"></a>Ubuntu18.04下载</h3><p>这个要注意！！！，必须从官网进行下载，这个必须的，因为如果不是从官网下载的话，安装过程可能会出错的。推荐下载Ubuntu Desktop 18.04 LTS。当然，如果嫌慢的话，也可以从我给的链接下载（如果你有超级会员或其他破解工具的话），这个是从官网亲自下载的，保证正确。</p>
-<h3 id="虚拟机的配置"><a href="#虚拟机的配置" class="headerlink" title="虚拟机的配置"></a>虚拟机的配置</h3><ol>
-<li><p>打开虚拟机，点击创建虚拟机，然后得到如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles01.png" alt="1"></p>
-<p>可以直接点下一步。</p>
-</li>
-<li><p>然后得到下面的图，像这样。再点下一步。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles02.png" alt="2"></p>
-</li>
-<li><p>既然是要安装Ubuntu，用Ubuntu64就行。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles03.png" alt="3"></p>
-</li>
-<li><p>下面自己设置就行</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles04.png" alt="4"></p>
-</li>
-<li><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles05.png" alt="5"></p>
-<p>​ 这个步骤，磁盘大小最好至少20GB，当然，设置更大就更好了，对了，起初是占用不多，才几GB，然后往里面添加一些文件才会变大。</p>
-</li>
-<li><p>接下来就是继续点下一步，直至完成。然后还要点击编辑虚拟机设置。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles06.png" alt="6"></p>
-<p>​ 最后在下面的图中：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles07.png" alt="7"></p>
-</li>
-</ol>
-<p>用这个，浏览Ubuntu镜像保存的位置。最后点击确定。</p>
-<h3 id="Ubuntu安装"><a href="#Ubuntu安装" class="headerlink" title="Ubuntu安装"></a>Ubuntu安装</h3><p>最后，VMware虚拟机配置好了，接下来就是点击开启此虚拟机，开始安装。安装步骤不难（和那个让我头大的生双系统安装相比太简单了，几乎是傻瓜式的）：（先不放图了）</p>
-<ol>
-<li>点击“Install Ubuntu”（我觉得最好用English比较好，因为用中文可能会有一些bug。。。用English权当练习英语吧）</li>
-<li>点continue,并且在‘Update and other software’ 中划上 ‘minimal installation’ （会省下一些时间）, 也划上 ‘Download updates while installation’ ,再点continue。</li>
-<li>在Installation Type选默认就行。弹出的提示也点继续就行，（注意！！！！，在安装双系统时，这个不能点，要点最下边的那个，方便分区）</li>
-<li>在Where Are You?点击中国，接下来就是填写个人信息，注意密码不能忘了，切记。</li>
-<li>最后就是点击安装了，我这个渣渣的校园网安装这个花了半小时左右。</li>
-<li>安装完毕后，点击restart now,重启虚拟机，当然，有可能会碰上重启时卡了，还一闪一闪的，可以直接打开windows进程，杀死VMware进程，然后进入VMware，点打开虚拟机，启动就行。</li>
-</ol>
-<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ol>
-<li><strong><a href="https://zhuanlan.zhihu.com/p/41940739">良许LInux-知乎-手把手教你安装Linux虚拟机</a></strong></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -1019,68 +893,110 @@ def parse_page(self, response):
       </tags>
   </entry>
   <entry>
-    <title>(图论) A. Love Triangle</title>
-    <url>/2022/10/06/%E5%9B%BE%E8%AE%BA-A-Love-Triangle/</url>
-    <content><![CDATA[<p>这个其实是一个很基础的图论题。</p>
+    <title>(brute force, implementation)A. Fafa and his Company</title>
+    <url>/2020/09/06/brute-force-implementation-A-Fafa-and-his-Company/</url>
+    <content><![CDATA[<p>水题</p>
 <span id="more"></span>
 
-<p>题目链接：<a href="http://codeforces.com/problemset/problem/939/A">Problem - 939A - Codeforces</a></p>
-<h4 id="A-Love-Triangle"><a href="#A-Love-Triangle" class="headerlink" title="A. Love Triangle"></a>A. Love Triangle</h4><p>As you could know there are no male planes nor female planes. However, each plane on Earth likes some other plane. There are <em>n</em> planes on Earth, numbered from 1 to <em>n</em>, and the plane with number <em>i</em> likes the plane with number <em>f**i</em>, where 1 ≤ <em>f**i</em> ≤ <em>n</em> and <em>f**i</em> ≠ <em>i</em>.</p>
-<p>We call a love triangle a situation in which plane <em>A</em> likes plane <em>B</em>, plane <em>B</em> likes plane <em>C</em> and plane <em>C</em> likes plane <em>A</em>. Find out if there is any love triangle on Earth.</p>
+<p>题目链接：<a href="http://codeforces.com/problemset/problem/935/A">935A - Fafa and his Company</a></p>
+<h4 id="A-Fafa-and-his-Company"><a href="#A-Fafa-and-his-Company" class="headerlink" title="A. Fafa and his Company"></a>A. Fafa and his Company</h4><p>Fafa owns a company that works on huge projects. There are <em>n</em> employees in Fafa’s company. Whenever the company has a new project to start working on, Fafa has to divide the tasks of this project among all the employees.</p>
+<p>Fafa finds doing this every time is very tiring for him. So, he decided to choose the best <em>l</em> employees in his company as team leaders. Whenever there is a new project, Fafa will divide the tasks among only the team leaders and each team leader will be responsible of some positive number of employees to give them the tasks. To make this process fair for the team leaders, each one of them should be responsible for the same number of employees. Moreover, every employee, who is not a team leader, has to be under the responsibility of exactly one team leader, and no team leader is responsible for another team leader.</p>
+<p>Given the number of employees <em>n</em>, <strong>find in how many ways</strong> Fafa could choose the number of team leaders <em>l</em> in such a way that it is possible to divide employees between them evenly.</p>
 <p>Input</p>
-<p>The first line contains a single integer <em>n</em> (2 ≤ <em>n</em> ≤ 5000) — the number of planes.</p>
-<p>The second line contains <em>n</em> integers <em>f</em>1, <em>f</em>2, …, <em>f**n</em> (1 ≤ <em>f**i</em> ≤ <em>n</em>, <em>f**i</em> ≠ <em>i</em>), meaning that the <em>i</em>-th plane likes the <em>f**i</em>-th.</p>
+<p>The input consists of a single line containing a positive integer <em>n</em> (2 ≤ <em>n</em> ≤ 105) — the number of employees in Fafa’s company.</p>
 <p>Output</p>
-<p>Output «YES» if there is a love triangle consisting of planes on Earth. Otherwise, output «NO».</p>
-<p>You can output any letter in lower case or in upper case.</p>
+<p>Print a single integer representing the answer to the problem.</p>
 <p>Examples</p>
 <p>input</p>
 <p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">5</span><br><span class="line">2 4 5 1 3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
 
+<p>复制</p>
 <p>output</p>
 <p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">YES</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
 
 <p>input</p>
 <p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">5</span><br><span class="line">5 5 5 5 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure>
 
 <p>output</p>
 <p>Copy</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">NO</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure>
 
 <p>Note</p>
-<p>In first example plane 2 likes plane 4, plane 4 likes plane 1, plane 1 likes plane 2 and that is a love triangle.</p>
-<p>In second example there are no love triangles.</p>
-<p>这个是一个很基础的图论题，只要有f[f[f[i]]] &#x3D;&#x3D; i的话，就说明肯定存在三角关系。</p>
-<p>Python代码:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">f = list(map(int, input().split()))</span><br><span class="line">f.insert(0, 0)</span><br><span class="line">flag = 0</span><br><span class="line">for i in range(1, n + 1):</span><br><span class="line">    if f[f[f[i]]] == i:</span><br><span class="line">        flag = 1</span><br><span class="line">        break</span><br><span class="line">if flag:</span><br><span class="line">    print(&quot;YES&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(&quot;NO&quot;)</span><br></pre></td></tr></table></figure>
+<p>In the second sample Fafa has 3 ways:</p>
+<ul>
+<li>choose only 1 employee as a team leader with 9 employees under his responsibility.</li>
+<li>choose 2 employees as team leaders with 4 employees under the responsibility of each of them.</li>
+<li>choose 5 employees as team leaders with 1 employee under the responsibility of each of them.</li>
+</ul>
+<p>这个是一个基础的题，注意题目中的 <strong>“find in how many ways”</strong> ，可以看出，这个是求分配的方案的总数，这个分配必须保证每个领导带领的人是一样的。因此可以采取模拟。</p>
+<p>Python代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">sum = 0</span><br><span class="line">i = 1</span><br><span class="line">while i &lt;= n // 2:</span><br><span class="line">    if (n - i) % i == 0:</span><br><span class="line">        sum += 1</span><br><span class="line">    i += 1</span><br><span class="line">print(sum)</span><br></pre></td></tr></table></figure>
+
+<p>C++代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main() &#123;</span><br><span class="line">    int n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    int sum = 0;</span><br><span class="line">    int i = 1;</span><br><span class="line">    while (i &lt;= n / 2) &#123;</span><br><span class="line">        if ((n - i) % i == 0) &#123;</span><br><span class="line">            sum++;</span><br><span class="line">        &#125;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; sum &lt;&lt; endl;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
-        <tag>刷题：图论</tag>
+        <tag>刷题：</tag>
       </tags>
   </entry>
   <entry>
-    <title>数据结构-排序算法-基数排序</title>
-    <url>/2023/09/17/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>基数排序适合针对位数比较大的数值的排序，比如手机号等，其思路是构建多个桶，然后每个桶按照其个位数放，然后取出来，接着按照十位数放，再取出来，这样循环处理，就可以对数值进行排序。</p>
-<p><strong>基数排序 vs 计数排序 vs 桶排序</strong></p>
-<p>这三种排序算法都利用了桶的概念，但对桶的使用方法上有明显差异：</p>
-<ul>
-<li>基数排序：根据键值的每位数字来分配桶</li>
-<li>计数排序：每个桶只存储单一键值</li>
-<li>桶排序：每个桶存储一定范围的数值</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">针对11位的手机号排序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RadisSort</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">radisSort</span><span class="params">(String[] a)</span>&#123;</span><br><span class="line">        List&lt;String&gt;[] buckets = <span class="keyword">new</span> <span class="title class_">ArrayList</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</span><br><span class="line">            buckets[i] = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        从低位向高位排序</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> a[<span class="number">0</span>].length() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">            <span class="keyword">for</span> (String s : a) &#123;</span><br><span class="line">                buckets[s.charAt(i) - <span class="string">&#x27;0&#x27;</span>].add(s);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (List&lt;String&gt; bucket : buckets) &#123;</span><br><span class="line">                <span class="keyword">for</span> (String s : bucket) &#123;</span><br><span class="line">                    a[k++] = s;</span><br><span class="line">                &#125;</span><br><span class="line">                bucket.clear();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        String[] a = &#123;<span class="string">&quot;1113123123&quot;</span>, <span class="string">&quot;1133123123&quot;</span>, <span class="string">&quot;1133123087&quot;</span>, <span class="string">&quot;1133123123&quot;</span>, <span class="string">&quot;1233123123&quot;</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">        radisSort(a);</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>二分查找进阶-最小化最大值问题</title>
+    <url>/2023/09/20/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E8%BF%9B%E9%98%B6-%E6%9C%80%E5%B0%8F%E5%8C%96%E6%9C%80%E5%A4%A7%E5%80%BC%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h4 id="最小化最大值介绍"><a href="#最小化最大值介绍" class="headerlink" title="最小化最大值介绍"></a>最小化最大值介绍</h4><p>参考：<a href="https://www.cnblogs.com/cs-whut/p/11216941.html#:~:text=%E8%A6%81%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E6%9C%80%E5%B0%8F%E5%8C%96,%E8%A2%AB%E5%88%86%E4%B8%BAm%E4%B8%AA%E9%83%A8%E5%88%86%E3%80%82">二分法（二）：采用二分法解决“最小化最大值问题” - aTeacher - 博客园 (cnblogs.com)</a> </p>
+<p>二分法除了可以进行有序查找、解方程等外，还可以用来解决一些实际问题。这些问题中，非常典型的应用就是“最小化最大值问题”和“最大化最小值问题”</p>
+<p>   “最小化最大值问题”和“最大化最小值问题”在优化问题中比较常见，简单来说，“最小化最大值”是为了压制优化目标中表现最突出的成分，“最大化最小值”为了提升优化目标中表现最差的成分。</p>
+<p>   （1）“最小化最大值问题”</p>
+<p>   一般来说，优化时考虑的是目标函数的最大化或最小化的问题。但是在某些情况下，则要求最大值的最小化才有意义。例如，在城市规划中需要确定急救中心、消防中心的位置，可取的目标函数应该是到所有地点最大距离的最小值（即急救中心、消防中心的建设位置应保证它到最远需求点的距离尽可能小），而不是到达所有目的地距离和的最小值。因为城市同时发生事故或同时着火的几率极低，因此更多应该考虑如何降低最恶劣情况的影响，即使是最远的地方出事了，中心到它们的距离也能达到最小。</p>
+<p>   （2）“最大化最小值问题”</p>
+<p>   这个问题在通信链路中应用比较多，如基站同时和多用户通信，每个基站到用户的通信为一个通信链路，且基站的发射功率是固定的。为了保证所有的通信链路都正常工作，应该去优化最差链路的通信情况，降低信道较好链路的基站发射功率，增加信道较差链路的基站发射功率，这是一个最大化最小值问题。</p>
+<h4 id="典型的-leetcode题"><a href="#典型的-leetcode题" class="headerlink" title="典型的 leetcode题"></a>典型的 leetcode题</h4><h5 id="410-分割数组的最大值"><a href="#410-分割数组的最大值" class="headerlink" title="410. 分割数组的最大值"></a>410. 分割数组的最大值</h5><p>该题是典型的最小化最大值问题，即将各个连续数组的和最大值取得最小值。</p>
+<p><strong>思路：</strong>要解决这个最小化最大值的问题，基本思路就是选取任意一个范围（输入数组的最大值到数组所有元素的和），然后在这个范围内进行二分法，每次把范围的中间值mid当作最小值，然后判断在mid值下数组是否能够被分为m个部分。如果判断出值为mid时可以将数组分成m个部分，就先让mid变大再试试，即增大下界（left&#x3D;mid+1）；如果分不成m个部分，说明当前的mid太大了，就先让mid变小再进行判断，即减小上界（right&#x3D;mid-1）。直到求出一个最大的mid就是最终的答案。</p>
+<p>因为要求各个子数组和的最大值中的最小，所以该值肯定大于等于所有数组的最大值，并且肯定小于等于数组的所有和，并且这个数值是连续递增，于是可以用二分解决。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">judge</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> mid, <span class="type">int</span> m)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>, count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i++)&#123;</span><br><span class="line">            sum += a[i];</span><br><span class="line">            <span class="keyword">if</span>(sum &gt; mid)&#123;</span><br><span class="line">                sum = a[i];</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(count + <span class="number">1</span> &lt;= m)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">splitArray</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> -<span class="number">1</span>, right = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> mid;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">            right += nums[i];</span><br><span class="line">            <span class="keyword">if</span>(nums[i] &gt; left)&#123;</span><br><span class="line">                left = nums[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(judge(nums, mid, k))&#123;</span><br><span class="line">                right = mid - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>拓展</strong></p>
-<p>如果数值里面有 abc 等字符时，如何排序？</p>
-<p>只需要将桶的个数增加就行，比如增加到 128，刚好存下 ASCII 的字符。</p>
+
+
+<h5 id="2560-打家劫舍IV"><a href="#2560-打家劫舍IV" class="headerlink" title="2560. 打家劫舍IV"></a>2560. 打家劫舍IV</h5><p><a href="https://leetcode.cn/problems/house-robber-iv/description/">2560. 打家劫舍 IV - 力扣（LeetCode）</a></p>
+<p>该题和之前的三个打家劫舍问题不同的是，其题是最小化最大值问题，所以更适合用二分方法。</p>
+<p><strong>思路：</strong></p>
+<p>从中可知，最大值是小偷窃取过程中能从单间房屋中窃取的<strong>最大金额</strong>，所以最小值就是该数组的最小值，而最大值则是该数组的最大值，并且可以认为这些数值是递增，所以可以用二分【针对二分出来的答案是否在nums的问题，可以见<a href="https://leetcode.cn/problems/house-robber-iv/solutions/2093952/er-fen-da-an-dp-by-endlesscheng-m558/">2560. 打家劫舍 IV - 力扣（LeetCode）</a> 的题解】。</p>
+<p>求解时需要得到一个最大的下限，该值可以能够满足至少窃取 $k$ 个房屋后，小偷的最小窃取能力。求解该问题时，可以用贪心思路，即在从左到右遍历数组时，能偷就偷。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minCapability</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> Arrays.stream(nums).min().getAsInt();</span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> Arrays.stream(nums).max().getAsInt();</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[i] &lt;= middle)&#123;</span><br><span class="line">                    count++;</span><br><span class="line">                    i++; <span class="comment">//如果当前偷了，就必须跳过下一个房子</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(count &gt;= k)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>二分查找</tag>
+        <tag>刷题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>二分查找的记录</title>
+    <url>/2023/09/14/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E7%9A%84%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h4 id="二分查找程序"><a href="#二分查找程序" class="headerlink" title="二分查找程序"></a>二分查找程序</h4><p>在二分查找上，根据区间的确定，主要有二种不同的写法：左闭右闭，左闭右开。</p>
+<p>在左闭右闭上，需要在 while 循环内满足 $left \leq right$，并且在 right 要为$middle-1$。</p>
+<p>而在左闭右开上，则是需要在 while 循环内满足 $left &lt; right$，并且在 right 要为 $middle$。</p>
+<p>以左闭右闭为例，程序有:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">binarysearch</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>, right = a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">candidate</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(a[middle] &gt; target)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(a[middle] &lt; target)&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> middle;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">13</span>&#125;;</span><br><span class="line">        System.out.println(binarysearch(a, <span class="number">10</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="二分查找的最大查找次数"><a href="#二分查找的最大查找次数" class="headerlink" title="二分查找的最大查找次数"></a>二分查找的最大查找次数</h4><p>在上述程序进行修改，就可以得到计算查找次数的程序，如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">binarysearch</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>, right = a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">candidate</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            res++;</span><br><span class="line">            <span class="keyword">if</span>(a[middle] &gt; target)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(a[middle] &lt; target)&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                candidate = middle;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">13</span>&#125;;</span><br><span class="line">        System.out.println(binarysearch(a, <span class="number">15</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出的结果是 4 ，也就是说，如果查找不到元素时，最大的查找次数就是 4，而如果数组长度为 7，相应的最大查找次数是 3，这个是有相应的公式：</p>
+<p>$$<br>res &#x3D; \lfloor log_2(N) \rfloor +1<br>$$</p>
+<p> 其中$N$为数组的长度。</p>
+<h4 id="二分查找时的最左和最右元素"><a href="#二分查找时的最左和最右元素" class="headerlink" title="二分查找时的最左和最右元素"></a>二分查找时的最左和最右元素</h4><p>问题：<a href="https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/">34. 在排序数组中查找元素的第一个和最后一个位置 - 力扣（LeetCode）</a></p>
+<p>需要在一个有序数组上，查找某个元素的第一个和最后一个位置，也可以在上述的程序的基础上，加以修改得到的，关键是如果 $left &#x3D;&#x3D; right$ 时，针对 $middle$ 加一或减一，从而让指针向右移动或向左移动，得到目标元素的最后一个位置或第一个位置。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">leftBorder</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>, right = nums.length - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">candidate</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[middle] &lt; target)&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[middle] &gt; target)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                candidate = middle;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> candidate;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">rightBorder</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>, right = nums.length - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">candidate</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[middle] &lt; target)&#123;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[middle] &gt; target)&#123;</span><br><span class="line">                right = middle - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                candidate = middle;</span><br><span class="line">                left = middle + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> candidate;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] searchRange(<span class="type">int</span>[] nums, <span class="type">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;leftBorder(nums, target), rightBorder(nums, target)&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
         <tag>刷题</tag>
-        <tag>排序算法</tag>
+        <tag>数据结构</tag>
+        <tag>二分</tag>
       </tags>
   </entry>
   <entry>
@@ -1121,6 +1037,49 @@ def parse_page(self, response):
       <tags>
         <tag>刷题：图论</tag>
         <tag>刷题：DFS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(图论) A. Love Triangle</title>
+    <url>/2022/10/06/%E5%9B%BE%E8%AE%BA-A-Love-Triangle/</url>
+    <content><![CDATA[<p>这个其实是一个很基础的图论题。</p>
+<span id="more"></span>
+
+<p>题目链接：<a href="http://codeforces.com/problemset/problem/939/A">Problem - 939A - Codeforces</a></p>
+<h4 id="A-Love-Triangle"><a href="#A-Love-Triangle" class="headerlink" title="A. Love Triangle"></a>A. Love Triangle</h4><p>As you could know there are no male planes nor female planes. However, each plane on Earth likes some other plane. There are <em>n</em> planes on Earth, numbered from 1 to <em>n</em>, and the plane with number <em>i</em> likes the plane with number <em>f**i</em>, where 1 ≤ <em>f**i</em> ≤ <em>n</em> and <em>f**i</em> ≠ <em>i</em>.</p>
+<p>We call a love triangle a situation in which plane <em>A</em> likes plane <em>B</em>, plane <em>B</em> likes plane <em>C</em> and plane <em>C</em> likes plane <em>A</em>. Find out if there is any love triangle on Earth.</p>
+<p>Input</p>
+<p>The first line contains a single integer <em>n</em> (2 ≤ <em>n</em> ≤ 5000) — the number of planes.</p>
+<p>The second line contains <em>n</em> integers <em>f</em>1, <em>f</em>2, …, <em>f**n</em> (1 ≤ <em>f**i</em> ≤ <em>n</em>, <em>f**i</em> ≠ <em>i</em>), meaning that the <em>i</em>-th plane likes the <em>f**i</em>-th.</p>
+<p>Output</p>
+<p>Output «YES» if there is a love triangle consisting of planes on Earth. Otherwise, output «NO».</p>
+<p>You can output any letter in lower case or in upper case.</p>
+<p>Examples</p>
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">5</span><br><span class="line">2 4 5 1 3</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">YES</span><br></pre></td></tr></table></figure>
+
+<p>input</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">5</span><br><span class="line">5 5 5 5 1</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<p>Copy</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">NO</span><br></pre></td></tr></table></figure>
+
+<p>Note</p>
+<p>In first example plane 2 likes plane 4, plane 4 likes plane 1, plane 1 likes plane 2 and that is a love triangle.</p>
+<p>In second example there are no love triangles.</p>
+<p>这个是一个很基础的图论题，只要有f[f[f[i]]] &#x3D;&#x3D; i的话，就说明肯定存在三角关系。</p>
+<p>Python代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">n = int(input())</span><br><span class="line">f = list(map(int, input().split()))</span><br><span class="line">f.insert(0, 0)</span><br><span class="line">flag = 0</span><br><span class="line">for i in range(1, n + 1):</span><br><span class="line">    if f[f[f[i]]] == i:</span><br><span class="line">        flag = 1</span><br><span class="line">        break</span><br><span class="line">if flag:</span><br><span class="line">    print(&quot;YES&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(&quot;NO&quot;)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题：图论</tag>
       </tags>
   </entry>
   <entry>
@@ -1171,6 +1130,98 @@ def parse_page(self, response):
       </tags>
   </entry>
   <entry>
+    <title>使用VMware虚拟机安装Ubuntu18.04</title>
+    <url>/2019/09/06/%E4%BD%BF%E7%94%A8VMware%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85Ubuntu18-04/</url>
+    <content><![CDATA[<p>这个是利用VMware虚拟机安装Ubuntu的。由于我的笔记本电脑的硬盘有点问题，所以利用USB安装Ubuntu时，却经常扫描不到硬盘，所以最后放弃安装双系统。改为利用虚拟机了。</p>
+<p>VMware 的百度云链接：<a href="https://pan.baidu.com/s/1QV60f1wv6OVOm9wJ1a0dKw">百度网盘 请输入提取码</a><br>提取码：sr62 </p>
+<p>Ubuntu 的百度云链接：<a href="https://pan.baidu.com/s/1L3NWXms7TSXGV2X_mORMKg">百度网盘 请输入提取码</a></p>
+<p>提取码：hbz4 </p>
+<h3 id="VMware-的安装"><a href="#VMware-的安装" class="headerlink" title="VMware 的安装"></a>VMware 的安装</h3><p>我们可以在上面给出的链接进行下载。这个链接长期有效。然后根据提示一步一步安装，最后根据给出的密钥进行注册。</p>
+<h3 id="Ubuntu18-04下载"><a href="#Ubuntu18-04下载" class="headerlink" title="Ubuntu18.04下载"></a>Ubuntu18.04下载</h3><p>这个要注意！！！，必须从官网进行下载，这个必须的，因为如果不是从官网下载的话，安装过程可能会出错的。推荐下载Ubuntu Desktop 18.04 LTS。当然，如果嫌慢的话，也可以从我给的链接下载（如果你有超级会员或其他破解工具的话），这个是从官网亲自下载的，保证正确。</p>
+<h3 id="虚拟机的配置"><a href="#虚拟机的配置" class="headerlink" title="虚拟机的配置"></a>虚拟机的配置</h3><ol>
+<li><p>打开虚拟机，点击创建虚拟机，然后得到如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles01.png" alt="1"></p>
+<p>可以直接点下一步。</p>
+</li>
+<li><p>然后得到下面的图，像这样。再点下一步。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles02.png" alt="2"></p>
+</li>
+<li><p>既然是要安装Ubuntu，用Ubuntu64就行。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles03.png" alt="3"></p>
+</li>
+<li><p>下面自己设置就行</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles04.png" alt="4"></p>
+</li>
+<li><p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles05.png" alt="5"></p>
+<p>​ 这个步骤，磁盘大小最好至少20GB，当然，设置更大就更好了，对了，起初是占用不多，才几GB，然后往里面添加一些文件才会变大。</p>
+</li>
+<li><p>接下来就是继续点下一步，直至完成。然后还要点击编辑虚拟机设置。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles06.png" alt="6"></p>
+<p>​ 最后在下面的图中：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PJCK/cdn@1.3/images/ubuntu/Ubuntu_articles07.png" alt="7"></p>
+</li>
+</ol>
+<p>用这个，浏览Ubuntu镜像保存的位置。最后点击确定。</p>
+<h3 id="Ubuntu安装"><a href="#Ubuntu安装" class="headerlink" title="Ubuntu安装"></a>Ubuntu安装</h3><p>最后，VMware虚拟机配置好了，接下来就是点击开启此虚拟机，开始安装。安装步骤不难（和那个让我头大的生双系统安装相比太简单了，几乎是傻瓜式的）：（先不放图了）</p>
+<ol>
+<li>点击“Install Ubuntu”（我觉得最好用English比较好，因为用中文可能会有一些bug。。。用English权当练习英语吧）</li>
+<li>点continue,并且在‘Update and other software’ 中划上 ‘minimal installation’ （会省下一些时间）, 也划上 ‘Download updates while installation’ ,再点continue。</li>
+<li>在Installation Type选默认就行。弹出的提示也点继续就行，（注意！！！！，在安装双系统时，这个不能点，要点最下边的那个，方便分区）</li>
+<li>在Where Are You?点击中国，接下来就是填写个人信息，注意密码不能忘了，切记。</li>
+<li>最后就是点击安装了，我这个渣渣的校园网安装这个花了半小时左右。</li>
+<li>安装完毕后，点击restart now,重启虚拟机，当然，有可能会碰上重启时卡了，还一闪一闪的，可以直接打开windows进程，杀死VMware进程，然后进入VMware，点打开虚拟机，启动就行。</li>
+</ol>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ol>
+<li><strong><a href="https://zhuanlan.zhihu.com/p/41940739">良许LInux-知乎-手把手教你安装Linux虚拟机</a></strong></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构-排序算法-基数排序</title>
+    <url>/2023/09/17/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>基数排序适合针对位数比较大的数值的排序，比如手机号等，其思路是构建多个桶，然后每个桶按照其个位数放，然后取出来，接着按照十位数放，再取出来，这样循环处理，就可以对数值进行排序。</p>
+<p><strong>基数排序 vs 计数排序 vs 桶排序</strong></p>
+<p>这三种排序算法都利用了桶的概念，但对桶的使用方法上有明显差异：</p>
+<ul>
+<li>基数排序：根据键值的每位数字来分配桶</li>
+<li>计数排序：每个桶只存储单一键值</li>
+<li>桶排序：每个桶存储一定范围的数值</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">针对11位的手机号排序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RadisSort</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">radisSort</span><span class="params">(String[] a)</span>&#123;</span><br><span class="line">        List&lt;String&gt;[] buckets = <span class="keyword">new</span> <span class="title class_">ArrayList</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</span><br><span class="line">            buckets[i] = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        从低位向高位排序</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> a[<span class="number">0</span>].length() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">            <span class="keyword">for</span> (String s : a) &#123;</span><br><span class="line">                buckets[s.charAt(i) - <span class="string">&#x27;0&#x27;</span>].add(s);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (List&lt;String&gt; bucket : buckets) &#123;</span><br><span class="line">                <span class="keyword">for</span> (String s : bucket) &#123;</span><br><span class="line">                    a[k++] = s;</span><br><span class="line">                &#125;</span><br><span class="line">                bucket.clear();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        String[] a = &#123;<span class="string">&quot;1113123123&quot;</span>, <span class="string">&quot;1133123123&quot;</span>, <span class="string">&quot;1133123087&quot;</span>, <span class="string">&quot;1133123123&quot;</span>, <span class="string">&quot;1233123123&quot;</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">        radisSort(a);</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>拓展</strong></p>
+<p>如果数值里面有 abc 等字符时，如何排序？</p>
+<p>只需要将桶的个数增加就行，比如增加到 128，刚好存下 ASCII 的字符。</p>
+]]></content>
+      <tags>
+        <tag>刷题</tag>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构-排序算法-希尔排序</title>
+    <url>/2023/09/16/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>对插入排序的优化<br>要点：  </p>
+<ul>
+<li>实现分组插入，每组元素之间的间隙为 gap  </li>
+<li>每轮排序后 gap 逐渐变小，直至 gap 为 1 完成排序。  </li>
+<li>对插入排序优化，让元素更快速交换到最终位置。  </li>
+<li>插入排序可以视为希尔排序上的 gap 为 1 时的特殊情况 ，所以<strong>程序上和插入排序类似</strong>。</li>
+<li>平均时间复杂度是 **O(nlogn)**，最差时间复杂度是 O(n^2) ，最好的时间复杂度是O(nlogn)</li>
+<li>算法是<strong>不稳定</strong>的。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">对插入排序的优化</span></span><br><span class="line"><span class="comment">要点：</span></span><br><span class="line"><span class="comment">- 实现分组插入，每组元素之间的间隙为gap</span></span><br><span class="line"><span class="comment">- 每轮排序后gap逐渐变小，直至gap为1完成排序。</span></span><br><span class="line"><span class="comment">- 对插入排序优化，让元素更快速交换到最终位置。</span></span><br><span class="line"><span class="comment">- 插入排序可以视为希尔排序上的gap为1时的特殊情况</span></span><br><span class="line"><span class="comment">- 平均时间复杂度是O(nlogn)，最差时间复杂度是O(n^2)，最好的时间复杂度是O(nlogn)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShellSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">shellsort</span><span class="params">(<span class="type">int</span>[] a)</span>&#123;</span><br><span class="line">        <span class="comment">//a.length / 2</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">gap</span> <span class="operator">=</span> a.length &gt;&gt; <span class="number">1</span>; gap &gt;=<span class="number">1</span>  ; gap &gt;&gt;= <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">low</span> <span class="operator">=</span> gap; low &lt; a.length; low++) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">t</span> <span class="operator">=</span> a[low];</span><br><span class="line">                <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> low - gap;</span><br><span class="line">                <span class="comment">//自右向左找插入位置，如果比待插入元素大，则不断右移，空出插入位置</span></span><br><span class="line">                <span class="keyword">while</span>(i &gt;= <span class="number">0</span> &amp;&amp; t &lt; a[i])&#123;</span><br><span class="line">                    a[i+gap] = a[i];</span><br><span class="line">                    i--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(i != low - gap)&#123;</span><br><span class="line">                    a[i+gap] = t;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">        shellsort(a);</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题</tag>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构-排序算法-堆排序</title>
     <url>/2023/09/16/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E5%A0%86%E6%8E%92%E5%BA%8F/</url>
     <content><![CDATA[<p>在掌握堆排序前需要先理解堆的数据结构：</p>
@@ -1193,25 +1244,6 @@ def parse_page(self, response):
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Heap</span>&#123;</span><br><span class="line">    <span class="type">int</span>[] array;</span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Heap</span><span class="params">(<span class="type">int</span> capacity)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.array = <span class="keyword">new</span> <span class="title class_">int</span>[capacity];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Heap</span><span class="params">(<span class="type">int</span>[] array)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.array = array;</span><br><span class="line">        <span class="built_in">this</span>.size = array.length;</span><br><span class="line">        heapify();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    建堆 Floyd建堆方法， 时间复杂度O(n)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">heapify</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> size / <span class="number">2</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span> ; i--) &#123;</span><br><span class="line">            down(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    下潜</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">down</span><span class="params">(<span class="type">int</span> parent)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> parent * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> left + <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> parent;</span><br><span class="line">        <span class="keyword">if</span>(left &lt; size &amp;&amp; array[max] &lt; array[left])&#123;</span><br><span class="line">            max = left;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(right &lt; size &amp;&amp; array[max] &lt; array[right])&#123;</span><br><span class="line">            max = right;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(max != parent)&#123;</span><br><span class="line">            swap(max, parent);</span><br><span class="line">            down(max);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">t</span> <span class="operator">=</span> array[i];</span><br><span class="line">        array[i] = array[j];</span><br><span class="line">        array[j] = t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    获取堆顶函数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">peek</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(size == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> Integer.MIN_VALUE;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> array[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    删除堆顶元素</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">poll</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(size == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> Integer.MIN_VALUE;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">top</span> <span class="operator">=</span> array[<span class="number">0</span>];</span><br><span class="line">        swap(<span class="number">0</span>, size - <span class="number">1</span>);</span><br><span class="line">        size--;</span><br><span class="line">        down(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> top;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    删除指定索引处的元素</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">poll</span><span class="params">(<span class="type">int</span> index)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(size == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> Integer.MIN_VALUE;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">deleted</span> <span class="operator">=</span> array[index];</span><br><span class="line">        swap(index, size - <span class="number">1</span>);</span><br><span class="line">        size--;</span><br><span class="line">        down(index);</span><br><span class="line">        <span class="keyword">return</span> deleted;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    替换堆顶元素</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">replace</span><span class="params">(<span class="type">int</span> replaced)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(size == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        array[<span class="number">0</span>] = replaced;</span><br><span class="line">        down(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    堆的尾部添加元素</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">offer</span><span class="params">(<span class="type">int</span> offered)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(size == array.length)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        up(offered);</span><br><span class="line">        size++;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    上浮</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">up</span><span class="params">(<span class="type">int</span> offered)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">child</span> <span class="operator">=</span> size;</span><br><span class="line">        <span class="keyword">while</span>(child &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">parent</span> <span class="operator">=</span> (child - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(offered &gt; array[parent])&#123;</span><br><span class="line">                array[child] = array[parent];</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            child = parent;</span><br><span class="line">        &#125;</span><br><span class="line">        array[child] = offered;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="type">int</span>[] array = &#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line">        <span class="type">Heap</span> <span class="variable">heap</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Heap</span>(array);</span><br><span class="line">        System.out.println(Arrays.toString(heap.array));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(heap.size &gt; <span class="number">1</span>)&#123;</span><br><span class="line">            heap.swap(<span class="number">0</span>, heap.size - <span class="number">1</span>);</span><br><span class="line">            heap.size--;</span><br><span class="line">            heap.down(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(Arrays.toString(heap.array));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//public class Heap &#123;</span></span><br><span class="line"><span class="comment">//    public static void main(String[] args) &#123;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>刷题</tag>
-        <tag>排序算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构-排序算法-希尔排序</title>
-    <url>/2023/09/16/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>对插入排序的优化<br>要点：  </p>
-<ul>
-<li>实现分组插入，每组元素之间的间隙为 gap  </li>
-<li>每轮排序后 gap 逐渐变小，直至 gap 为 1 完成排序。  </li>
-<li>对插入排序优化，让元素更快速交换到最终位置。  </li>
-<li>插入排序可以视为希尔排序上的 gap 为 1 时的特殊情况 ，所以<strong>程序上和插入排序类似</strong>。</li>
-<li>平均时间复杂度是 **O(nlogn)**，最差时间复杂度是 O(n^2) ，最好的时间复杂度是O(nlogn)</li>
-<li>算法是<strong>不稳定</strong>的。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">对插入排序的优化</span></span><br><span class="line"><span class="comment">要点：</span></span><br><span class="line"><span class="comment">- 实现分组插入，每组元素之间的间隙为gap</span></span><br><span class="line"><span class="comment">- 每轮排序后gap逐渐变小，直至gap为1完成排序。</span></span><br><span class="line"><span class="comment">- 对插入排序优化，让元素更快速交换到最终位置。</span></span><br><span class="line"><span class="comment">- 插入排序可以视为希尔排序上的gap为1时的特殊情况</span></span><br><span class="line"><span class="comment">- 平均时间复杂度是O(nlogn)，最差时间复杂度是O(n^2)，最好的时间复杂度是O(nlogn)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShellSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">shellsort</span><span class="params">(<span class="type">int</span>[] a)</span>&#123;</span><br><span class="line">        <span class="comment">//a.length / 2</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">gap</span> <span class="operator">=</span> a.length &gt;&gt; <span class="number">1</span>; gap &gt;=<span class="number">1</span>  ; gap &gt;&gt;= <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">low</span> <span class="operator">=</span> gap; low &lt; a.length; low++) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">t</span> <span class="operator">=</span> a[low];</span><br><span class="line">                <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> low - gap;</span><br><span class="line">                <span class="comment">//自右向左找插入位置，如果比待插入元素大，则不断右移，空出插入位置</span></span><br><span class="line">                <span class="keyword">while</span>(i &gt;= <span class="number">0</span> &amp;&amp; t &lt; a[i])&#123;</span><br><span class="line">                    a[i+gap] = a[i];</span><br><span class="line">                    i--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(i != low - gap)&#123;</span><br><span class="line">                    a[i+gap] = t;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">        shellsort(a);</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
         <tag>刷题</tag>
@@ -1250,6 +1282,61 @@ def parse_page(self, response):
       <tags>
         <tag>刷题</tag>
         <tag>排序算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构-排序算法-桶排序</title>
+    <url>/2023/09/17/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E6%A1%B6%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>桶排序是在计数排序的基础上改进的，差不多对于有 n 个元素的计数排序上，就有 n 个桶，每个桶放一个元素，但是对于元素很大的数组时，这个情况存在数据超出容量的问题，所以需要设置每个桶放多个元素，并且放完后，需要对桶里面的元素排序。</p>
+<p>然后需要创建动态数组，因为不确定每个桶里面会有多少个元素，所以针对每个桶要分别加个动态数组，此处可以使用 2 个 ArrayList 或 DynamicArray 来创建。</p>
+<p>最后，需要注意的是，针对-9-9这个较为极端的情况下，需要手动设置每个桶放置的元素个数，并且需要借鉴计数排序，求出最大值和最小值，然后计算合适的桶的个数，以及怎么将每个元素放到合适的桶上（关键点是最小值）。</p>
+<p>其平均时间复杂度是 O(n+k)，但是最差的时间复杂度可以有 O(n^2)。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BucketSort</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bucketsort</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> range)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> a[<span class="number">0</span>];</span><br><span class="line">        <span class="type">int</span> <span class="variable">min</span> <span class="operator">=</span> a[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i++)&#123;</span><br><span class="line">            max = Math.max(max, a[i]);</span><br><span class="line">            min = Math.min(min, a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; buckets = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; (max - min) / range + <span class="number">1</span>; i++)&#123;</span><br><span class="line">            buckets.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i++)&#123;</span><br><span class="line">            buckets.get((a[i] - min) / range).add(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; buckets.size(); i++)&#123;</span><br><span class="line">            Collections.sort(buckets.get(i));</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//        for (int i = 0; i &lt; buckets.size(); i++) &#123;</span></span><br><span class="line"><span class="comment">//            System.out.println(Arrays.toString(buckets.get(i).toArray()));</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; buckets.size(); i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(buckets.get(i).size() &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                a[k++] = buckets.get(i).get(<span class="number">0</span>);</span><br><span class="line">                buckets.get(i).remove(<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, -<span class="number">1</span>, <span class="number">6</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">17</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">        bucketsort(a, <span class="number">3</span>);</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>刷题</tag>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（Java复习总结）多线程简要总结</title>
+    <url>/2023/08/28/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<h3 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h3><ul>
+<li><p>Syschronized是关键字，可以修饰实例方法、静态方法和代码块。</p>
+<ul>
+<li>修饰实例方法，作用于当前实例加锁，进入同步代码前要获得当前实例的锁；</li>
+<li>修饰静态方法，作用于当前类对象加锁，进入同步代码前要获得当前类对象的锁；</li>
+<li>修饰代码块，指定加锁对象，对给定对象加锁，进入同步代码库前要获得给定对象的锁</li>
+</ul>
+<p>可以让实例方法、静态方法等变为一个临界区</p>
+<p>Java的锁都是基于<strong>对象</strong>的。</p>
+</li>
+<li><p>synchronized可以保证原子性、可见性（能够替代volatile）和有序性。</p>
+<p>而volatile只能保证可见性与有序性，不能保证原子性。</p>
+</li>
+<li><p>synchronized是悲观锁。</p>
+</li>
+<li><p>几个锁的等级排序【要回顾】</p>
+<p>无锁&lt;偏向锁&lt;轻量级锁&lt;重量级锁</p>
+</li>
+</ul>
+<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><ol>
+<li><p>synchronized是悲观锁</p>
+<p>而CAS是乐观锁</p>
+<p><strong>悲观锁：</strong></p>
+<p>悲观锁就是我们常说的锁。对于悲观锁来说，它总是认为每次访问共享资源时会发生冲突，所以必须对每次数据操作加上锁，以保证临界区的程序同一时间只能有一个线程在执行。</p>
+<p><strong>乐观锁：</strong></p>
+<p>乐观锁又称为“<strong>无锁</strong>”，顾名思义，它是乐观派。乐观锁总是假设对共享资源的访问没有冲突，线程可以不停地执行，无需加锁也无需等待。而一旦多个线程发生冲突，乐观锁通常是使用一种称为<strong>CAS</strong>的技术来保证<strong>线程执行的安全性</strong>。</p>
+<p>由于无锁操作中没有锁的存在，因此不可能出现死锁的情况，也就是说<strong>乐观锁天生免疫死锁</strong>。</p>
+<p>乐观锁多用于“读多写少“的环境，避免频繁加锁影响性能；而悲观锁多用于”写多读少“的环境，避免频繁失败和重试影响性能。</p>
+</li>
+</ol>
+<h3 id="锁总结-重要，查阅该网址"><a href="#锁总结-重要，查阅该网址" class="headerlink" title="锁总结[重要，查阅该网址]"></a>锁总结[重要，查阅该网址]</h3><p><a href="https://javabetter.cn/thread/suo.html">公司空降一个美团大佬，彻底把Java中的锁”讲清楚了 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<p><img src="https://secure2.wostatic.cn/static/cVT9qmnz3xTwL7aR9HPYpS/image.png?auth_key=1694066438-3YDQC8JfwDMXoryS64KkXq-0-6d773945dfe8f3d988052210c57e10b9"></p>
+]]></content>
+      <tags>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1309,6 +1396,195 @@ def parse_page(self, response):
 <ol>
 <li>栈的读取速度比堆块，但栈上存储的数据受到有效范围的限制。</li>
 <li>一个对象引用可以赋值给另一个对象引用，此时复制的实际上是对象的地址。因此，一个对象可以由多个对象引用，减少对内存的消耗。</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（Java复习总结）JVM简要总结</title>
+    <url>/2023/09/02/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89JVM%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<h2 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h2><h4 id="字节码-1"><a href="#字节码-1" class="headerlink" title="字节码"></a>字节码</h4><ol>
+<li><p>Java分为编译时与运行时，而字节码与编译时有关。</p>
+</li>
+<li><p><strong>类加载机制</strong>与字节码密切相关。</p>
+</li>
+<li><p>IDEA 默认会用 Fernflower 反编译工具将<strong>字节码文件（后缀为 .class 的文件，也就是 Java 源代码编译后的文件）</strong>反编译为我们可以看得懂的 Java 源代码。</p>
+</li>
+<li><p>在编译阶段，Java会将Java源代码文件编译为字节码文件。在这个阶段，编译器会进行一些检查工作，比如说，某个关键字是不是写错了，语法上是不是符合预期了，不能有很明显的错误，否则带到运行时再检查出来就会比较麻烦了。</p>
+</li>
+<li><p>Java 字节码是沟通 JVM 与 Java 代码的桥梁，可以用javap查看。</p>
+</li>
+<li><p>Java虚拟机采用基于栈的架构，其指令由操作码与操作数组成。</p>
+<p>0xb2 getstatic 获取静态字段的值<br>0x12 ldc 常量池中的常量值入栈<br>0xb6 invokevirtual 运行时方法绑定调用方法<br>0xb1 return void 函数返回</p>
+</li>
+<li><p>JVM会在<strong>准备阶段</strong>对类变量（静态变量， static修饰）<strong>分配内存并初始化</strong>（对应数据类型的默认初始值，如 0、0L、null、false 等）。</p>
+<p>也就是说，假如有这样一段代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">String</span> <span class="variable">chenmo</span> <span class="operator">=</span> <span class="string">&quot;沉默&quot;</span>; <span class="comment">//会查看常量池是否存在，只创建一个对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">wanger</span> <span class="operator">=</span> <span class="string">&quot;王二&quot;</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">cmower</span> <span class="operator">=</span> <span class="string">&quot;沉默王二&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>chenmo 不会被分配内存，而 wanger 会；但 wanger 的初始值不是“王二”而是 <code>null</code>。</p>
+<p>需要注意的是，<code>static final</code> 修饰的变量被称作为常量，和类变量不同。常量一旦赋值就不会改变了，所以 cmower 在准备阶段的值为“沉默王二”而不是 <code>null</code>。</p>
+</li>
+</ol>
+<h4 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h4><p><a href="https://tobebetterjavaer.com/jvm/class-file-jiegou.html">详解Java的类文件（class文件）结构 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<ul>
+<li>使用xxd命令后，得到16进制内容，其中如果开头有cafe base这个魔数，说明这个class文件可以被JVM接受。</li>
+</ul>
+<p>上面往后抽空看。</p>
+<h4 id="Javap与字节码"><a href="#Javap与字节码" class="headerlink" title="Javap与字节码"></a>Javap与字节码</h4><p><a href="https://tobebetterjavaer.com/jvm/bytecode.html">从javap的角度轻松看懂字节码 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<p>上面抽空看</p>
+<ol>
+<li><p>Java 内置了一个反编译命令 javap，可以通过 <code>javap -help</code> 了解 javap 的基本用法</p>
+</li>
+<li><p>常量池</p>
+<p>Constant pool，也就是字节码文件最重要的常量池部分。可以把常量池理解为<strong>字节码文件中的资源仓库，主要存放两大类信息。</strong></p>
+<p>1）<strong>字面量</strong>（Literal），有点类似 Java 中的常量概念，比如文本字符串，final 常量等。</p>
+<p>2）<strong>符号引用</strong>（Symbolic References），属于编译原理方面的概念，包括 3 种：</p>
+<ul>
+<li>类和接口的全限定名（Fully Qualified Name）</li>
+<li>字段的名称和描述符（Descriptor）</li>
+<li>方法的名称和描述符</li>
+</ul>
+<p>Java 虚拟机是在加载字节码文件的时候才进行的动态链接，也就是说，字段和方法的符号引用只有经过<strong>运行期转换后才能获得真正的内存地址</strong>。当 <strong>Java 虚拟机运行</strong>时，需要从常量池获取对应的符号引用，然后在类创建或者运行时解析并翻译到具体的内存地址上。</p>
+</li>
+</ol>
+<h4 id="JVM字节码详情"><a href="#JVM字节码详情" class="headerlink" title="JVM字节码详情"></a>JVM字节码详情</h4><h4 id="虚拟机-字节码"><a href="#虚拟机-字节码" class="headerlink" title="虚拟机 字节码"></a>虚拟机 字节码</h4><h4 id="HSDB"><a href="#HSDB" class="headerlink" title="HSDB"></a>HSDB</h4><h4 id="ASM"><a href="#ASM" class="headerlink" title="ASM"></a>ASM</h4><p><a href="https://tobebetterjavaer.com/jvm/asm.html">史上最通俗易懂的ASM教程 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<p>前面有讲基础内容。</p>
+<h4 id="自己编译JDK"><a href="#自己编译JDK" class="headerlink" title="自己编译JDK"></a>自己编译JDK</h4><h2 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h2><h4 id="类加载-1"><a href="#类加载-1" class="headerlink" title="类加载"></a>类加载</h4><ol>
+<li><p>类<strong>加载</strong>过程</p>
+<p>Loading</p>
+<p>Verification</p>
+<p>Preparation【编译时阶段】</p>
+<p>Resolution【运行时阶段】</p>
+<ul>
+<li><p>该阶段将常量池中的<strong>符号引用</strong>转化为<strong>直接引用</strong>。</p>
+<p><strong>符号引用</strong>以一组符号（任何形式的字面量，只要在使用时能够无歧义的定位到目标即可）来描述所引用的目标。（<strong>就是不知道内存地址，先暂时用它的名字，也就是符号</strong>）</p>
+<p>在编译时，Java 类并不知道所引用的类的实际地址，因此只能使用符号引用来代替。比如 <code>com.Wanger</code> 类引用了 <code>com.Chenmo</code> 类，编译时 Wanger 类并不知道 Chenmo 类的实际内存地址，因此只能使用符号 <code>com.Chenmo</code>。</p>
+<p><strong>直接引用</strong>通过对<strong>符号引用进行解析</strong>，找到引用的实际内存地址。</p>
+</li>
+</ul>
+<p>Initialization</p>
+<ul>
+<li>该阶段是类加载过程的最后一步。<strong>在准备阶段，类变量已经被赋过默认初始值</strong>，而在初始化阶段【运行时阶段】，类变量将<strong>被赋值为代码期望赋的值</strong>。换句话说，初始化阶段是执行<strong>类构造器方法</strong>的过程。</li>
+</ul>
+</li>
+<li><p>类加载器</p>
+<p>Java 类加载器可以分为三种。<strong>【黑马八股文有讲】</strong></p>
+<p>注意：这个三种是JDK8之前的情况，JDK9有改动。</p>
+<p>1）启动类（或者说引导类）加载器（Bootstrap Class-Loader），加载 <code>jre/lib</code> 包下面的 jar 文件，比如说常见的 rt.jar，通常以null表示。</p>
+<p>2）扩展类加载器（Extension or Ext Class-Loader），加载 <code>jre/lib/ext</code> 包下面的 jar 文件，它的父类加载器为引导类加载器。</p>
+<p>3）应用类加载器（Application or App Clas-Loader），根据程序的类路径（classpath）来加载 Java 类。它的父类加载器为扩展类加载器。</p>
+<p>JDK9的改动：</p>
+<p>Java 9仍然保留了三层类加载器结构，<strong>不过为了支持模块系统</strong>，对它们做了一些调整。扩展机制被移除，扩展类加载器由于向后兼容性的原因被保留，不过被重命名为<strong>平台类加载器（platform class loader）</strong>。可以通过<code>ClassLoader</code>的新方法<code>getPlatformClassLoader()</code>来获取。Java 9中的内置类加载器如下所示。</p>
+<ul>
+<li><p>引导类加载器：定义<strong>核心</strong>Java SE和JDK模块。</p>
+</li>
+<li><p>平台类加载器：定义<strong>部分</strong>Java SE和JDK模块。</p>
+</li>
+<li><p>应用或系统类加载器：定义<strong>CLASSPATH上的类和模块路径中的模块</strong>。</p>
+</li>
+</ul>
+<p><strong>关键程序：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">```Java</span><br><span class="line"><span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> ClassLoaderMain.class.getClassLoader();</span><br><span class="line"><span class="keyword">while</span> (classLoader != <span class="literal">null</span>) &#123;</span><br><span class="line">  System.out.println(classLoader);</span><br><span class="line">  classLoader = classLoader.getParent();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>
+</code></pre>
+</li>
+<li><p>双亲委派模型</p>
+<p>如果以上三种类加载器不能满足要求的话，程序员还可以自定义类加载器（继承 <code>java.lang.ClassLoader</code> 类），它们之间的层级关系如下图所示。</p>
+<p>【图片见<a href="https://cdn.tobebetterjavaer.com/tobebetterjavaer/images/jvm/class-load-02.png%E3%80%91">https://cdn.tobebetterjavaer.com/tobebetterjavaer/images/jvm/class-load-02.png】</a></p>
+<p>自定义类加载器的父类是应用类加载器（JDK8前）</p>
+<p>这种层次关系被称作为<strong>双亲委派模型</strong>：如果一个类加载器收到了加载类的请求，它会<strong>先把请求委托给上层加载器去完成</strong>，上层加载器<strong>又会委托</strong>上上层加载器，一直到最顶层的类加载器；如果上层加载器<strong>无法完成类的加载工作时</strong>，当前类加载器才会尝试自己去加载这个类。</p>
+<p>使用双亲委派模型有一个很明显的好处，那就是 Java 类随着它的类加载器一起具备了<strong>一种带有优先级的层次关系</strong>，这对于保证 Java 程序的稳定运作很重要。</p>
+<p>上文中曾提到，如果两个类的加载器不同，即使两个类来源于同一个字节码文件，<strong>那这两个类就必定不相等</strong>——双亲委派模型能够保证同一个类最终会被特定的类加载器加载。</p>
+</li>
+</ol>
+<h2 id="内存与垃圾回收"><a href="#内存与垃圾回收" class="headerlink" title="内存与垃圾回收"></a>内存与垃圾回收</h2><h3 id="JVM内存结构"><a href="#JVM内存结构" class="headerlink" title="JVM内存结构"></a>JVM内存结构</h3><h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ol>
+<li><p>程序计数器（Program Counter Register）所占的内存空间不大，很小一块，可以看作是当前线程所执行的字节码指令的行号指示器。字节码解释器会在工作的时候改变这个计数器的值来选取下一条需要执行的字节码指令，像分支、循环、跳转、异常处理、线程恢复等功能都需要依赖这个计数器来完成。</p>
+</li>
+<li><p>在 JVM 中，多线程是通过线程轮流切换来获得 CPU 执行时间的，因此，在任一具体时刻，一个 CPU 的内核只会执行一条线程中的指令，因此，为了线程切换后能恢复到正确的执行位置，每个线程都需要有一个独立的程序计数器，并且不能互相干扰，否则就会影响到程序的正常执行次序。</p>
+<p>也就是说，我们要求程序计数器是<strong>线程私有</strong>的。</p>
+</li>
+<li><p>《Java 虚拟机规范》中规定，如果线程执行的是非本地（native）方法，则程序计数器中保存的是当前需要执行的指令地址；如果线程执行的是本地方法，则程序计数器中的值是 undefined。</p>
+<p>为什么本地方法在程序计数器中的值是 undefined 的？因为本地方法大多是通过 C&#x2F;C++ 实现的，并未编译成需要执行的字节码指令。</p>
+<p>由于程序计数器中存储的数据所占的空间不会随程序的执行而发生大小上的改变，因此，程序计数器是不会发生内存溢出现象（OutOfMemory）的。</p>
+</li>
+</ol>
+<h4 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h4><p><a href="https://tobebetterjavaer.com/jvm/how-jvm-run-zijiema-zhiling.html">Java虚拟机是如何执行字节码指令的？ | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
+<li>所有线程共享的一块内存区域。在 <strong>Java 虚拟机启动的时候创建</strong>，用来存储<strong>对象</strong>（数组也是一种对象，new创建）。</li>
+<li>以前，Java 中“几乎”所有的对象都会在堆中分配，但随着 JIT（Just-In-Time）编译器的发展和逃逸技术的逐渐成熟，所有的对象都分配到堆上渐渐变得不那么“绝对”了。<strong>从 JDK 7 开始，Java 虚拟机已经默认开启逃逸分析了</strong>，意味着如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。</li>
+<li>堆是 Java 垃圾收集器管理的主要区域，因此也被称作 GC 堆（Garbage Collected Heap）。从垃圾回收的角度来看，由于垃圾收集器基本都采用了分代垃圾收集的算法，所以堆还可以细分为：<strong>新生代和老年代</strong>。新生代还可以细分为：Eden 空间、From Survivor、To Survivor 空间等。进一步划分的目的是<strong>更好地回收内存，或者更快地分配内存。</strong></li>
+<li>堆这最容易出现的就是 OutOfMemoryError 错误，分为以下几种表现形式：<ul>
+<li><code>OutOfMemoryError: GC Overhead Limit Exceeded</code>：当JVM花费太多时间执行垃圾回收并且只能回收很少的堆空间时，会发生这个错误的，就是堆空间爆满。</li>
+<li><code>java.lang.OutOfMemoryError: Java heap space</code>：假如在创建新的对象时, 堆内存中的空间不足以存放新创建的对象, 就会引发该错误。和本机的物理内存无关，和我们配置的虚拟机内存大小有关！</li>
+</ul>
+</li>
+</ol>
+<h4 id="元空间"><a href="#元空间" class="headerlink" title="元空间"></a>元空间</h4><p><a href="https://tobebetterjavaer.com/jvm/neicun-jiegou.html#_05%E3%80%81%E5%85%83%E7%A9%BA%E9%97%B4">https://tobebetterjavaer.com/jvm/neicun-jiegou.html#_05、元空间</a></p>
+<ol>
+<li><p>JDK8后，元空间取代方法区（或者说永久代），方法区和堆一样，是线程共享的区域，它用来存储已经被 <strong>Java 虚拟机加载的类信息、常量、静态变量，以及编译后的代码</strong>等。</p>
+</li>
+<li><p>在方法区中，还有一块非常重要的部分，也就是<strong>运行时常量池</strong>【字节码上很重要】。在讲 <a href="https://mp.weixin.qq.com/s/uMEZ2Xwctx4n-_8zvtDp5A">class 文件</a>的时候，提到了每个 class 文件都会有个常量池，用来存放字符串常量、类和接口的名字、字段名、常量等等。运行时常量池和 class 文件的常量池是一一对应的，它就是通过 class 文件中的常量池来构建的。</p>
+<p>JDK 7 <strong>之前</strong>，运行时常量池中包含着字符串常量池，都在方法区。</p>
+<p>JDK 7 的时候，字符串常量池从方法区中拿出来放到了堆中，运行时常量池中的其他东西还在方法区中</p>
+</li>
+<li><p>JDK 8 的时候，HotSpot <strong>移除了永久代</strong>，也就是说方法区不存在了，取而代之的是元空间。也就意味着<strong>字符串常量池在堆中</strong>，<strong>运行时常量池跑到了元空间</strong>。</p>
+<p>再来说说为什么要将永久代 (PermGen) 或者说方法区替换为元空间 (MetaSpace) 。</p>
+<p>第一，永久代放在 Java 虚拟机中，就会受到 Java 虚拟机内存大小的限制，<strong>而元空间使用的是本地内存，也就脱离了 Java 虚拟机内存的限制。</strong></p>
+<p>第二，JDK 8 的时候，在 HotSpot 中融合了 JRockit 虚拟机，<strong>而 JRockit 中并没有永久代的概念</strong>，因此新的 HotSpot 就没有必要再开辟一块空间来作为永久代了。</p>
+</li>
+</ol>
+<h3 id="Java创建对象"><a href="#Java创建对象" class="headerlink" title="Java创建对象"></a>Java创建对象</h3><p>问题：创建对象的时候，对象是在堆内存中创建的。但堆内存又分为新生代和老年代，新生代又细分为 Eden 空间、From Survivor 空间、To Survivor 空间。<strong>那我们创建的对象到底在哪里</strong>？</p>
+<p><a href="https://tobebetterjavaer.com/jvm/whereis-the-object.html">Java 创建的对象到底放在哪？ | 二哥的Java进阶之路</a></p>
+<p><img src="https://secure2.wostatic.cn/static/g4Tmp6tkHhSsMFaviUqmud/image.png?auth_key=1694067059-tMcx5kvXmCjJkU6RezCDC4-0-159c031a18e37cc9103f32f89208db95"></p>
+<h3 id="Java垃圾回收"><a href="#Java垃圾回收" class="headerlink" title="Java垃圾回收"></a>Java垃圾回收</h3><p><a href="https://tobebetterjavaer.com/jvm/gc.html">咱们从头到尾说一次Java垃圾回收 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<p><a href="https://tobebetterjavaer.com/jvm/tujie-gc.html">图解Java的垃圾回收机制 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+<p><a href="https://tobebetterjavaer.com/jvm/meituan-9-gc.html">Java中9种常见的CMS GC问题分析与解决 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（Java复习总结）面对对象</title>
+    <url>/2023/08/22/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89%E9%9D%A2%E5%AF%B9%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><ol>
+<li><p>在 Java 中，构造方法是一种特殊的方法，当一个类被实例化的时候，就会调用构造方法。只有在构造方法被调用的时候，对象才会被<strong>分配内存空间</strong>。每次使用 <code>new</code> 关键字创建对象的时候，构造方法至少会被调用一次。构造方法有无参构造方法与有参构造方法两种。</p>
+<p>注意，之所以叫它构造方法，是因为对象在创建的时候，需要通过<strong>构造方法初始化值</strong>——描写对象有哪些<strong>初始化状态</strong>。</p>
+<p>必须得要有构造方法，这样才能让类的对象初始化为null或其他值。</p>
+<p><strong>没有返回值，但是返回的是类的对象。</strong></p>
+<p><strong>不仅能做初始化工作，还可以做其他工作，比如启动线程、调用其他方法等</strong>。</p>
+</li>
+<li><p>构造方法必须符合以下<strong>规则</strong>：</p>
+<p>1）构造方法的名字必须和类名一样；</p>
+<p>2）构造方法<strong>没有返回类型</strong>，包括 void，否则会当成普通方法来处理。</p>
+<p>3）构造方法<strong>不能是抽象</strong>的（abstract）、静态的（static）、最终的（final）、同步的（synchronized）。</p>
+<p>简单解析一下最后一条规则：</p>
+<p>1）由于构造方法<strong>不能被子类继承</strong>，所以用 final 和 abstract 关键字修饰没有意义；</p>
+<p>2）构造方法用于初始化一个对象，所以用 static 关键字修饰没有意义；</p>
+<p>3）多个线程不会同时创建内存地址相同的同一个对象，所以用 synchronized 关键字修饰没有必要。</p>
+</li>
+<li><p>方法与构造方法之间的<strong>区别</strong>：</p>
+<p><img src="https://secure2.wostatic.cn/static/srA7J9pcmRUVvGVNsTP6AZ/image.png?auth_key=1694066108-wbvoTLTecKhRTraVMeMRYt-0-11c19ff298088815d26bd98274099f63"></p>
+</li>
+<li><p>复制对象的方式</p>
+<p>复制一个对象可以通过下面三种方式完成：</p>
+<ul>
+<li>通过构造方法</li>
+<li>通过对象的值</li>
+<li>通过 Object 类的 <code>clone()</code> 方法</li>
+</ul>
+</li>
+</ol>
+<h3 id="权限修饰符"><a href="#权限修饰符" class="headerlink" title="权限修饰符"></a>权限修饰符</h3><ol>
+<li><p>补充一些关于 Java 包和类文件的知识：</p>
+<p>1）Java 中的包主要是为了防止<strong>类文件命名冲突</strong>以及方便<strong>进行代码组织和管理</strong>；</p>
+<p>2）对于一个 <strong>Java 源代码文件</strong>，如果存在 public 类的话，<strong>只能有一个 public 类</strong>，且此时源代码文件的名称必须和 <strong>public 类的名称完全相同</strong>。</p>
+<p>另外，如果还存在其他类，这些类在包外是不可见的。如果源代码文件没有 public 类，则源代码文件的名称可以随意命名。</p>
+</li>
 </ol>
 ]]></content>
       <tags>
@@ -1462,20 +1738,6 @@ def parse_page(self, response):
       </tags>
   </entry>
   <entry>
-    <title>数据结构-排序算法-桶排序</title>
-    <url>/2023/09/17/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95-%E6%A1%B6%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p>桶排序是在计数排序的基础上改进的，差不多对于有 n 个元素的计数排序上，就有 n 个桶，每个桶放一个元素，但是对于元素很大的数组时，这个情况存在数据超出容量的问题，所以需要设置每个桶放多个元素，并且放完后，需要对桶里面的元素排序。</p>
-<p>然后需要创建动态数组，因为不确定每个桶里面会有多少个元素，所以针对每个桶要分别加个动态数组，此处可以使用 2 个 ArrayList 或 DynamicArray 来创建。</p>
-<p>最后，需要注意的是，针对-9-9这个较为极端的情况下，需要手动设置每个桶放置的元素个数，并且需要借鉴计数排序，求出最大值和最小值，然后计算合适的桶的个数，以及怎么将每个元素放到合适的桶上（关键点是最小值）。</p>
-<p>其平均时间复杂度是 O(n+k)，但是最差的时间复杂度可以有 O(n^2)。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BucketSort</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bucketsort</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> range)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> a[<span class="number">0</span>];</span><br><span class="line">        <span class="type">int</span> <span class="variable">min</span> <span class="operator">=</span> a[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i++)&#123;</span><br><span class="line">            max = Math.max(max, a[i]);</span><br><span class="line">            min = Math.min(min, a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; buckets = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; (max - min) / range + <span class="number">1</span>; i++)&#123;</span><br><span class="line">            buckets.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; a.length; i++)&#123;</span><br><span class="line">            buckets.get((a[i] - min) / range).add(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; buckets.size(); i++)&#123;</span><br><span class="line">            Collections.sort(buckets.get(i));</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//        for (int i = 0; i &lt; buckets.size(); i++) &#123;</span></span><br><span class="line"><span class="comment">//            System.out.println(Arrays.toString(buckets.get(i).toArray()));</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; buckets.size(); i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(buckets.get(i).size() &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                a[k++] = buckets.get(i).get(<span class="number">0</span>);</span><br><span class="line">                buckets.get(i).remove(<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] a = &#123;<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, -<span class="number">1</span>, <span class="number">6</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">17</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">        bucketsort(a, <span class="number">3</span>);</span><br><span class="line">        System.out.println(Arrays.toString(a));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>刷题</tag>
-        <tag>排序算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>（Java复习总结）数组与字符串</title>
     <url>/2023/08/21/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89%E6%95%B0%E7%BB%84%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
     <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/array/array.html">掌握Java数组：一个非常特殊的对象 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
@@ -1496,192 +1758,6 @@ def parse_page(self, response):
 <li>“第二，String 类实现了 <a href="https://javabetter.cn/io/Serializbale.html">Serializable 接口</a>，意味着它可以<a href="https://javabetter.cn/io/serialize.html">序列化</a>。”</li>
 <li>“第三，String 类实现了 <a href="https://javabetter.cn/basic-extra-meal/comparable-omparator.html">Comparable 接口</a>，意味着最好不要用‘&#x3D;&#x3D;’来<a href="https://javabetter.cn/string/equals.html">比较两个字符串是否相等</a>，而应该用 <code>compareTo()</code> 方法去比较。”</li>
 </ol>
-]]></content>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>（Java复习总结）JVM简要总结</title>
-    <url>/2023/09/02/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89JVM%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
-<h2 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h2><h4 id="字节码-1"><a href="#字节码-1" class="headerlink" title="字节码"></a>字节码</h4><ol>
-<li><p>Java分为编译时与运行时，而字节码与编译时有关。</p>
-</li>
-<li><p><strong>类加载机制</strong>与字节码密切相关。</p>
-</li>
-<li><p>IDEA 默认会用 Fernflower 反编译工具将<strong>字节码文件（后缀为 .class 的文件，也就是 Java 源代码编译后的文件）</strong>反编译为我们可以看得懂的 Java 源代码。</p>
-</li>
-<li><p>在编译阶段，Java会将Java源代码文件编译为字节码文件。在这个阶段，编译器会进行一些检查工作，比如说，某个关键字是不是写错了，语法上是不是符合预期了，不能有很明显的错误，否则带到运行时再检查出来就会比较麻烦了。</p>
-</li>
-<li><p>Java 字节码是沟通 JVM 与 Java 代码的桥梁，可以用javap查看。</p>
-</li>
-<li><p>Java虚拟机采用基于栈的架构，其指令由操作码与操作数组成。</p>
-<p>0xb2 getstatic 获取静态字段的值<br>0x12 ldc 常量池中的常量值入栈<br>0xb6 invokevirtual 运行时方法绑定调用方法<br>0xb1 return void 函数返回</p>
-</li>
-<li><p>JVM会在<strong>准备阶段</strong>对类变量（静态变量， static修饰）<strong>分配内存并初始化</strong>（对应数据类型的默认初始值，如 0、0L、null、false 等）。</p>
-<p>也就是说，假如有这样一段代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">String</span> <span class="variable">chenmo</span> <span class="operator">=</span> <span class="string">&quot;沉默&quot;</span>; <span class="comment">//会查看常量池是否存在，只创建一个对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">wanger</span> <span class="operator">=</span> <span class="string">&quot;王二&quot;</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">cmower</span> <span class="operator">=</span> <span class="string">&quot;沉默王二&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>chenmo 不会被分配内存，而 wanger 会；但 wanger 的初始值不是“王二”而是 <code>null</code>。</p>
-<p>需要注意的是，<code>static final</code> 修饰的变量被称作为常量，和类变量不同。常量一旦赋值就不会改变了，所以 cmower 在准备阶段的值为“沉默王二”而不是 <code>null</code>。</p>
-</li>
-</ol>
-<h4 id="Class文件"><a href="#Class文件" class="headerlink" title="Class文件"></a>Class文件</h4><p><a href="https://tobebetterjavaer.com/jvm/class-file-jiegou.html">详解Java的类文件（class文件）结构 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
-<ul>
-<li>使用xxd命令后，得到16进制内容，其中如果开头有cafe base这个魔数，说明这个class文件可以被JVM接受。</li>
-</ul>
-<p>上面往后抽空看。</p>
-<h4 id="Javap与字节码"><a href="#Javap与字节码" class="headerlink" title="Javap与字节码"></a>Javap与字节码</h4><p><a href="https://tobebetterjavaer.com/jvm/bytecode.html">从javap的角度轻松看懂字节码 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
-<p>上面抽空看</p>
-<ol>
-<li><p>Java 内置了一个反编译命令 javap，可以通过 <code>javap -help</code> 了解 javap 的基本用法</p>
-</li>
-<li><p>常量池</p>
-<p>Constant pool，也就是字节码文件最重要的常量池部分。可以把常量池理解为<strong>字节码文件中的资源仓库，主要存放两大类信息。</strong></p>
-<p>1）<strong>字面量</strong>（Literal），有点类似 Java 中的常量概念，比如文本字符串，final 常量等。</p>
-<p>2）<strong>符号引用</strong>（Symbolic References），属于编译原理方面的概念，包括 3 种：</p>
-<ul>
-<li>类和接口的全限定名（Fully Qualified Name）</li>
-<li>字段的名称和描述符（Descriptor）</li>
-<li>方法的名称和描述符</li>
-</ul>
-<p>Java 虚拟机是在加载字节码文件的时候才进行的动态链接，也就是说，字段和方法的符号引用只有经过<strong>运行期转换后才能获得真正的内存地址</strong>。当 <strong>Java 虚拟机运行</strong>时，需要从常量池获取对应的符号引用，然后在类创建或者运行时解析并翻译到具体的内存地址上。</p>
-</li>
-</ol>
-<h4 id="JVM字节码详情"><a href="#JVM字节码详情" class="headerlink" title="JVM字节码详情"></a>JVM字节码详情</h4><h4 id="虚拟机-字节码"><a href="#虚拟机-字节码" class="headerlink" title="虚拟机 字节码"></a>虚拟机 字节码</h4><h4 id="HSDB"><a href="#HSDB" class="headerlink" title="HSDB"></a>HSDB</h4><h4 id="ASM"><a href="#ASM" class="headerlink" title="ASM"></a>ASM</h4><p><a href="https://tobebetterjavaer.com/jvm/asm.html">史上最通俗易懂的ASM教程 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
-<p>前面有讲基础内容。</p>
-<h4 id="自己编译JDK"><a href="#自己编译JDK" class="headerlink" title="自己编译JDK"></a>自己编译JDK</h4><h2 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h2><h4 id="类加载-1"><a href="#类加载-1" class="headerlink" title="类加载"></a>类加载</h4><ol>
-<li><p>类<strong>加载</strong>过程</p>
-<p>Loading</p>
-<p>Verification</p>
-<p>Preparation【编译时阶段】</p>
-<p>Resolution【运行时阶段】</p>
-<ul>
-<li><p>该阶段将常量池中的<strong>符号引用</strong>转化为<strong>直接引用</strong>。</p>
-<p><strong>符号引用</strong>以一组符号（任何形式的字面量，只要在使用时能够无歧义的定位到目标即可）来描述所引用的目标。（<strong>就是不知道内存地址，先暂时用它的名字，也就是符号</strong>）</p>
-<p>在编译时，Java 类并不知道所引用的类的实际地址，因此只能使用符号引用来代替。比如 <code>com.Wanger</code> 类引用了 <code>com.Chenmo</code> 类，编译时 Wanger 类并不知道 Chenmo 类的实际内存地址，因此只能使用符号 <code>com.Chenmo</code>。</p>
-<p><strong>直接引用</strong>通过对<strong>符号引用进行解析</strong>，找到引用的实际内存地址。</p>
-</li>
-</ul>
-<p>Initialization</p>
-<ul>
-<li>该阶段是类加载过程的最后一步。<strong>在准备阶段，类变量已经被赋过默认初始值</strong>，而在初始化阶段【运行时阶段】，类变量将<strong>被赋值为代码期望赋的值</strong>。换句话说，初始化阶段是执行<strong>类构造器方法</strong>的过程。</li>
-</ul>
-</li>
-<li><p>类加载器</p>
-<p>Java 类加载器可以分为三种。<strong>【黑马八股文有讲】</strong></p>
-<p>注意：这个三种是JDK8之前的情况，JDK9有改动。</p>
-<p>1）启动类（或者说引导类）加载器（Bootstrap Class-Loader），加载 <code>jre/lib</code> 包下面的 jar 文件，比如说常见的 rt.jar，通常以null表示。</p>
-<p>2）扩展类加载器（Extension or Ext Class-Loader），加载 <code>jre/lib/ext</code> 包下面的 jar 文件，它的父类加载器为引导类加载器。</p>
-<p>3）应用类加载器（Application or App Clas-Loader），根据程序的类路径（classpath）来加载 Java 类。它的父类加载器为扩展类加载器。</p>
-<p>JDK9的改动：</p>
-<p>Java 9仍然保留了三层类加载器结构，<strong>不过为了支持模块系统</strong>，对它们做了一些调整。扩展机制被移除，扩展类加载器由于向后兼容性的原因被保留，不过被重命名为<strong>平台类加载器（platform class loader）</strong>。可以通过<code>ClassLoader</code>的新方法<code>getPlatformClassLoader()</code>来获取。Java 9中的内置类加载器如下所示。</p>
-<ul>
-<li><p>引导类加载器：定义<strong>核心</strong>Java SE和JDK模块。</p>
-</li>
-<li><p>平台类加载器：定义<strong>部分</strong>Java SE和JDK模块。</p>
-</li>
-<li><p>应用或系统类加载器：定义<strong>CLASSPATH上的类和模块路径中的模块</strong>。</p>
-</li>
-</ul>
-<p><strong>关键程序：</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">```Java</span><br><span class="line"><span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> ClassLoaderMain.class.getClassLoader();</span><br><span class="line"><span class="keyword">while</span> (classLoader != <span class="literal">null</span>) &#123;</span><br><span class="line">  System.out.println(classLoader);</span><br><span class="line">  classLoader = classLoader.getParent();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<pre><code>
-</code></pre>
-</li>
-<li><p>双亲委派模型</p>
-<p>如果以上三种类加载器不能满足要求的话，程序员还可以自定义类加载器（继承 <code>java.lang.ClassLoader</code> 类），它们之间的层级关系如下图所示。</p>
-<p>【图片见<a href="https://cdn.tobebetterjavaer.com/tobebetterjavaer/images/jvm/class-load-02.png%E3%80%91">https://cdn.tobebetterjavaer.com/tobebetterjavaer/images/jvm/class-load-02.png】</a></p>
-<p>自定义类加载器的父类是应用类加载器（JDK8前）</p>
-<p>这种层次关系被称作为<strong>双亲委派模型</strong>：如果一个类加载器收到了加载类的请求，它会<strong>先把请求委托给上层加载器去完成</strong>，上层加载器<strong>又会委托</strong>上上层加载器，一直到最顶层的类加载器；如果上层加载器<strong>无法完成类的加载工作时</strong>，当前类加载器才会尝试自己去加载这个类。</p>
-<p>使用双亲委派模型有一个很明显的好处，那就是 Java 类随着它的类加载器一起具备了<strong>一种带有优先级的层次关系</strong>，这对于保证 Java 程序的稳定运作很重要。</p>
-<p>上文中曾提到，如果两个类的加载器不同，即使两个类来源于同一个字节码文件，<strong>那这两个类就必定不相等</strong>——双亲委派模型能够保证同一个类最终会被特定的类加载器加载。</p>
-</li>
-</ol>
-<h2 id="内存与垃圾回收"><a href="#内存与垃圾回收" class="headerlink" title="内存与垃圾回收"></a>内存与垃圾回收</h2><h3 id="JVM内存结构"><a href="#JVM内存结构" class="headerlink" title="JVM内存结构"></a>JVM内存结构</h3><h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ol>
-<li><p>程序计数器（Program Counter Register）所占的内存空间不大，很小一块，可以看作是当前线程所执行的字节码指令的行号指示器。字节码解释器会在工作的时候改变这个计数器的值来选取下一条需要执行的字节码指令，像分支、循环、跳转、异常处理、线程恢复等功能都需要依赖这个计数器来完成。</p>
-</li>
-<li><p>在 JVM 中，多线程是通过线程轮流切换来获得 CPU 执行时间的，因此，在任一具体时刻，一个 CPU 的内核只会执行一条线程中的指令，因此，为了线程切换后能恢复到正确的执行位置，每个线程都需要有一个独立的程序计数器，并且不能互相干扰，否则就会影响到程序的正常执行次序。</p>
-<p>也就是说，我们要求程序计数器是<strong>线程私有</strong>的。</p>
-</li>
-<li><p>《Java 虚拟机规范》中规定，如果线程执行的是非本地（native）方法，则程序计数器中保存的是当前需要执行的指令地址；如果线程执行的是本地方法，则程序计数器中的值是 undefined。</p>
-<p>为什么本地方法在程序计数器中的值是 undefined 的？因为本地方法大多是通过 C&#x2F;C++ 实现的，并未编译成需要执行的字节码指令。</p>
-<p>由于程序计数器中存储的数据所占的空间不会随程序的执行而发生大小上的改变，因此，程序计数器是不会发生内存溢出现象（OutOfMemory）的。</p>
-</li>
-</ol>
-<h4 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h4><p><a href="https://tobebetterjavaer.com/jvm/how-jvm-run-zijiema-zhiling.html">Java虚拟机是如何执行字节码指令的？ | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
-<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
-<li>所有线程共享的一块内存区域。在 <strong>Java 虚拟机启动的时候创建</strong>，用来存储<strong>对象</strong>（数组也是一种对象，new创建）。</li>
-<li>以前，Java 中“几乎”所有的对象都会在堆中分配，但随着 JIT（Just-In-Time）编译器的发展和逃逸技术的逐渐成熟，所有的对象都分配到堆上渐渐变得不那么“绝对”了。<strong>从 JDK 7 开始，Java 虚拟机已经默认开启逃逸分析了</strong>，意味着如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。</li>
-<li>堆是 Java 垃圾收集器管理的主要区域，因此也被称作 GC 堆（Garbage Collected Heap）。从垃圾回收的角度来看，由于垃圾收集器基本都采用了分代垃圾收集的算法，所以堆还可以细分为：<strong>新生代和老年代</strong>。新生代还可以细分为：Eden 空间、From Survivor、To Survivor 空间等。进一步划分的目的是<strong>更好地回收内存，或者更快地分配内存。</strong></li>
-<li>堆这最容易出现的就是 OutOfMemoryError 错误，分为以下几种表现形式：<ul>
-<li><code>OutOfMemoryError: GC Overhead Limit Exceeded</code>：当JVM花费太多时间执行垃圾回收并且只能回收很少的堆空间时，会发生这个错误的，就是堆空间爆满。</li>
-<li><code>java.lang.OutOfMemoryError: Java heap space</code>：假如在创建新的对象时, 堆内存中的空间不足以存放新创建的对象, 就会引发该错误。和本机的物理内存无关，和我们配置的虚拟机内存大小有关！</li>
-</ul>
-</li>
-</ol>
-<h4 id="元空间"><a href="#元空间" class="headerlink" title="元空间"></a>元空间</h4><p><a href="https://tobebetterjavaer.com/jvm/neicun-jiegou.html#_05%E3%80%81%E5%85%83%E7%A9%BA%E9%97%B4">https://tobebetterjavaer.com/jvm/neicun-jiegou.html#_05、元空间</a></p>
-<ol>
-<li><p>JDK8后，元空间取代方法区（或者说永久代），方法区和堆一样，是线程共享的区域，它用来存储已经被 <strong>Java 虚拟机加载的类信息、常量、静态变量，以及编译后的代码</strong>等。</p>
-</li>
-<li><p>在方法区中，还有一块非常重要的部分，也就是<strong>运行时常量池</strong>【字节码上很重要】。在讲 <a href="https://mp.weixin.qq.com/s/uMEZ2Xwctx4n-_8zvtDp5A">class 文件</a>的时候，提到了每个 class 文件都会有个常量池，用来存放字符串常量、类和接口的名字、字段名、常量等等。运行时常量池和 class 文件的常量池是一一对应的，它就是通过 class 文件中的常量池来构建的。</p>
-<p>JDK 7 <strong>之前</strong>，运行时常量池中包含着字符串常量池，都在方法区。</p>
-<p>JDK 7 的时候，字符串常量池从方法区中拿出来放到了堆中，运行时常量池中的其他东西还在方法区中</p>
-</li>
-<li><p>JDK 8 的时候，HotSpot <strong>移除了永久代</strong>，也就是说方法区不存在了，取而代之的是元空间。也就意味着<strong>字符串常量池在堆中</strong>，<strong>运行时常量池跑到了元空间</strong>。</p>
-<p>再来说说为什么要将永久代 (PermGen) 或者说方法区替换为元空间 (MetaSpace) 。</p>
-<p>第一，永久代放在 Java 虚拟机中，就会受到 Java 虚拟机内存大小的限制，<strong>而元空间使用的是本地内存，也就脱离了 Java 虚拟机内存的限制。</strong></p>
-<p>第二，JDK 8 的时候，在 HotSpot 中融合了 JRockit 虚拟机，<strong>而 JRockit 中并没有永久代的概念</strong>，因此新的 HotSpot 就没有必要再开辟一块空间来作为永久代了。</p>
-</li>
-</ol>
-<h3 id="Java创建对象"><a href="#Java创建对象" class="headerlink" title="Java创建对象"></a>Java创建对象</h3><p>问题：创建对象的时候，对象是在堆内存中创建的。但堆内存又分为新生代和老年代，新生代又细分为 Eden 空间、From Survivor 空间、To Survivor 空间。<strong>那我们创建的对象到底在哪里</strong>？</p>
-<p><a href="https://tobebetterjavaer.com/jvm/whereis-the-object.html">Java 创建的对象到底放在哪？ | 二哥的Java进阶之路</a></p>
-<p><img src="https://secure2.wostatic.cn/static/g4Tmp6tkHhSsMFaviUqmud/image.png?auth_key=1694067059-tMcx5kvXmCjJkU6RezCDC4-0-159c031a18e37cc9103f32f89208db95"></p>
-<h3 id="Java垃圾回收"><a href="#Java垃圾回收" class="headerlink" title="Java垃圾回收"></a>Java垃圾回收</h3><p><a href="https://tobebetterjavaer.com/jvm/gc.html">咱们从头到尾说一次Java垃圾回收 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
-<p><a href="https://tobebetterjavaer.com/jvm/tujie-gc.html">图解Java的垃圾回收机制 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
-<p><a href="https://tobebetterjavaer.com/jvm/meituan-9-gc.html">Java中9种常见的CMS GC问题分析与解决 | Java程序员进阶之路 (tobebetterjavaer.com)</a></p>
-]]></content>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>（Java复习总结）多线程简要总结</title>
-    <url>/2023/08/28/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AE%80%E8%A6%81%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
-<h3 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h3><ul>
-<li><p>Syschronized是关键字，可以修饰实例方法、静态方法和代码块。</p>
-<ul>
-<li>修饰实例方法，作用于当前实例加锁，进入同步代码前要获得当前实例的锁；</li>
-<li>修饰静态方法，作用于当前类对象加锁，进入同步代码前要获得当前类对象的锁；</li>
-<li>修饰代码块，指定加锁对象，对给定对象加锁，进入同步代码库前要获得给定对象的锁</li>
-</ul>
-<p>可以让实例方法、静态方法等变为一个临界区</p>
-<p>Java的锁都是基于<strong>对象</strong>的。</p>
-</li>
-<li><p>synchronized可以保证原子性、可见性（能够替代volatile）和有序性。</p>
-<p>而volatile只能保证可见性与有序性，不能保证原子性。</p>
-</li>
-<li><p>synchronized是悲观锁。</p>
-</li>
-<li><p>几个锁的等级排序【要回顾】</p>
-<p>无锁&lt;偏向锁&lt;轻量级锁&lt;重量级锁</p>
-</li>
-</ul>
-<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><ol>
-<li><p>synchronized是悲观锁</p>
-<p>而CAS是乐观锁</p>
-<p><strong>悲观锁：</strong></p>
-<p>悲观锁就是我们常说的锁。对于悲观锁来说，它总是认为每次访问共享资源时会发生冲突，所以必须对每次数据操作加上锁，以保证临界区的程序同一时间只能有一个线程在执行。</p>
-<p><strong>乐观锁：</strong></p>
-<p>乐观锁又称为“<strong>无锁</strong>”，顾名思义，它是乐观派。乐观锁总是假设对共享资源的访问没有冲突，线程可以不停地执行，无需加锁也无需等待。而一旦多个线程发生冲突，乐观锁通常是使用一种称为<strong>CAS</strong>的技术来保证<strong>线程执行的安全性</strong>。</p>
-<p>由于无锁操作中没有锁的存在，因此不可能出现死锁的情况，也就是说<strong>乐观锁天生免疫死锁</strong>。</p>
-<p>乐观锁多用于“读多写少“的环境，避免频繁加锁影响性能；而悲观锁多用于”写多读少“的环境，避免频繁失败和重试影响性能。</p>
-</li>
-</ol>
-<h3 id="锁总结-重要，查阅该网址"><a href="#锁总结-重要，查阅该网址" class="headerlink" title="锁总结[重要，查阅该网址]"></a>锁总结[重要，查阅该网址]</h3><p><a href="https://javabetter.cn/thread/suo.html">公司空降一个美团大佬，彻底把Java中的锁”讲清楚了 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
-<p><img src="https://secure2.wostatic.cn/static/cVT9qmnz3xTwL7aR9HPYpS/image.png?auth_key=1694066438-3YDQC8JfwDMXoryS64KkXq-0-6d773945dfe8f3d988052210c57e10b9"></p>
 ]]></content>
       <tags>
         <tag>Java</tag>
@@ -1741,62 +1817,6 @@ def parse_page(self, response):
 <p>MP如何更新数据  </p>
 <p>DigestUtils  </p>
 <p>定时任务框架-xxljob</p>
-]]></content>
-      <tags>
-        <tag>开发</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>（Java复习总结）面对对象</title>
-    <url>/2023/08/22/%EF%BC%88Java%E5%A4%8D%E4%B9%A0%E6%80%BB%E7%BB%93%EF%BC%89%E9%9D%A2%E5%AF%B9%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<p>复习资料：<a href="https://javabetter.cn/home.html">二哥的Java进阶之路x沉默王二 | 二哥的Java进阶之路 (javabetter.cn)</a></p>
-<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><ol>
-<li><p>在 Java 中，构造方法是一种特殊的方法，当一个类被实例化的时候，就会调用构造方法。只有在构造方法被调用的时候，对象才会被<strong>分配内存空间</strong>。每次使用 <code>new</code> 关键字创建对象的时候，构造方法至少会被调用一次。构造方法有无参构造方法与有参构造方法两种。</p>
-<p>注意，之所以叫它构造方法，是因为对象在创建的时候，需要通过<strong>构造方法初始化值</strong>——描写对象有哪些<strong>初始化状态</strong>。</p>
-<p>必须得要有构造方法，这样才能让类的对象初始化为null或其他值。</p>
-<p><strong>没有返回值，但是返回的是类的对象。</strong></p>
-<p><strong>不仅能做初始化工作，还可以做其他工作，比如启动线程、调用其他方法等</strong>。</p>
-</li>
-<li><p>构造方法必须符合以下<strong>规则</strong>：</p>
-<p>1）构造方法的名字必须和类名一样；</p>
-<p>2）构造方法<strong>没有返回类型</strong>，包括 void，否则会当成普通方法来处理。</p>
-<p>3）构造方法<strong>不能是抽象</strong>的（abstract）、静态的（static）、最终的（final）、同步的（synchronized）。</p>
-<p>简单解析一下最后一条规则：</p>
-<p>1）由于构造方法<strong>不能被子类继承</strong>，所以用 final 和 abstract 关键字修饰没有意义；</p>
-<p>2）构造方法用于初始化一个对象，所以用 static 关键字修饰没有意义；</p>
-<p>3）多个线程不会同时创建内存地址相同的同一个对象，所以用 synchronized 关键字修饰没有必要。</p>
-</li>
-<li><p>方法与构造方法之间的<strong>区别</strong>：</p>
-<p><img src="https://secure2.wostatic.cn/static/srA7J9pcmRUVvGVNsTP6AZ/image.png?auth_key=1694066108-wbvoTLTecKhRTraVMeMRYt-0-11c19ff298088815d26bd98274099f63"></p>
-</li>
-<li><p>复制对象的方式</p>
-<p>复制一个对象可以通过下面三种方式完成：</p>
-<ul>
-<li>通过构造方法</li>
-<li>通过对象的值</li>
-<li>通过 Object 类的 <code>clone()</code> 方法</li>
-</ul>
-</li>
-</ol>
-<h3 id="权限修饰符"><a href="#权限修饰符" class="headerlink" title="权限修饰符"></a>权限修饰符</h3><ol>
-<li><p>补充一些关于 Java 包和类文件的知识：</p>
-<p>1）Java 中的包主要是为了防止<strong>类文件命名冲突</strong>以及方便<strong>进行代码组织和管理</strong>；</p>
-<p>2）对于一个 <strong>Java 源代码文件</strong>，如果存在 public 类的话，<strong>只能有一个 public 类</strong>，且此时源代码文件的名称必须和 <strong>public 类的名称完全相同</strong>。</p>
-<p>另外，如果还存在其他类，这些类在包外是不可见的。如果源代码文件没有 public 类，则源代码文件的名称可以随意命名。</p>
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>（开发笔记）平台开发时所使用的JSON记录总结</title>
-    <url>/2023/01/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%97%B6%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84JSON%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h3 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h3><p>JSON的作用是实现序列化，用于将Java中的对象转化为JSON字符串，方便返回给前端。</p>
-<p>平台使用的JSON是fastjson，阿里开源的，但是Java和Spring版本不能过高，否则fastjson可能没法用。</p>
-<p>另外，SpringBoot内置的Jackson和谷歌开源的Gson也可以用（立下flag要学习使用）</p>
-<h3 id="parseArray"><a href="#parseArray" class="headerlink" title="parseArray"></a>parseArray</h3><p>Java中的JSON.parseArray()方法用于将JSON数组字符串解析为Java中的List对象。<br>比如如果给一个JSON语句，然后第二个参数给Map.class，于是该方法就将该语句解析为一个List语句，其中该List里面的类是Map。</p>
 ]]></content>
       <tags>
         <tag>开发</tag>
@@ -2019,6 +2039,18 @@ def parse_page(self, response):
       </tags>
   </entry>
   <entry>
+    <title>（开发笔记）平台开发时所使用的JSON记录总结</title>
+    <url>/2023/01/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E6%97%B6%E6%89%80%E4%BD%BF%E7%94%A8%E7%9A%84JSON%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h3 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h3><p>JSON的作用是实现序列化，用于将Java中的对象转化为JSON字符串，方便返回给前端。</p>
+<p>平台使用的JSON是fastjson，阿里开源的，但是Java和Spring版本不能过高，否则fastjson可能没法用。</p>
+<p>另外，SpringBoot内置的Jackson和谷歌开源的Gson也可以用（立下flag要学习使用）</p>
+<h3 id="parseArray"><a href="#parseArray" class="headerlink" title="parseArray"></a>parseArray</h3><p>Java中的JSON.parseArray()方法用于将JSON数组字符串解析为Java中的List对象。<br>比如如果给一个JSON语句，然后第二个参数给Map.class，于是该方法就将该语句解析为一个List语句，其中该List里面的类是Map。</p>
+]]></content>
+      <tags>
+        <tag>开发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>（开发笔记）平台开发的注意事项简要记录</title>
     <url>/2023/04/23/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E5%BC%80%E5%8F%91%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E7%AE%80%E8%A6%81%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h4 id="nacos配置问题"><a href="#nacos配置问题" class="headerlink" title="nacos配置问题"></a>nacos配置问题</h4><p>每次正确添加nacos配置后，如果碰上某个微服务的错误，此时要考虑是不是不小心加上了无关的依赖库，尤其是okhttp 。</p>
@@ -2045,6 +2077,37 @@ def parse_page(self, response):
       </tags>
   </entry>
   <entry>
+    <title>（开发笔记）注解总结之@RequestBody</title>
+    <url>/2023/03/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E6%B3%A8%E8%A7%A3%E6%80%BB%E7%BB%93%E4%B9%8B-RequestBody/</url>
+    <content><![CDATA[<p><code>@RequestBody</code> 是一个Spring框架中的注解，用于将HTTP请求的内容（例如JSON、XML等）绑定到方法的参数上。它通常与Spring MVC或Spring Boot中的控制器方法一起使用。  </p>
+<p>使用<code>@RequestBody</code>注解时，Spring框架会自动将请求体的内容解析，并尝试将其转换为指定的参数类型。  </p>
+<p>以下是<code>@RequestBody</code>的示例用法：  </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span>  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;  </span><br><span class="line">    <span class="meta">@PostMapping(&quot;/users&quot;)</span>  </span><br><span class="line">        <span class="keyword">public</span> ResponseEntity&lt;?&gt; createUser(<span class="meta">@RequestBody</span> User user) &#123;  </span><br><span class="line">        <span class="comment">// 处理请求，使用接收到的User对象  </span></span><br><span class="line">        <span class="comment">// ...  </span></span><br><span class="line">    <span class="keyword">return</span> ResponseEntity.ok().build();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，<code>createUser()</code>方法使用<code>@RequestBody</code>注解来接收HTTP POST请求中的请求体，并将其转换为User对象。Spring框架会根据请求的内容类型（例如JSON）以及User类的定义，自动完成请求体到User对象的转换。  </p>
+<p>需要注意的是，在使用<code>@RequestBody</code>时，通常还需要指定请求的Content-Type。例如，如果请求的Content-Type是application&#x2F;json，则Spring会使用相应的JSON转换器将JSON字符串转换为User对象。  </p>
+<p>另外，<code>@RequestBody</code>注解还支持其他参数类型，如<code>Map&lt;String, Object&gt;</code>、<code>List&lt;User&gt;</code>等，以及自定义的数据转换器和处理器。  </p>
+<p>总之，<code>@RequestBody</code>注解允许将HTTP请求的内容转换为方法参数，并方便地在Spring框架中处理和使用请求体数据。</p>
+]]></content>
+      <tags>
+        <tag>开发</tag>
+        <tag>注解与反射</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>（开发笔记）平台数据库开发记录总结</title>
+    <url>/2023/02/21/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%91%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>添加到数据库时  </p>
+<ul>
+<li>如果是Mapper，一般是用insert方法或save方法  </li>
+<li>而用这些方法前，一般会设置dto类，并创建dto方法，然后用BeansUtils将传输过来的类拷贝到这个dto类，但是dto类依然有些属性是空着，要自己从其他地方添加。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>开发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>（秋招笔试-美团）平均数为k的最长连续子数组</title>
     <url>/2023/09/01/%EF%BC%88%E7%A7%8B%E6%8B%9B%E7%AC%94%E8%AF%95-%E7%BE%8E%E5%9B%A2%EF%BC%89%E5%B9%B3%E5%9D%87%E6%95%B0%E4%B8%BAk%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/</url>
     <content><![CDATA[<p>题的来源：</p>
@@ -2063,37 +2126,6 @@ def parse_page(self, response):
         <tag>刷题：前缀和</tag>
         <tag>刷题：哈希表</tag>
         <tag>秋招</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>（开发笔记）平台数据库开发记录总结</title>
-    <url>/2023/02/21/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E5%B9%B3%E5%8F%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%91%E8%AE%B0%E5%BD%95%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p>添加到数据库时  </p>
-<ul>
-<li>如果是Mapper，一般是用insert方法或save方法  </li>
-<li>而用这些方法前，一般会设置dto类，并创建dto方法，然后用BeansUtils将传输过来的类拷贝到这个dto类，但是dto类依然有些属性是空着，要自己从其他地方添加。</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>开发</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>（开发笔记）注解总结之@RequestBody</title>
-    <url>/2023/03/10/%EF%BC%88%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0%EF%BC%89%E6%B3%A8%E8%A7%A3%E6%80%BB%E7%BB%93%E4%B9%8B-RequestBody/</url>
-    <content><![CDATA[<p><code>@RequestBody</code> 是一个Spring框架中的注解，用于将HTTP请求的内容（例如JSON、XML等）绑定到方法的参数上。它通常与Spring MVC或Spring Boot中的控制器方法一起使用。  </p>
-<p>使用<code>@RequestBody</code>注解时，Spring框架会自动将请求体的内容解析，并尝试将其转换为指定的参数类型。  </p>
-<p>以下是<code>@RequestBody</code>的示例用法：  </p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span>  </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;  </span><br><span class="line">    <span class="meta">@PostMapping(&quot;/users&quot;)</span>  </span><br><span class="line">        <span class="keyword">public</span> ResponseEntity&lt;?&gt; createUser(<span class="meta">@RequestBody</span> User user) &#123;  </span><br><span class="line">        <span class="comment">// 处理请求，使用接收到的User对象  </span></span><br><span class="line">        <span class="comment">// ...  </span></span><br><span class="line">    <span class="keyword">return</span> ResponseEntity.ok().build();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
-
-<p>在上面的示例中，<code>createUser()</code>方法使用<code>@RequestBody</code>注解来接收HTTP POST请求中的请求体，并将其转换为User对象。Spring框架会根据请求的内容类型（例如JSON）以及User类的定义，自动完成请求体到User对象的转换。  </p>
-<p>需要注意的是，在使用<code>@RequestBody</code>时，通常还需要指定请求的Content-Type。例如，如果请求的Content-Type是application&#x2F;json，则Spring会使用相应的JSON转换器将JSON字符串转换为User对象。  </p>
-<p>另外，<code>@RequestBody</code>注解还支持其他参数类型，如<code>Map&lt;String, Object&gt;</code>、<code>List&lt;User&gt;</code>等，以及自定义的数据转换器和处理器。  </p>
-<p>总之，<code>@RequestBody</code>注解允许将HTTP请求的内容转换为方法参数，并方便地在Spring框架中处理和使用请求体数据。</p>
-]]></content>
-      <tags>
-        <tag>开发</tag>
-        <tag>注解与反射</tag>
       </tags>
   </entry>
 </search>
